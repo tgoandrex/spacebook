@@ -1,4 +1,4 @@
-import '../app/layout'
+import "../app/layout"
 
 export default function TestPage() {
     return (
