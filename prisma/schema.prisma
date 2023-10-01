@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  fname      String?  @map(name: "first_name")
+  lname      String?  @map(name: "last_name")
+  email      String   @unique
+  password   String
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  posts      Post[]
+  comments   Comment[]
+  followedBy Follow[] @relation("follower")
+  following  Follow[] @relation("following")
+
+  @@map(name: "users")
+}
+
+model Follow {
+  follower    User     @relation("follower", fields: [followerId], references: [id])
+  followerId  Int      @map(name: "follower_id")
+  following   User     @relation("following", fields: [followingId], references: [id])
+  followingId Int      @map(name: "following_id")
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+
+  @@id([followerId, followingId])
+  @@map(name: "follows")
+
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  content     String
+  author      User      @relation(fields: [authorEmail], references: [email])
+  authorEmail String    @map(name: "author_email")
+  comments    Comment[]
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  @@map(name: "posts")
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  content     String
+  post        Post     @relation(fields: [postId], references: [id])
+  postId      Int      @map(name: "post_id")
+  author      User     @relation(fields: [authorEmail], references: [email])
+  authorEmail String   @map(name: "author_email")
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  @@map(name: "comments")
+}

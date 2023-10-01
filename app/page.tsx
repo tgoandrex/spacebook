@@ -1,34 +1,36 @@
-import SignUpModal from "../components/SignUp"
+import prisma from '../prisma/lib/prisma';
 
-export default function Landing() {
-    const LoginRegisterForms = () => {
-        return (
-            <div id="login-register-square">
-                <form>
-                    <label htmlFor="email">
-                        Email: <input type="email" id="email" name="login_email" />
-                    </label>
-                    <label htmlFor="password">
-                        Password: <input type="password" id="password" name="login_password" />
-                    </label>
-                    <button type="submit">Login</button>
-                </form>
-                <a href="#">Forgot Password?</a>
-                <SignUpModal />
-            </div>
-        )
+// Components
+import PostForm from './components/PostForm';
+
+const Home = async () => {
+  const data = await prisma.post.findMany({
+    include: {
+      author: {
+        select: { id: true }
+      },
     }
-    return (
-        <>
-            <div id="landing-left">
-                <h1 className="text-3xl font-bold underline">Spacebook</h1>
-                <div id="recent-logins">
-                    {/* TODO: Remember logins from this device (localstorage?) */}
-                </div>
-            </div> 
-            <div id="landing-right">
-                <LoginRegisterForms />
-            </div>
-        </>
-    )
+  });
+
+  return (
+    <main>
+      <h1 className="text-3xl font-bold underline">Hello, Home Page!</h1>
+      <PostForm />
+      {data.length > 0 ? 
+        <ul>
+          {data.map((post) => (
+            <>
+              <li>{post.id}</li>
+              <li>{post.content}</li>
+              <li>{post.authorEmail}</li>
+              <li>{post.author.id}</li>
+            </>
+          ))}
+        </ul> :
+        <p>No posts yet! Create a post!</p>
+      }
+    </main>
+  )
 }
+
+export default Home;

@@ -1,13 +1,23 @@
-import "./globals.css"
+import "./globals.css";
+
+// Components
+import Nav from "./components/Nav";
+
+export const metaData = {
+  title: "Spacebook"
+}
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) {
-    return (
-        <html lang="en">
-            <body>{children}</body>
-        </html>
-    )
+  return (
+    <html lang="en">
+        <body>
+            <Nav />
+            {children}
+        </body>
+    </html>
+  )
 }
