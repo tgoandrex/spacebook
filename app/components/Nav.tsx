@@ -6,7 +6,7 @@ import Link from "next/link";
 import Button from "./Button";
 import { navDesktop, navMobile } from "../constants";
 
-import icon from "../../public/icons/nav-icon.png";
+import icon from "../assets/icons/nav-icon.png";
 
 const Nav = () => {
   const [toggleOpen, setToggleOpen] = useState(false);
@@ -36,7 +36,7 @@ const Nav = () => {
         </div>
         <div className="flex flex-col justify-around max-md:hidden mr-2">
           {navDesktop.map((item) => (
-            <form action={item.href}>
+            <form action={item.href} key={item.label}>
               <Button label={item.label} fontAwesomeIcon={item.fontAwesomeIcon} />
             </form>
           ))}
