@@ -4,31 +4,37 @@ import prisma from '../prisma/lib/prisma';
 import PostForm from './components/PostForm';
 
 const Home = async () => {
+  /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
   const data = await prisma.post.findMany({
+    where: {
+      // However we find the authorized user's followed user(s) posts!
+    },
     include: {
       author: {
         select: { id: true }
-      },
+      }
     }
   });
+  */
 
   return (
-    <main>
+    <main className='padding border border-black'>
       <h1 className="text-3xl font-bold underline">Hello, Home Page!</h1>
       <PostForm />
-      {data.length > 0 ? 
+      {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
+      data.length > 0 ? 
         <ul>
           {data.map((post) => (
-            <>
-              <li>{post.id}</li>
-              <li>{post.content}</li>
-              <li>{post.authorEmail}</li>
-              <li>{post.author.id}</li>
-            </>
+            <li key={post.id}>
+              <span>{post.id}</span>
+              <span>{post.content}</span>
+              <span>{post.authorEmail}</span>
+              <span>{post.author.id}</span>
+            </li>
           ))}
         </ul> :
         <p>No posts yet! Create a post!</p>
-      }
+      */}
     </main>
   )
 }

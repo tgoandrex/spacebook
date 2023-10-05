@@ -17,6 +17,7 @@ export default function RootLayout({
         <body>
             <Nav />
             {children}
+            <script src="https://kit.fontawesome.com/a0cabf7a73.js" crossOrigin="anonymous"></script>
         </body>
     </html>
   )
