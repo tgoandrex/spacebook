@@ -6,7 +6,7 @@ import Link from "next/link";
 import Button from "./Button";
 import { navDesktop, navMobile } from "../constants";
 
-import icon from "../../public/icons/nav-icon.png";
+import icon from "../../public/nav-icon.png";
 
 const Nav = () => {
   const [toggleOpen, setToggleOpen] = useState(false);
