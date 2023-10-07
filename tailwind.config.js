@@ -4,7 +4,12 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      backgroundImage: {
+        "background": "url('../app/_assets/images/background.jpg')"
+      }
+    }
   },
+  darkMode: "class",
   plugins: [],
 }

@@ -1,7 +1,7 @@
 import prisma from '../prisma/lib/prisma';
 
 // Components
-import PostForm from './components/PostForm';
+import PostForm from './_components/PostForm';
 
 const Home = async () => {
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
@@ -18,7 +18,7 @@ const Home = async () => {
   */
 
   return (
-    <main className='padding border border-black'>
+    <main className='page-layout'>
       <h1 className="text-3xl font-bold underline">Hello, Home Page!</h1>
       <PostForm />
       {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)

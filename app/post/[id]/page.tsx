@@ -1,7 +1,7 @@
 import prisma from "../../../prisma/lib/prisma";
 
 // Components
-import CommentForm from "../../components/CommentForm";
+import CommentForm from "../../_components/CommentForm";
 
 const Post = async ({ params }: { params: { id: number } }) => {
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
@@ -28,7 +28,7 @@ const Post = async ({ params }: { params: { id: number } }) => {
   });
   */
   return (
-    <main className='padding border border-black'>
+    <main className='page-layout'>
       <h1 className="text-3xl font-bold underline">Hello, Post Dynamic Page!</h1>
       {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
         <ul>

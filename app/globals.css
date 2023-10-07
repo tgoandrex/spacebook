@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 @layer utilities {
-  .max-container {
-    max-width: 1440px;
-    margin: 0 auto;
+  .page-layout {
+    @apply padding dark:bg-background dark:text-white w-screen h-screen
   }
   
   .padding {

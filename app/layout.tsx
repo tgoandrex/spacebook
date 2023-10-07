@@ -1,7 +1,7 @@
 import "./globals.css";
 
 // Components
-import Nav from "./components/Nav";
+import Nav from "./_components/Nav";
 
 export const metaData = {
   title: "Spacebook"
