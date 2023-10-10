@@ -9,7 +9,7 @@ const RegisterForm = () => {
       {authFormFields.map((field) => (
         <label key={field.label} htmlFor={field.label} className="mb-3 w-full">
           {field.label}<br />
-          <input id={field.label} type={field.type} name={field.label} className="border border-gray-800 w-full" required />
+          <input id={field.label} type={field.type} name={field.label} className="border border-gray-800 w-full text-black" required />
         </label>
       ))}
       <Button label="Register" isDisabled={true} />

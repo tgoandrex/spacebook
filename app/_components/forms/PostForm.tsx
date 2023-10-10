@@ -28,7 +28,7 @@ const PostForm = async () => {
     <form action={createPost} className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto">
       <label htmlFor="content" className="mb-3">
         Enter Post Content<br />
-        <textarea id="content" name="content" className="border border-gray-800 w-full" rows={4} required />
+        <textarea id="content" name="content" className="border border-gray-800 w-full text-black" rows={4} required />
       </label>
     <Button label="Add Post" isDisabled={true} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
   </form>
