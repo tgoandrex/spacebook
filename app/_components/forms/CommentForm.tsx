@@ -1,6 +1,9 @@
 import { revalidatePath } from 'next/cache';
 import prisma from "../../../prisma/lib/prisma";
 
+// Components
+import Button from '../Button';
+
 const CommentForm = async () => {
   const createComment = async (formData: FormData) => {
     'use server'
@@ -23,10 +26,12 @@ const CommentForm = async () => {
   }
 
   return (
-    <form action={createComment}>
-      <label htmlFor="content">Enter Comment Content</label>
-      <input type="text" id="content" name="content" required />
-      <button type="submit" disabled>Add</button>{/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+    <form action={createComment} className="flex flex-col text-center w-1/2 m-auto">
+      <label htmlFor="content" className="mb-3">
+        Enter Comment Content<br />
+        <textarea id="content" name="content" className="border border-gray-800" required />
+      </label>
+      <Button label="Add Comment" isDisabled={true} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
     </form>
   )
 }

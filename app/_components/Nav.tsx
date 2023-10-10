@@ -45,6 +45,7 @@ const Nav = () => {
               label={colorMode === "light" ? "Space Mode" : "Light Mode"} 
               fontAwesomeIcon={colorMode === "light" ? "fa-moon" : "fa-sun"} 
               clickEvent={() => setColorMode(colorMode === "light" ? "dark" : "light")} 
+              isDisabled={false}
             />
           </div>
           <div className="flex items-center gap-2 max-sm:hidden divide-x divide-black dark:divide-white">
