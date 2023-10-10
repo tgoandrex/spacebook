@@ -1,5 +1,5 @@
 import { revalidatePath } from 'next/cache';
-import prisma from "../../prisma/lib/prisma";
+import prisma from "../../../prisma/lib/prisma";
 
 const PostForm = async () => {
   const createPost = async (formData: FormData) => {

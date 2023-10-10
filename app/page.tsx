@@ -1,7 +1,7 @@
 import prisma from '../prisma/lib/prisma';
 
 // Components
-import PostForm from './_components/PostForm';
+import PostForm from './_components/forms/PostForm';
 
 const Home = async () => {
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
