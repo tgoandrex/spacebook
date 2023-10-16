@@ -12,7 +12,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ modalType, setModalType }) => {
   return (
     <section>
-      <div className="fixed top-[25%] left-[17%] sm:left-[40%] bg-white dark:bg-gray-500 z-10 pb-6 px-6 border border-black rounded-lg">
+      <div className="fixed top-[25%] left-[17%] sm:left-[40%] bg-white dark:bg-slate-700 z-10 pb-6 px-6 border border-black rounded-lg">
         <div className="flex justify-end mb-1">
           <span className="text-2xl cursor-pointer dark:text-white" onClick={() => setModalType("")}>X</span>
         </div>

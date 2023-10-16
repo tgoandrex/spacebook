@@ -4,7 +4,7 @@
 
 @layer utilities {
   .page-layout {
-    @apply padding dark:bg-background dark:text-white w-full h-screen
+    @apply padding dark:bg-background dark:text-white w-full h-full
   }
   
   .padding {

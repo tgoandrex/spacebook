@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-        <body>
+        <body className="bg-slate-300">
             <Nav />
             {children}
             <script src="https://kit.fontawesome.com/a0cabf7a73.js" crossOrigin="anonymous"></script>

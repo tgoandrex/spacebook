@@ -1,40 +1,20 @@
-import prisma from '../prisma/lib/prisma';
-
 // Components
-import PostForm from './_components/forms/PostForm';
+import Feed from "./_components/Feed";
 
-const Home = async () => {
-  /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
-  const data = await prisma.post.findMany({
-    where: {
-      // However we find the authorized user's followed user(s) posts!
-    },
-    include: {
-      author: {
-        select: { id: true }
-      }
-    }
-  });
-  */
-
+const Home = () => {
   return (
     <main className='page-layout'>
-      <h1 className="text-3xl font-bold underline">Hello, Home Page!</h1>
-      <PostForm />
-      {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
-      data.length > 0 ? 
-        <ul>
-          {data.map((post) => (
-            <li key={post.id}>
-              <span>{post.id}</span>
-              <span>{post.content}</span>
-              <span>{post.authorEmail}</span>
-              <span>{post.author.id}</span>
-            </li>
-          ))}
-        </ul> :
-        <p>No posts yet! Create a post!</p>
+      {/*
+        (If the user is authenticated...) {
+          <Feed />
+        }
+        // Else show the below message
+        <div className="flex flex-col items-center sm:flex-row text-center flex-grow justify-between h-full">
+          <h1 className="text-6xl font-bold flex-1 font-serif">Welcome to Spacebook</h1>
+          <span className="flex-1">To get started, login or register a new account from the navigation bar.</span>
+        </div>
       */}
+      <Feed />
     </main>
   )
 }
