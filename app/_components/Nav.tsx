@@ -48,11 +48,11 @@ const Nav = () => {
               isDisabled={false}
             />
           </div>
-          <div className="flex items-center gap-2 max-sm:hidden divide-x divide-black dark:divide-white">
+          <div className="flex items-center max-sm:hidden">
             {navLinks.map((item) => (
               <li 
                 key={item.label} 
-                className="flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer" 
+                className="flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0]" 
                 onClick={() => setModalType(item.label)}
               >
                 {item.label}
@@ -76,11 +76,11 @@ const Nav = () => {
           </div>
         </nav>
         <nav className={toggleOpen ? "block" : "hidden"}>
-          <ul className="flex flex-col text-center">
+          <ul className="flex flex-col items-center text-center">
             {navLinks.map((item) => (
               <li 
                 key={item.label} 
-                className="dark:text-white text-lg py-3" 
+                className="dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-lg" 
                 onClick={() => setModalType(item.label)}
               >
                 {item.label}
