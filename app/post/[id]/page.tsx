@@ -1,12 +1,31 @@
-import { getCommentsFromPost, getSpecificPost } from "../../_routes/route";
+import prisma from "../../../prisma/lib/prisma";
 
 // Components
 import CommentForm from "../../_components/forms/CommentForm";
 
 const Post = async ({ params }: { params: { id: number } }) => {
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
-  const post = getSpecificPost(params.id);
-  const comments = getCommentsFromPost(params.id);
+  await prisma.post.findUnique({
+    where: {
+      id: params.id
+    },
+    include: {
+      author: {
+        select: { id: true }
+      }
+    }
+  });
+
+  const comments = await prisma.comment.findMany({
+    where: {
+      postId: params.id
+    },
+    include: {
+      author: {
+        select: { id: true }
+      }
+    }
+  });
   */
   return (
     <main className='page-layout'>

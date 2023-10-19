@@ -1,4 +1,4 @@
-import { getFeedPosts } from '../_routes/route';
+import prisma from "../../prisma/lib/prisma";
 
 // Components
 import PostForm from '../_components/forms/PostForm';
@@ -9,7 +9,16 @@ import { posts } from "../_constants";
 
 const Feed = async () => {
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
-    const data = getFeedPosts();
+  const data = await prisma.post.findMany({
+    where: {
+      // However we find the authorized user's followed user(s) posts!
+    },
+    include: {
+      author: {
+        select: { id: true }
+      }
+    }
+  });
   */
   return (
     <>
