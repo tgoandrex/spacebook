@@ -5,6 +5,7 @@ import Link from "next/link";
 
 // Components
 import Comment from "./Comment";
+import Button from "./Button";
 
 type Comment = {
   authorEmail: string;
@@ -33,6 +34,8 @@ const Post: React.FC<PostProps> = ({ id, authorEmail, createdAt, content, commen
         <div className="col-start-1 col-end-4">{authorEmail}</div>
         <div className="col-end-7 col-span-3 text-right">{createdAt}</div>
         <div className="col-start-1 col-end-7 text-center min-h-[4rem]">{content}</div>
+        <div className="col-start-1 col-end-4"><Button label="Like" fontAwesomeIcon="fa-thumbs-up" isDisabled={true} /></div>
+        <div className="col-end-7 col-span-3 text-right">0 Likes</div>
       </div>
       <ul className="flex flex-col items-center gap-1">
         {comments.map((comment, index) => (
@@ -44,9 +47,7 @@ const Post: React.FC<PostProps> = ({ id, authorEmail, createdAt, content, commen
           />
         ))}
       </ul>
-      <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">
-        View All Comments
-      </Link>
+      <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">View All Comments</Link>
     </li>
   );
 };

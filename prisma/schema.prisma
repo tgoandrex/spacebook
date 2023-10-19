@@ -9,16 +9,18 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  fname      String?  @map(name: "first_name")
-  lname      String?  @map(name: "last_name")
-  email      String   @unique
-  password   String
-  createdAt  DateTime @default(now()) @map(name: "created_at")
-  posts      Post[]
-  comments   Comment[]
-  followedBy Follow[] @relation("follower")
-  following  Follow[] @relation("following")
+  id           Int           @id @default(autoincrement())
+  fname        String?       @map(name: "first_name")
+  lname        String?       @map(name: "last_name")
+  email        String        @unique
+  password     String
+  createdAt    DateTime      @default(now()) @map(name: "created_at")
+  posts        Post[]
+  comments     Comment[]
+  followedBy   Follow[]      @relation("follower")
+  following    Follow[]      @relation("following")
+  postlikes    PostLike[]    @relation("user")
+  commentLikes CommentLike[] @relation("user")
 
   @@map(name: "users")
 }
@@ -32,26 +34,49 @@ model Follow {
 
   @@id([followerId, followingId])
   @@map(name: "follows")
-
 }
 
 model Post {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   content     String
-  author      User      @relation(fields: [authorEmail], references: [email])
-  authorEmail String    @map(name: "author_email")
+  author      User       @relation(fields: [authorEmail], references: [email])
+  authorEmail String     @map(name: "author_email")
   comments    Comment[]
-  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  likes       PostLike[] @relation("post")
+  createdAt   DateTime   @default(now()) @map(name: "created_at")
   @@map(name: "posts")
 }
 
+model PostLike {
+  user      User     @relation("user", fields: [userId], references: [id])
+  userId    Int      @map(name: "user_id")
+  post      Post     @relation("post", fields: [postId], references: [id])
+  postId    Int      @map(name: "post_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  @@id([userId, postId])
+  @@map(name: "post_likes")
+}
+
 model Comment {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   content     String
-  post        Post     @relation(fields: [postId], references: [id])
-  postId      Int      @map(name: "post_id")
-  author      User     @relation(fields: [authorEmail], references: [email])
-  authorEmail String   @map(name: "author_email")
-  createdAt   DateTime @default(now()) @map(name: "created_at")
+  post        Post          @relation(fields: [postId], references: [id])
+  postId      Int           @map(name: "post_id")
+  author      User          @relation(fields: [authorEmail], references: [email])
+  authorEmail String        @map(name: "author_email")
+  likes       CommentLike[] @relation("comment")
+  createdAt   DateTime      @default(now()) @map(name: "created_at")
   @@map(name: "comments")
+}
+
+model CommentLike {
+  user      User     @relation("user", fields: [userId], references: [id])
+  userId    Int      @map(name: "user_id")
+  Comment   Comment  @relation("comment", fields: [commentId], references: [id])
+  commentId Int      @map(name: "comment_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  @@id([userId, commentId])
+  @@map(name: "comment_likes")
 }
