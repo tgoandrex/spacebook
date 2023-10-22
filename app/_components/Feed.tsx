@@ -40,7 +40,7 @@ const Feed = async () => {
         */}
         <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
           {posts.map((post) => (
-            <Post key={post.id} id={post.id} authorEmail={post.authorEmail} createdAt={post.createdAt} content={post.content} comments={post.comments} />
+            <Post key={post.id} id={post.id} authorEmail={post.authorEmail} createdAt={post.createdAt} content={post.content} likes={post.likes} comments={post.comments} />
           ))}
         </ul>
       </section>

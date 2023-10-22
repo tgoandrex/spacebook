@@ -30,8 +30,8 @@ const PostForm = async () => {
         New Post<br />
         <textarea id="content" name="content" className="border border-gray-800 rounded-lg w-full  text-black" rows={4} required />
       </label>
-    <Button label="Add Post" isDisabled={true} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
-  </form>
+      <Button label="Add Post" isDisabled={true} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+    </form>
   )
 }
 
