@@ -5,7 +5,7 @@ import Link from "next/link";
 
 // Components
 import Button from "./Button";
-import { navLinks } from "../_constants";
+import { navLinksAuthenticated, navLinksUnauthenticated } from "../_constants";
 import Modal from "./Modal";
 
 // Hooks
@@ -49,19 +49,30 @@ const Nav = () => {
             />
           </div>
           <div className="flex items-center max-sm:hidden">
-            {navLinks.map((item) => (
-              <li 
-                key={item.label} 
-                className="flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0]" 
-                onClick={() => setModalType(item.label)}
-              >
-                {item.label}
-              </li>
+            {navLinksUnauthenticated.map((item) => (
+              item.modal === true ?
+                <li 
+                  key={item.label} 
+                  className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                  hover:dark:bg-[#89CFF0] rounded-xl`} 
+                  onClick={() => setModalType(item.label)}
+                >
+                  {item.label}
+                </li>
+              :
+                <Link 
+                  key={item.label}
+                  href={item.href}
+                  className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                  hover:dark:bg-[#89CFF0] rounded-xl`}
+                >
+                  {item.label}
+                </Link>
             ))}
           </div>
           <div className='hidden max-sm:flex mr-2'>
             <button className="relative group" onClick={() => setToggleOpen(!toggleOpen)}>
-              <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-black ring-0 ring-gray-300 hover:ring-8 group-hover:ring-4 ring-opacity-30 duration-200 shadow-md">
+              <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-black dark:bg-[#4B91F1] ring-0 ring-gray-300 hover:ring-8 group-hover:ring-4 ring-opacity-30 duration-200 shadow-md">
                 <div className="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">
                   <div className="bg-white h-[2px] w-7 transform transition-all duration-300 origin-left group-hover:translate-y-6 delay-100"></div>
                   <div className="bg-white h-[2px] w-7 rounded transform transition-all duration-300 group-hover:translate-y-6 delay-75"></div>
@@ -77,14 +88,23 @@ const Nav = () => {
         </nav>
         <nav className={toggleOpen ? "block" : "hidden"}>
           <ul className="flex flex-col items-center text-center">
-            {navLinks.map((item) => (
-              <li 
-                key={item.label} 
-                className="dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-lg" 
-                onClick={() => setModalType(item.label)}
-              >
-                {item.label}
-              </li>
+            {navLinksUnauthenticated.map((item) => (
+              item.modal === true ?
+                <li 
+                  key={item.label} 
+                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+                  rounded-xl`}
+                  onClick={() => setModalType(item.label)}
+                >
+                  {item.label}
+                </li>
+              :
+                <Link key={item.label}
+                  href={item.href}
+                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
+                >
+                  {item.label}
+                </Link>
             ))}
           </ul>
         </nav>

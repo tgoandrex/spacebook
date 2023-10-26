@@ -1,6 +1,11 @@
-export const navLinks = [
-  { href: "/login", label: "Login" },
-  { href: "/register", label: "Register" }
+export const navLinksAuthenticated = [
+  { label: "Login", modal: true },
+  { label: "Register", modal: true }
+];
+
+export const navLinksUnauthenticated = [
+  { href: "/user/1", label: "Profile", modal: false },
+  { href: "/logout", label: "Log Out", modal: false }
 ];
 
 export const authFormFields = [

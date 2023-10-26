@@ -1,11 +1,13 @@
 // Components
 import Feed from "./_components/Feed";
+import PostForm from "./_components/forms/PostForm";
 
 const Home = () => {
   return (
     <main className='page-layout'>
       {/*
         (If the user is authenticated...) {
+          <PostForm />
           <Feed />
         }
         // Else show the below message
@@ -14,6 +16,7 @@ const Home = () => {
           <span className="flex-1">To get started, login or register a new account from the navigation bar.</span>
         </div>
       */}
+      <PostForm />
       <Feed />
     </main>
   )

@@ -16,7 +16,7 @@ const Modal: React.FC<ModalProps> = ({ modalType, setModalType }) => {
         <div className="flex justify-end mb-1">
           <span className="text-2xl cursor-pointer dark:text-white" onClick={() => setModalType("")}>X</span>
         </div>
-        {modalType === "Login" ? <LoginForm /> : <RegisterForm />}
+        {modalType === "Login" ? <LoginForm /> : modalType === "Register" ? <RegisterForm /> : <div>There was an error</div>}
       </div>
       <div onClick={() => setModalType("")} className="fixed top-0 left-0 w-full h-full opacity-50 bg-black"></div>
     </section>
