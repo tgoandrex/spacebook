@@ -1,6 +1,6 @@
 export const navLinksAuthenticated = [
-  { label: "Login", modal: true },
-  { label: "Register", modal: true }
+  { href: "", label: "Login", modal: true },
+  { href: "", label: "Register", modal: true }
 ];
 
 export const navLinksUnauthenticated = [

@@ -31,6 +31,10 @@ const Nav = () => {
       window.removeEventListener("resize", handleResize);
     }
   }, []);
+
+  const toggleMenu = () => {
+    setToggleOpen(!toggleOpen);
+  };
   
   return (
     <>
@@ -49,7 +53,7 @@ const Nav = () => {
             />
           </div>
           <div className="flex items-center max-sm:hidden">
-            {navLinksUnauthenticated.map((item) => (
+            {navLinksAuthenticated.map((item) => (
               item.modal === true ?
                 <li 
                   key={item.label} 
@@ -71,7 +75,7 @@ const Nav = () => {
             ))}
           </div>
           <div className='hidden max-sm:flex mr-2'>
-            <button className="relative group" onClick={() => setToggleOpen(!toggleOpen)}>
+            <button className="relative group" onClick={toggleMenu}>
               <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-black dark:bg-[#4B91F1] ring-0 ring-gray-300 hover:ring-8 group-hover:ring-4 ring-opacity-30 duration-200 shadow-md">
                 <div className="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">
                   <div className="bg-white h-[2px] w-7 transform transition-all duration-300 origin-left group-hover:translate-y-6 delay-100"></div>
@@ -86,9 +90,9 @@ const Nav = () => {
             </button>
           </div>
         </nav>
-        <nav className={toggleOpen ? "block" : "hidden"}>
+        <nav className={`overflow-hidden ${toggleOpen ? 'max-h-[100vh]' : 'max-h-0'} duration-700 ease-in-out`}>
           <ul className="flex flex-col items-center text-center">
-            {navLinksUnauthenticated.map((item) => (
+            {navLinksAuthenticated.map((item) => (
               item.modal === true ?
                 <li 
                   key={item.label} 
