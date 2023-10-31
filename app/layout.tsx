@@ -3,7 +3,7 @@ import "./globals.css";
 // Components
 import Nav from "./_components/Nav";
 
-export const metaData = {
+export const metadata = {
   title: "Spacebook"
 }
 
