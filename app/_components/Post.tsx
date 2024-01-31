@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react";
 import Link from "next/link";
 import { submitLike } from "../actions";
 
@@ -10,7 +9,7 @@ import Button from "./Button";
 
 type Comment = {
   id: number,
-  authorEmail: string;
+  author: {id: number, email: string};
   createdAt: string;
   content: string;
   likes: number;
@@ -18,24 +17,19 @@ type Comment = {
 
 type PostProps = {
   id: number,
-  authorEmail: string;
+  author: {id: number, email: string};
   createdAt: string;
   content: string;
   likes: number;
   comments: Comment[];
+  commentsLink: Boolean;
 }
 
-const Post: React.FC<PostProps> = ({ id, authorEmail, createdAt, content, likes, comments }) => {
-  const [showPost, setShowPost] = useState(true);
-
+const Post: React.FC<PostProps> = ({ id, author, createdAt, content, likes, comments, commentsLink }) => {
   return (
-    showPost &&
-    <li className="px-6 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none">
-      <div className="flex justify-end mb-1">
-        <span className="text-2xl cursor-pointer dark:text-white" onClick={() => setShowPost(false)}>X</span>
-      </div>
+    <div className="px-2 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none">
       <div className="grid grid-cols-6 bg-[#89CFF0] dark:bg-[#034694] rounded-lg mb-1 shadow-md dark:shadow-none px-3 py-1">
-        <div className="col-start-1 col-end-4">{authorEmail}</div>
+        <Link href={`/user/${author.id}/posts`} className="col-start-1 col-end-4 text-blue-700 dark:text-blue-300">{author.email}</Link>
         <div className="col-end-7 col-span-3 text-right">{createdAt}</div>
         <div className="col-start-1 col-end-7 text-center min-h-[5rem]">{content}</div>
         <div className="col-start-1 col-end-4">
@@ -48,15 +42,23 @@ const Post: React.FC<PostProps> = ({ id, authorEmail, createdAt, content, likes,
           <Comment
             key={comment.id}
             id={comment.id}
-            authorEmail={comment.authorEmail}
+            author={comment.author}
             createdAt={comment.createdAt}
             content={comment.content}
             likes={comment.likes}
           />
         ))}
       </ul>
-      <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">View All Comments</Link>
-    </li>
+      {commentsLink &&
+        <>
+          {comments.length > 3 ?
+            <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">View All Comments</Link>
+          :
+            <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">Add a Comment</Link>
+          }
+        </>
+      }
+    </div>
   );
 };
 

@@ -1,9 +1,20 @@
+'use client'
+
 import prisma from "../../../prisma/lib/prisma";
+import { useParams } from 'next/navigation';
 
 // Components
+import Post from "../../_components/Post";
 import CommentForm from "../../_components/forms/CommentForm";
 
-const Post = async ({ params }: { params: { id: number } }) => {
+// Constants (Only temporary while backend is disabled)
+import { posts } from "../../_constants";
+
+// const PostPage = async ({ params }: { params: { id: number } }) => { (Should use once backend is enabled again)
+const PostPage = () => {
+  const params = useParams();
+
+  const post = posts.find(post => post.id === Number(params.id));
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
   await prisma.post.findUnique({
     where: {
@@ -29,7 +40,6 @@ const Post = async ({ params }: { params: { id: number } }) => {
   */
   return (
     <main className='page-layout'>
-      <h1 className="text-3xl font-bold underline">Hello, Post Dynamic Page!</h1>
       {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
         <ul>
           <li key={post.id}>
@@ -52,9 +62,27 @@ const Post = async ({ params }: { params: { id: number } }) => {
         </ul> :
         <p>No comments yet! Create a comment!</p>
       */}
+      {post ?
+        <>
+          <div className="gap-4 max-w-lg m-auto">
+            <Post 
+              key={post.id} 
+              id={post.author.id}
+              author={post.author} 
+              likes={post.likes}
+              createdAt={post.createdAt}
+              content={post.content}
+              comments={post.comments}
+              commentsLink={false}
+            />
+          </div>
+        </>
+        :
+        <div className='text-2xl text-center'>Photo not found!</div>
+      }
       <CommentForm />
     </main>
   )
 }
 
-export default Post;
+export default PostPage;

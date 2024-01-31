@@ -1,12 +1,14 @@
 "use client"
 
+import { useSession, signOut, signIn } from "next-auth/react"
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 // Components
 import Button from "./Button";
 import { navLinksAuthenticated, navLinksUnauthenticated } from "../_constants";
-import Modal from "./Modal";
 
 // Hooks
 import useColorMode from "../_hooks/useColorMode";
@@ -15,8 +17,9 @@ import navIcon from "../_assets/icons/nav-icon.png";
 import navIconDark from "../_assets/icons/nav-icon-dark.png";
 
 const Nav = () => {
+  const { data: session, status } = useSession()
+
   const [toggleOpen, setToggleOpen] = useState(false);
-  const [modalType, setModalType] = useState("");
   const [colorMode, setColorMode] = useColorMode();
 
   useEffect(() => {
@@ -39,11 +42,25 @@ const Nav = () => {
   return (
     <>
       <header className=" bg-[#4B91F1] dark:bg-black">
-        <nav className="flex justify-between">
-          <Link href="/">
-            <img src={navIcon.src} alt='logo' className="w-[225px] h-[75px] block dark:hidden" />
-            <img src={navIconDark.src} alt='logo' className="w-[225px] h-[75px] hidden dark:block" />
-          </Link>
+        <nav className="flex justify-between min-h-[75px]">
+          <div className="flex items-center">
+            <Link href="/">
+              <Image
+                src={navIcon.src}
+                width={325}
+                height={75}
+                className="block dark:hidden"
+                alt="navigation logo"
+              />
+              <Image
+                src={navIconDark.src}
+                width={325}
+                height={75}
+                className="hidden dark:block"
+                alt="navigation logo"
+              />
+            </Link>
+          </div>
           <div className="flex flex-col justify-center">
             <Button 
               label={colorMode === "light" ? "Space Mode" : "Light Mode"} 
@@ -52,19 +69,38 @@ const Nav = () => {
               isDisabled={false}
             />
           </div>
-          <div className="flex items-center max-sm:hidden">
-            {navLinksAuthenticated.map((item) => (
-              item.modal === true ?
+          <ul className="flex items-center max-sm:hidden">
+            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
+              item.href === "/logout" ?
                 <li 
                   key={item.label} 
                   className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
-                  hover:dark:bg-[#89CFF0] rounded-xl`} 
-                  onClick={() => setModalType(item.label)}
+                  hover:dark:bg-[#89CFF0] rounded-xl`}
+                  onClick={() => signOut({ callbackUrl: '/' })}
                 >
                   {item.label}
                 </li>
               :
-                <Link 
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                hover:dark:bg-[#89CFF0] rounded-xl`}
+              >
+                {item.label}
+              </Link>
+            )) :
+            navLinksUnauthenticated.map((item) => (
+              item.href === "/login" ?
+                <li key={item.label}
+                  className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                  hover:dark:bg-[#89CFF0] rounded-xl`}
+                  onClick={() => signIn('email', { callbackUrl: '/' })}
+                >
+                  {item.label}
+                </li>
+              :
+                <Link
                   key={item.label}
                   href={item.href}
                   className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
@@ -73,7 +109,7 @@ const Nav = () => {
                   {item.label}
                 </Link>
             ))}
-          </div>
+          </ul>
           <div className='hidden max-sm:flex mr-2'>
             <button className="relative group" onClick={toggleMenu}>
               <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-black dark:bg-[#4B91F1] ring-0 ring-gray-300 hover:ring-8 group-hover:ring-4 ring-opacity-30 duration-200 shadow-md">
@@ -92,13 +128,29 @@ const Nav = () => {
         </nav>
         <nav className={`overflow-hidden ${toggleOpen ? 'max-h-[100vh]' : 'max-h-0'} duration-700 ease-in-out`}>
           <ul className="flex flex-col items-center text-center">
-            {navLinksAuthenticated.map((item) => (
-              item.modal === true ?
-                <li 
-                  key={item.label} 
+            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
+              item.href === "/logout" ?
+                <li key={item.label}
                   className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
                   rounded-xl`}
-                  onClick={() => setModalType(item.label)}
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                >
+                  {item.label}
+                </li>
+              :
+                <Link key={item.label}
+                  href={item.href}
+                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
+                >
+                  {item.label}
+                </Link>
+            )) :
+            navLinksUnauthenticated.map((item) => (
+              item.href === "/login" ?
+                <li key={item.label}
+                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+                  rounded-xl`}
+                  onClick={() => signIn('email', { callbackUrl: '/' })}
                 >
                   {item.label}
                 </li>
@@ -113,9 +165,6 @@ const Nav = () => {
           </ul>
         </nav>
       </header>
-      {modalType !== "" &&
-        <Modal modalType={modalType} setModalType={setModalType} />
-      }
     </>
   )
 }

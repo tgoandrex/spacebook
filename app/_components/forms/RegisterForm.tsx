@@ -4,8 +4,8 @@ import Button from "../Button";
 
 const RegisterForm = () => {
   return (
-    <form className="flex flex-col dark:text-white">
-      <h3 className="text-2xl mb-4">Register a New Account</h3>
+    <form className="flex flex-col dark:text-white md:w-96 mx-auto">
+      <h3 className="text-2xl mb-4 text-center">Register a New Account</h3>
       {authFormFields.map((field) => (
         <label key={field.label} htmlFor={field.label} className="mb-3 w-full">
           {field.label}<br />
