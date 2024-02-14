@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 // Components
-import Photo from "./Photo";
+import Photo from "../Photo";
 
 // Constants (Only temporary while backend is disabled)
-import { photos } from "../_constants/index";
+import { photos } from "../../_constants/index";
 
 const ProfilePhotos = () => {
   return (

@@ -1,5 +1,5 @@
 // Components
-import ProfilePhotos from "../../../_components/ProfilePhotos";
+import ProfilePhotos from "../../../_components/profile/ProfilePhotos";
 
 const UserPhotos = async () => {
   return (

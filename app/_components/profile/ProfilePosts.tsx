@@ -1,8 +1,8 @@
 // Components
-import Post from "./Post";
+import Post from "../Post";
 
 // Constants (Only temporary while backend is disabled)
-import { posts } from "../_constants";
+import { posts } from "../../_constants";
 
 
 const ProfilePosts = () => {

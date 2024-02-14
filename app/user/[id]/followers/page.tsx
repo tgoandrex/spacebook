@@ -1,4 +1,4 @@
-import ProfileFollowers from "../../../_components/ProfileFollowers";
+import ProfileFollowers from "../../../_components/profile/ProfileFollowers";
 
 const UserFollowers = async () => {
   return (

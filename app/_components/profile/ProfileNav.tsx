@@ -4,9 +4,9 @@ import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from "next/image";
 
-import blankProfilePicture from "../_assets/images/blank-profile-picture.jpg"
+import blankProfilePicture from "../../_assets/images/blank-profile-picture.jpg"
 
-import { profileNavLinks, users } from '../_constants';
+import { profileNavLinks, users } from '../../_constants';
 
 const ProfileNav = () => {
   const pathname = usePathname();

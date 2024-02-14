@@ -1,5 +1,5 @@
 // Components
-import ProfileNav from "../../_components/ProfileNav"
+import ProfileNav from "../../_components/profile/ProfileNav"
 
 export default async function UserLayout({
   children,

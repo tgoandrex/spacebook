@@ -5,6 +5,7 @@ import parakeet from "../_assets/images/parakeet.jpg";
 import penguin from "../_assets/images/penguin.jpg";
 
 export const navLinksAuthenticated = [
+  { href: "/search", label: "Search" },
   { href: "/user/1/posts", label: "Profile" },
   { href: "/logout", label: "Log Out" }
 ];

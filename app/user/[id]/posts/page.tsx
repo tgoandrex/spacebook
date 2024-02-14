@@ -1,5 +1,5 @@
 // Components
-import ProfilePosts from "../../../_components/ProfilePosts";
+import ProfilePosts from "../../../_components/profile/ProfilePosts";
 
 const UserPosts = async () => {
   return (

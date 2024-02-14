@@ -3,10 +3,10 @@
 import { useParams } from 'next/navigation';
 
 // Components
-import Follower from './Follower';
+import Follower from '../Follower';
 
 // Constants (Only temporary while backend is disabled)
-import { users } from "../_constants";
+import { users } from "../../_constants";
 
 const ProfileFollowers = () => {
   const params = useParams();
