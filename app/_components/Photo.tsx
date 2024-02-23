@@ -10,7 +10,7 @@ import Button from "./Button";
 
 type Comment = {
   id: number,
-  author: {id: number, email: string};
+  author: {id: number, username: string};
   createdAt: string;
   content: string;
   likes: number;
@@ -20,7 +20,7 @@ type PhotoProps = {
   id: number;
   src: StaticImageData;
   description: string;
-  author?: {id: number, email: string};
+  author?: {id: number, username: string};
   createdAt?: string;
   content?: string;
   likes?: number;
@@ -34,7 +34,7 @@ const Photo: React.FC<PhotoProps> = ({ id, src, description, author, createdAt, 
       <Image src={src} alt={description} />
       {author && content &&
         <div className="grid grid-cols-6 bg-[#89CFF0] dark:bg-[#034694] rounded-b-lg mb-1 shadow-md dark:shadow-none px-3 py-1">
-          <Link href={`/user/${author.id}/posts`} className="col-start-1 col-end-4 text-blue-700 dark:text-blue-300">{author.email}</Link>
+          <Link href={`/user/${author.id}/posts`} className="col-start-1 col-end-4 text-blue-700 dark:text-blue-300">{author.username}</Link>
           <div className="col-end-7 col-span-3 text-right">{createdAt}</div>
           <div className="col-start-1 col-end-7 text-center min-h-[5rem]">{content}</div>
           <div className="col-start-1 col-end-4">

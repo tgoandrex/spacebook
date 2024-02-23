@@ -8,7 +8,7 @@ import Image from "next/image";
 
 // Components
 import Button from "./Button";
-import { navLinksAuthenticated, navLinksUnauthenticated } from "../_constants";
+import { navLinksAuthenticatedUser, navLinksAuthenticatedAdmin, navLinksUnauthenticated } from "../_constants";
 
 // Hooks
 import useColorMode from "../_hooks/useColorMode";
@@ -70,7 +70,7 @@ const Nav = () => {
             />
           </div>
           <ul className="flex items-center max-sm:hidden">
-            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
+            {status === "authenticated" ? navLinksAuthenticatedAdmin.map((item) => (
               item.href === "/logout" ?
                 <li 
                   key={item.label} 
@@ -128,7 +128,7 @@ const Nav = () => {
         </nav>
         <nav className={`overflow-hidden ${toggleOpen ? 'max-h-[100vh]' : 'max-h-0'} duration-700 ease-in-out`}>
           <ul className="flex flex-col items-center text-center">
-            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
+            {status === "authenticated" ? navLinksAuthenticatedAdmin.map((item) => (
               item.href === "/logout" ?
                 <li key={item.label}
                   className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 

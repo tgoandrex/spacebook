@@ -1,28 +1,11 @@
-import { revalidatePath } from 'next/cache';
-import prisma from "../../../prisma/lib/prisma";
+'use client'
+
+import { createPost } from '../../actions';
 
 // Components
 import Button from '../Button';
 
-const PostForm = async () => {
-  const createPost = async (formData: FormData) => {
-    'use server'
-    
-    const value = formData.get("content") as string;
-
-    try {
-      await prisma.post.create({
-        data: {
-          content: value,
-          authorEmail: 'tgoandrex@gmail.com'
-        }
-      });
-  
-      revalidatePath('/');
-    } catch (e) {
-      console.log('Failed to create post');
-    }
-  }
+const PostForm = () => {
 
   return (
     <form action={createPost} className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto">

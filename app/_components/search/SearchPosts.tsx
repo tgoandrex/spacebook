@@ -4,7 +4,6 @@ import Post from "../Post";
 // Constants (Only temporary while backend is disabled)
 import { posts } from "../../_constants";
 
-
 const SearchPosts = async({ query } : { query: string; }) => {
   const filteredPosts = posts.filter((post) => {
     return post.content.includes(query);

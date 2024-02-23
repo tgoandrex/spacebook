@@ -12,14 +12,16 @@ model User {
   id           Int           @id @default(autoincrement())
   fname        String?       @map(name: "first_name")
   lname        String?       @map(name: "last_name")
-  email        String        @unique
+  username     String        @unique
   password     String
   createdAt    DateTime      @default(now()) @map(name: "created_at")
   posts        Post[]
+  photos       Photo[]
   comments     Comment[]
   followedBy   Follow[]      @relation("follower")
   following    Follow[]      @relation("following")
   postlikes    PostLike[]    @relation("user")
+  photoLikes   PhotoLike[]   @relation("user")
   commentLikes CommentLike[] @relation("user")
 
   @@map(name: "users")
@@ -37,13 +39,13 @@ model Follow {
 }
 
 model Post {
-  id          Int        @id @default(autoincrement())
-  content     String
-  author      User       @relation(fields: [authorEmail], references: [email])
-  authorEmail String     @map(name: "author_email")
-  comments    Comment[]
-  likes       PostLike[] @relation("post")
-  createdAt   DateTime   @default(now()) @map(name: "created_at")
+  id             Int        @id @default(autoincrement())
+  content        String
+  author         User       @relation(fields: [authorUsername], references: [username])
+  authorUsername String     @map(name: "author_username")
+  comments       Comment[]
+  likes          PostLike[] @relation("post")
+  createdAt      DateTime   @default(now()) @map(name: "created_at")
   @@map(name: "posts")
 }
 
@@ -58,15 +60,40 @@ model PostLike {
   @@map(name: "post_likes")
 }
 
+model Photo {
+  id             Int         @id @default(autoincrement())
+  url            String
+  content        String
+  author         User        @relation(fields: [authorUsername], references: [username])
+  authorUsername String      @map(name: "author_username")
+  comments       Comment[]
+  likes          PhotoLike[] @relation("photo")
+  createdAt      DateTime    @default(now()) @map(name: "created_at")
+  @@map(name: "photos")
+}
+
+model PhotoLike {
+  user      User     @relation("user", fields: [userId], references: [id])
+  userId    Int      @map(name: "user_id")
+  photo     Photo    @relation("photo", fields: [photoId], references: [id])
+  photoId   Int      @map(name: "photo_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  @@id([userId, photoId])
+  @@map(name: "photo_likes")
+}
+
 model Comment {
-  id          Int           @id @default(autoincrement())
-  content     String
-  post        Post          @relation(fields: [postId], references: [id])
-  postId      Int           @map(name: "post_id")
-  author      User          @relation(fields: [authorEmail], references: [email])
-  authorEmail String        @map(name: "author_email")
-  likes       CommentLike[] @relation("comment")
-  createdAt   DateTime      @default(now()) @map(name: "created_at")
+  id             Int           @id @default(autoincrement())
+  content        String
+  post           Post?         @relation(fields: [postId], references: [id])
+  postId         Int?          @map(name: "post_id")
+  photo          Photo?        @relation(fields: [photoId], references: [id])
+  photoId        Int?          @map(name: "photo_id")
+  author         User          @relation(fields: [authorUsername], references: [username])
+  authorUsername String        @map(name: "author_username")
+  likes          CommentLike[] @relation("comment")
+  createdAt      DateTime      @default(now()) @map(name: "created_at")
   @@map(name: "comments")
 }
 

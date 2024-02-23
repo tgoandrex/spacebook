@@ -1,8 +1,8 @@
 "use client"
 
-import { revalidatePath } from 'next/cache';
 import prisma from "../../../prisma/lib/prisma";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 const SearchForm = () => {
   const searchParams = useSearchParams();
@@ -63,35 +63,35 @@ const SearchForm = () => {
 
   const params = new URLSearchParams(Array.from(searchParams.entries()));
 
-  const searchClient = (term: string) => {
+  const handleInput = useDebouncedCallback((term: string) => {
     if(term) {
       params.set('query', term);
     } else {
       params.delete('query');
     }
     replace(`${pathname}?${params.toString()}`);
-  }
+  }, 1000);
 
-  const handleRadioButtons = (term: string) => {
+  const handleRadioButtons = useDebouncedCallback((term: string) => {
     if(term) {
       params.set('type', term);
     } else {
       params.delete('type');
     }
     replace(`${pathname}?${params.toString()}`);
-  }
+  }, 1000);
 
   return (
     <form className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto">
       <label htmlFor="query" className="mb-3">
-        Search<br />
+        <span className="text-2xl">Search</span><br />
         <input 
           type='text' 
           id="query" 
           name="query" 
           className="border border-gray-800 rounded-lg w-full  text-black"
           onChange={(e) => {
-            searchClient(e.target.value);
+            handleInput(e.target.value);
           }}
           defaultValue={searchParams.get('query')?.toString()}
           required 

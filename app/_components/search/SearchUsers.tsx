@@ -1,23 +1,22 @@
 // Components
-import Follower from "../Follower";
+import Follower from "../User";
 
 // Constants (Only temporary while backend is disabled)
 import { users } from "../../_constants";
 
-
 const SearchUsers = async({ query } : { query: string; }) => {
   const filteredUsers = users.filter((user) => {
-    return user.email.includes(query);
+    return user.username.includes(query);
   });
 
   return (
-    <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
+    <ul className="flex flex-col justify-center gap-4 max-w-sm m-auto py-8">
       {filteredUsers.length > 0 ?
         filteredUsers.map((user) => (
           <Follower 
             key={user.id}  
             id={user.id} 
-            email={user.email}
+            username={user.username}
           />
         ))
         :

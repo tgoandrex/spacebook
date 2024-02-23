@@ -1,14 +1,11 @@
 'use client'
 
-import { revalidatePath } from 'next/cache';
-import prisma from "../../../prisma/lib/prisma";
-
 import { createComment } from '../../actions';
 
 // Components
 import Button from '../Button';
 
-const CommentForm = async () => {
+const CommentForm = () => {
   return (
     <form action={createComment} className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto mt-4">
       <label htmlFor="content" className="mb-3">

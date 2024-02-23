@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 
 // Components
-import Follower from '../Follower';
+import User from '../User';
 
 // Constants (Only temporary while backend is disabled)
 import { users } from "../../_constants";
@@ -17,8 +17,8 @@ const ProfileFollowers = () => {
     <ul className="flex flex-wrap justify-center gap-4 md:gap-8">
       {user ?
         user.followers.length > 0 ?
-          user.followers.map((follower) => (
-            <Follower id={follower.id} email={follower.email} key={follower.id} />
+          user.followers.map((user) => (
+            <User id={user.id} username={user.username} key={user.id} />
           ))
           :
           <div className='text-2xl text-center'>No followers!</div>

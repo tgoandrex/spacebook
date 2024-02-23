@@ -3,9 +3,14 @@
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from "next/image";
+import { submitFollow } from "../../actions";
 
 import blankProfilePicture from "../../_assets/images/blank-profile-picture.jpg"
 
+// Components
+import Button from '../Button';
+
+// Constants (Only temporary while backend is disabled)
 import { profileNavLinks, users } from '../../_constants';
 
 const ProfileNav = () => {
@@ -29,13 +34,16 @@ const ProfileNav = () => {
                     className="rounded-full"
                     alt="Profile picture"
                   />
-              {user.email}
+              {user.username}
             </div>
-            <div className='md:text-right text-2xl pr-2'>Joined: {user.createdAt}</div>
+            <div className='flex flex-col gap-2 md:gap-4'>
+              <div className='md:text-right text-2xl pr-2'>Joined: {user.createdAt}</div>
+              <Button label="Follow" isDisabled={true} clickEvent={() => submitFollow(user.id, 1)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+            </div>
           </div>
-          <ul className="w-full flex justify-around text-center items-end border-b border-stone-600 dark:border-black mt-4">
+          <ul className="w-full flex justify-around text-center items-end border-b-2 border-black mt-4">
             {profileNavLinks.map((item) => (
-              <li key={item.label} className={`${pathnameEnd === item.href ? "-mb-[.5px] bg-white dark:bg-gray-700 border-t border-r border-l rounded-t border-stone-600 dark:border-black" : "border-none"}`}>
+              <li key={item.label} className={`${pathnameEnd === item.href ? "-mb-[1.5px] bg-white dark:bg-gray-700 border-t-2 border-r-2 border-l-2 rounded-t border-black" : "border-none"}`}>
                 <Link className={`text-xl text-blue-700 dark:text-blue-300 px-4`} href={`${item.href}`}>{item.label}</Link>
               </li>
             ))}

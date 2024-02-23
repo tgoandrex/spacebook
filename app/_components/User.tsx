@@ -3,12 +3,12 @@ import Link from "next/link";
 
 import blankProfilePicture from "../_assets/images/blank-profile-picture.jpg";
 
-type FollowerProps = {
+type UserProps = {
   id: number;
-  email: String;
+  username: String;
 }
 
-const Follower: React.FC<FollowerProps> = ({ id, email }) => {
+const User: React.FC<UserProps> = ({ id, username }) => {
   return (
     <div className="px-6 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none flex justify-between gap-4">
       <Image
@@ -18,9 +18,9 @@ const Follower: React.FC<FollowerProps> = ({ id, email }) => {
         className="rounded-full"
         alt="Profile picture"
       />
-      <Link href={`/user/${id}/posts`} className="flex items-center text-blue-700 dark:text-blue-300">{email}</Link>
+      <Link href={`/user/${id}/posts`} className="flex items-center text-blue-700 dark:text-blue-300">{username}</Link>
     </div>
   )
 }
 
-export default Follower
+export default User;

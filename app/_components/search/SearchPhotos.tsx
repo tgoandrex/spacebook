@@ -4,7 +4,6 @@ import Photo from "../Photo";
 // Constants (Only temporary while backend is disabled)
 import { photos } from "../../_constants";
 
-
 const SearchPhotos = async({ query } : { query: string; }) => {
   const filteredPhotos = photos.filter((photo) => {
     return photo.content.includes(query);
