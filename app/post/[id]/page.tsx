@@ -8,13 +8,15 @@ import Post from "../../_components/Post";
 import CommentForm from "../../_components/forms/CommentForm";
 
 // Constants (Only temporary while backend is disabled)
-import { posts } from "../../_constants";
+import { posts, comments } from "../../_constants";
 
 // const PostPage = async ({ params }: { params: { id: number } }) => { (Should use once backend is enabled again)
 const PostPage = () => {
   const params = useParams();
 
   const post = posts.find(post => post.id === Number(params.id));
+
+  const postComments = post ? comments.filter(comment => post.commentIds.includes(comment.id)) : [];
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
   await prisma.post.findUnique({
     where: {
@@ -72,7 +74,7 @@ const PostPage = () => {
               likes={post.likes}
               createdAt={post.createdAt}
               content={post.content}
-              comments={post.comments}
+              comments={postComments}
               commentsLink={false}
             />
           </div>

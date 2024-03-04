@@ -2,12 +2,15 @@
 import Photo from "../Photo";
 
 // Constants (Only temporary while backend is disabled)
-import { photos } from "../../_constants";
+import { photos, comments } from "../../_constants";
 
-const SearchPhotos = async({ query } : { query: string; }) => {
+const SearchPhotos = async ({ query } : { query: string; }) => {
   const filteredPhotos = photos.filter((photo) => {
     return photo.content.includes(query);
-  });
+  }).map((photo) => ({
+    ...photo,
+    comments: comments.filter((comment) => photo.commentIds.includes(comment.id))
+  }));
 
   return (
     <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">

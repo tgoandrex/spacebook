@@ -1,3 +1,5 @@
+'use client'
+
 // Components
 import { authFormFields } from "../../_constants";
 import Button from "../Button";

@@ -10,11 +10,11 @@ type UserProps = {
 
 const User: React.FC<UserProps> = ({ id, username }) => {
   return (
-    <div className="px-6 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none flex justify-between gap-4">
+    <div className="px-6 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none flex gap-4">
       <Image
         src={blankProfilePicture}
-        width={100}
-        height={100}
+        width={75}
+        height={75}
         className="rounded-full"
         alt="Profile picture"
       />

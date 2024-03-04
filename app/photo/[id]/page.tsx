@@ -7,12 +7,15 @@ import Photo from '../../_components/Photo';
 import CommentForm from '../../_components/forms/CommentForm';
 
 // Constants (Only temporary while backend is disabled)
-import { photos } from "../../_constants";
+import { photos, comments } from "../../_constants";
 
 const PhotoPage = () => {
   const params = useParams();
 
   const photo = photos.find(photo => photo.id === Number(params.id));
+
+  const photoComments = photo ? comments.filter(comment => photo.commentIds.includes(comment.id)) : [];
+
   return (
     <main className="page-layout">
       {photo ?
@@ -27,7 +30,7 @@ const PhotoPage = () => {
               likes={photo.likes}
               createdAt={photo.createdAt}
               content={photo.content}
-              comments={photo.comments}
+              comments={photoComments}
               commentsLink={false}
             />
           </div>

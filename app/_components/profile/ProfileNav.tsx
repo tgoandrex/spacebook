@@ -38,7 +38,7 @@ const ProfileNav = () => {
             </div>
             <div className='flex flex-col gap-2 md:gap-4'>
               <div className='md:text-right text-2xl pr-2'>Joined: {user.createdAt}</div>
-              <Button label="Follow" isDisabled={true} clickEvent={() => submitFollow(user.id, 1)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+              <Button label="Follow" fontAwesomeIcon='fa-user-plus' isDisabled={true} clickEvent={() => submitFollow(user.id, 1)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
             </div>
           </div>
           <ul className="w-full flex justify-around text-center items-end border-b-2 border-black mt-4">

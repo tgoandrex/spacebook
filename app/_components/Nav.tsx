@@ -8,7 +8,7 @@ import Image from "next/image";
 
 // Components
 import Button from "./Button";
-import { navLinksAuthenticatedUser, navLinksAuthenticatedAdmin, navLinksUnauthenticated } from "../_constants";
+import { navLinksAuthenticatedUser, navLinksAuthenticatedAdmin, navLinksUnauthenticated } from "../_constants/index";
 
 // Hooks
 import useColorMode from "../_hooks/useColorMode";

@@ -21,7 +21,7 @@ type PostProps = {
   createdAt: string;
   content: string;
   likes: number;
-  comments: Comment[];
+  comments?: Comment[];
   commentsLink: Boolean;
 }
 
@@ -33,28 +33,36 @@ const Post: React.FC<PostProps> = ({ id, author, createdAt, content, likes, comm
         <div className="col-end-7 col-span-3 text-right">{createdAt}</div>
         <div className="col-start-1 col-end-7 text-center min-h-[5rem]">{content}</div>
         <div className="col-start-1 col-end-4">
-          <Button label="Like" fontAwesomeIcon="fa-thumbs-up" isDisabled={true} clickEvent={() => submitLike("Post", id)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+          <Button label={`${likes}`} fontAwesomeIcon="fa-thumbs-up" isDisabled={true} clickEvent={() => submitLike("Post", id)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
         </div>
-        <div className="col-end-7 col-span-3 text-right">{likes} Likes</div>
+        <div className="col-end-7 col-span-3 text-right">
+          <Link href={`/post/${id}/report`} className="text-blue-700 dark:text-blue-300">Report</Link>
+        </div>
       </div>
       <ul className="flex flex-col items-center gap-1">
-        {comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            id={comment.id}
-            author={comment.author}
-            createdAt={comment.createdAt}
-            content={comment.content}
-            likes={comment.likes}
-          />
-        ))}
       </ul>
-      {commentsLink &&
+      {comments &&
         <>
-          {comments.length > 3 ?
-            <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">View All Comments</Link>
-          :
-            <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">Add a Comment</Link>
+          <ul className="flex flex-col items-center gap-1">
+            {comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                id={comment.id}
+                author={comment.author}
+                createdAt={comment.createdAt}
+                content={comment.content}
+                likes={comment.likes}
+              />
+            ))}
+          </ul>
+          {commentsLink &&
+            <>
+              {comments.length > 3 ?
+                <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">View All Comments</Link>
+              :
+                <Link href={`/post/${id}`} className="block text-center text-blue-700 dark:text-blue-300">Add a Comment</Link>
+              }
+            </>
           }
         </>
       }

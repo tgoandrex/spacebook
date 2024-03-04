@@ -5,7 +5,7 @@ import Post from "./Post";
 import Photo from "./Photo";
 
 // Constants (Only temporary while backend is disabled)
-import { posts, photos } from "../_constants";
+import { posts, photos, comments } from "../_constants";
 
 const Feed = async () => {
   function shuffleArrays(array1: any[], array2: any[]): any[] {
@@ -20,6 +20,11 @@ const Feed = async () => {
   }
 
   const shuffledPhotosAndPosts: any[] = shuffleArrays(posts, photos);
+
+  const itemsWithComments = shuffledPhotosAndPosts.map((item) => ({
+    ...item,
+    comments: comments.filter((comment) => item.commentIds.includes(comment.id))
+  }));
 
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
   const data = await prisma.post.findMany({
@@ -50,7 +55,7 @@ const Feed = async () => {
         <p>No posts yet! Create a post!</p>
       */}
       <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
-        {shuffledPhotosAndPosts.map((item) => (
+        {itemsWithComments.map((item) => (
           item.src ?
           <Photo 
             key={item.shuffleID} 

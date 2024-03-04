@@ -6,7 +6,6 @@ import { createPost } from '../../actions';
 import Button from '../Button';
 
 const PostForm = () => {
-
   return (
     <form action={createPost} className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto">
       <label htmlFor="content" className="mb-3">

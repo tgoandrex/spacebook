@@ -1,6 +1,5 @@
 "use client"
 
-import prisma from "../../../prisma/lib/prisma";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -8,58 +7,6 @@ const SearchForm = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-
-  /* 
-  Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
-
-  const searchPosts = async (formData: FormData) => {
-    'use server'
-    
-    const query = formData.get("query") as string;
-
-    try {
-      await prisma.post.findMany({
-        where: {
-          content: query
-        }
-      });
-    } catch (e) {
-      console.log('Failed to get post search results');
-    }
-  }
-
-  const searchPhotos = async (formData: FormData) => {
-    'use server'
-    
-    const query = formData.get("query") as string;
-
-    try {
-      await prisma.photo.findMany({
-        where: {
-          content: query
-        }
-      });
-    } catch (e) {
-      console.log('Failed to get photo search results');
-    }
-  }
-
-  const searchUsers = async (formData: FormData) => {
-    'use server'
-    
-    const query = formData.get("query") as string;
-
-    try {
-      await prisma.user.findMany({
-        where: {
-          email: query
-        }
-      });
-    } catch (e) {
-      console.log('Failed to get user search results');
-    }
-  }
-  */
 
   const params = new URLSearchParams(Array.from(searchParams.entries()));
 
