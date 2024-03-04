@@ -3,7 +3,7 @@ import RegisterForm from "../_components/forms/RegisterForm";
 const Register = () => {
   return (
     <main className='page-layout'>
-      {RegisterForm()}
+      <RegisterForm />
     </main>
   )
 }
