@@ -41,7 +41,7 @@ const Nav = () => {
   
   return (
     <>
-      <header className=" bg-[#4B91F1] dark:bg-black">
+      <header className="bg-[#4B91F1] dark:bg-black">
         <nav className="flex justify-between min-h-[75px]">
           <div className="flex items-center">
             <Link href="/">
@@ -81,14 +81,28 @@ const Nav = () => {
                   {item.label}
                 </li>
               :
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
-                hover:dark:bg-[#89CFF0] rounded-xl`}
-              >
-                {item.label}
-              </Link>
+              item.href === "/admin/search" ? (
+                <li
+                  key={item.label}
+                  className={`relative group flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                  hover:dark:bg-[#89CFF0] rounded-xl`}
+                >
+                  <span className="mr-1">{item.label}</span>
+                  <div className="absolute hidden group-hover:block top-full left-0 bg-white rounded-lg shadow-lg py-2 w-40">
+                    <Link href="/admin/search" className="block px-4 py-2 text-center dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
+                    <Link href="/admin/reports/search?type=resolved" className="block px-4 py-2 text-center dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
+                  </div>
+                </li>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                  hover:dark:bg-[#89CFF0] rounded-xl`}
+                >
+                  {item.label}
+                </Link>
+              )
             )) :
             navLinksUnauthenticated.map((item) => (
               item.href === "/login" ?
@@ -138,12 +152,26 @@ const Nav = () => {
                   {item.label}
                 </li>
               :
+              item.href === "/admin/search" ? (
+                <li
+                  key={item.label}
+                  className={`relative group dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+                  rounded-xl`}
+                >
+                  <span className="mr-1">{item.label}</span>
+                  <div className="absolute hidden group-hover:block top-0 right-full bg-white rounded-lg shadow-lg py-2 w-40">
+                    <Link href="/admin/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
+                    <Link href="/admin/reports/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
+                  </div>
+                </li>
+              ) : (
                 <Link key={item.label}
                   href={item.href}
                   className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
                 >
                   {item.label}
                 </Link>
+              )
             )) :
             navLinksUnauthenticated.map((item) => (
               item.href === "/login" ?

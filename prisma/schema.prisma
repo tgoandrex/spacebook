@@ -9,20 +9,21 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  fname        String?       @map(name: "first_name")
-  lname        String?       @map(name: "last_name")
-  username     String        @unique
-  password     String
-  createdAt    DateTime      @default(now()) @map(name: "created_at")
-  posts        Post[]
-  photos       Photo[]
-  comments     Comment[]
-  followedBy   Follow[]      @relation("follower")
-  following    Follow[]      @relation("following")
-  postlikes    PostLike[]    @relation("user")
-  photoLikes   PhotoLike[]   @relation("user")
-  commentLikes CommentLike[] @relation("user")
+  id               Int           @id @default(autoincrement())
+  fname            String?       @map(name: "first_name")
+  lname            String?       @map(name: "last_name")
+  username         String        @unique
+  password         String
+  createdAt        DateTime      @default(now()) @map(name: "created_at")
+  posts            Post[]
+  photos           Photo[]
+  comments         Comment[]
+  submittedReports Report[]
+  followedBy       Follow[]      @relation("follower")
+  following        Follow[]      @relation("following")
+  postlikes        PostLike[]    @relation("user")
+  photoLikes       PhotoLike[]   @relation("user")
+  commentLikes     CommentLike[] @relation("user")
 
   @@map(name: "users")
 }
@@ -44,6 +45,7 @@ model Post {
   author         User       @relation(fields: [authorUsername], references: [username])
   authorUsername String     @map(name: "author_username")
   comments       Comment[]
+  reports        Report[]
   likes          PostLike[] @relation("post")
   createdAt      DateTime   @default(now()) @map(name: "created_at")
   @@map(name: "posts")
@@ -67,6 +69,7 @@ model Photo {
   author         User        @relation(fields: [authorUsername], references: [username])
   authorUsername String      @map(name: "author_username")
   comments       Comment[]
+  reports        Report[]
   likes          PhotoLike[] @relation("photo")
   createdAt      DateTime    @default(now()) @map(name: "created_at")
   @@map(name: "photos")
@@ -93,6 +96,7 @@ model Comment {
   author         User          @relation(fields: [authorUsername], references: [username])
   authorUsername String        @map(name: "author_username")
   likes          CommentLike[] @relation("comment")
+  reports        Report[]
   createdAt      DateTime      @default(now()) @map(name: "created_at")
   @@map(name: "comments")
 }
@@ -106,4 +110,22 @@ model CommentLike {
 
   @@id([userId, commentId])
   @@map(name: "comment_likes")
+}
+
+model Report {
+  id               Int      @id @default(autoincrement())
+  type             String
+  reporterMessage  String   @map(name: "reporter_message")
+  post             Post?    @relation(fields: [postId], references: [id])
+  postId           Int?     @map(name: "post_id")
+  photo            Photo?   @relation(fields: [photoId], references: [id])
+  photoId          Int?     @map(name: "photo_id")
+  comment          Comment? @relation(fields: [commentId], references: [id])
+  commentId        Int?     @map(name: "comment_id")
+  resolved         Boolean  @default(false)
+  adminAction      String?  @map(name: "admin_action")
+  reporter         User     @relation(fields: [reporterUsername], references: [username])
+  reporterUsername String   @map(name: "reporter_username")
+  createdAt        DateTime @default(now()) @map(name: "created_at")
+  @@map(name: "reports")
 }

@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 
 // Components
 import Post from '../../../_components/Post';
-import ReportForm from '../../../_components/forms/ReportForm';
+import ReportForm from '../../../_components/forms/ReportCreateForm';
 
 // Constants (Only temporary while backend is disabled)
 import { posts } from "../../../_constants";
@@ -28,7 +28,7 @@ const ReportPostPage = () => {
               commentsLink={false}
             />
           </div>
-          <ReportForm />
+          <ReportForm type={"Post"} id={post.id} />
         </>
         :
         <div className='text-2xl text-center'>Post not found!</div>

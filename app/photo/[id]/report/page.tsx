@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 
 // Components
 import Photo from '../../../_components/Photo';
-import ReportForm from '../../../_components/forms/ReportForm';
+import ReportForm from '../../../_components/forms/ReportCreateForm';
 
 // Constants (Only temporary while backend is disabled)
 import { photos } from "../../../_constants";
@@ -32,7 +32,7 @@ const ReportPhotoPage = () => {
               />
             </div>
           </div>
-          <ReportForm />
+          <ReportForm type={"Photo"} id={photo.id} />
         </>
         :
         <div className='text-2xl text-center'>Photo not found!</div>

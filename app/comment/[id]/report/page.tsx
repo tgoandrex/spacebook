@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 
 // Components
 import Comment from '../../../_components/Comment';
-import ReportForm from "../../../_components/forms/ReportForm";
+import ReportForm from "../../../_components/forms/ReportCreateForm";
 
 // Constants (Only temporary while backend is disabled)
 import { comments } from "../../../_constants";
@@ -30,7 +30,7 @@ const ReportCommentPage = () => {
               />
             </div>
           </div>
-          <ReportForm />
+          <ReportForm type={"Comment"} id={comment.id} />
         </>
         :
         <div className='text-2xl text-center'>Comment not found!</div>

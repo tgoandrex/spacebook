@@ -4,7 +4,7 @@ import AdminSearchPosts from "../../_components/search/admin/AdminSearchPosts";
 import AdminSearchPhotos from "../../_components/search/admin/AdminSearchPhotos";
 import AdminSearchUsers from "../../_components/search/admin/AdminSearchUsers";
 
-const AdminPage = async({ searchParams } : { searchParams: { query?: string, type?: string }; }) => {
+const AdminSearchPage = async({ searchParams } : { searchParams: { query?: string, type?: string }; }) => {
   const query = searchParams?.query || '';
   const type = searchParams?.type || '';
 
@@ -26,4 +26,4 @@ const AdminPage = async({ searchParams } : { searchParams: { query?: string, typ
   )
 }
 
-export default AdminPage;
+export default AdminSearchPage;

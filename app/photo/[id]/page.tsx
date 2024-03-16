@@ -23,7 +23,7 @@ const PhotoPage = () => {
           <div className='flex justify-center flex-wrap'>
             <Photo 
               key={photo.id} 
-              id={photo.author.id} 
+              id={photo.id} 
               src={photo.src} 
               description={photo.description} 
               author={photo.author} 
