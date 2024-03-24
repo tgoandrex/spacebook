@@ -10,7 +10,7 @@ const SearchUsers = async({ query } : { query: string; }) => {
   });
 
   return (
-    <ul className="flex flex-col justify-center gap-4 max-w-sm m-auto py-8">
+    <ul className="flex flex-col justify-center gap-4 max-w-[225px] m-auto py-8">
       {filteredUsers.length > 0 ?
         filteredUsers.map((user) => (
           <Follower 

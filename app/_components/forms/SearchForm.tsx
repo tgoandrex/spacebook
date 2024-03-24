@@ -3,7 +3,7 @@
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
-const SearchForm = () => {
+const SearchForm = ({ title } : { title: string; }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -31,7 +31,7 @@ const SearchForm = () => {
   return (
     <form className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto">
       <label htmlFor="query" className="mb-3">
-        <span className="text-2xl">Search</span><br />
+        <span className="text-2xl">{title} Search</span><br />
         <input 
           type='text' 
           id="query" 

@@ -26,6 +26,8 @@ type PostProps = {
 }
 
 const Post: React.FC<PostProps> = ({ id, author, createdAt, content, likes, comments, commentsLink }) => {
+  const reducedComments = comments ? comments.slice(0, 3) : [];
+
   return (
     <div className="px-2 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none">
       <div className="grid grid-cols-6 bg-[#89CFF0] dark:bg-[#034694] rounded-lg mb-1 shadow-md dark:shadow-none px-3 py-1">
@@ -44,7 +46,8 @@ const Post: React.FC<PostProps> = ({ id, author, createdAt, content, likes, comm
       {comments &&
         <>
           <ul className="flex flex-col items-center gap-1">
-            {comments.map((comment) => (
+          {commentsLink ?
+            reducedComments.map((comment) => (
               <Comment
                 key={comment.id}
                 id={comment.id}
@@ -53,7 +56,19 @@ const Post: React.FC<PostProps> = ({ id, author, createdAt, content, likes, comm
                 content={comment.content}
                 likes={comment.likes}
               />
-            ))}
+            ))
+          :
+            comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                id={comment.id}
+                author={comment.author}
+                createdAt={comment.createdAt}
+                content={comment.content}
+                likes={comment.likes}
+              />
+            ))
+          }
           </ul>
           {commentsLink &&
             <>

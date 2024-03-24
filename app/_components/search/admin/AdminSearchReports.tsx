@@ -52,7 +52,7 @@ const AdminSearchReports = ({ type } : { type: string; }) => {
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               {report.resolved === false ?
-                <Link href={`/report/${report.id}/resolve`}>Resolve</Link>
+                <Link href={`/report/${report.id}/resolve`} className="text-blue-700">Resolve</Link>
               :
                 "Already resolved!"
               }

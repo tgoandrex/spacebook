@@ -21,6 +21,7 @@ const SearchReportsForm = () => {
 
   return (
     <form className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto">
+      <span className="text-2xl pb-4">Reports</span>
       <div className="flex justify-center">
         <label htmlFor="posts" className="mr-4">
           <input 

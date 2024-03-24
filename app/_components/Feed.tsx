@@ -54,7 +54,7 @@ const Feed = async () => {
           </ul> :
         <p>No posts yet! Create a post!</p>
       */}
-      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
+      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto">
         {itemsWithComments.map((item) => (
           item.src ?
           <Photo 

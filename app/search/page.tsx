@@ -11,7 +11,7 @@ const SearchPage = async({ searchParams } : { searchParams: { query?: string, ty
   return (
     <main className='page-layout'>
       <section>
-        <SearchForm />
+        <SearchForm title="General" />
         {type === "posts" ?
           <SearchPosts query={query} />
         : type === "photos" ?

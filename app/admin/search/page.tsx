@@ -10,7 +10,7 @@ const AdminSearchPage = async({ searchParams } : { searchParams: { query?: strin
 
   return (
     <main className='page-layout'>
-      <SearchForm />
+      <SearchForm title="Admin" />
       <div className="overflow-x-auto">
         {type === "posts" ?
           <AdminSearchPosts query={query} />

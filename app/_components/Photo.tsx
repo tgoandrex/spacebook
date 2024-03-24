@@ -29,6 +29,8 @@ type PhotoProps = {
 }
 
 const Photo: React.FC<PhotoProps> = ({ id, src, description, author, createdAt, content, likes, comments, commentsLink }) => {
+  const reducedComments = comments ? comments.slice(0, 3) : [];
+
   return (
     <div className="px-2 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none">
       <Image src={src} alt={description} />
@@ -48,16 +50,29 @@ const Photo: React.FC<PhotoProps> = ({ id, src, description, author, createdAt, 
       {comments &&
         <>
           <ul className="flex flex-col items-center gap-1">
-            {comments.map((comment) => (
-              <Comment
-                key={comment.id}
-                id={comment.id}
-                author={comment.author}
-                createdAt={comment.createdAt}
-                content={comment.content}
-                likes={comment.likes}
-              />
-            ))}
+            {commentsLink ?
+              reducedComments.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  id={comment.id}
+                  author={comment.author}
+                  createdAt={comment.createdAt}
+                  content={comment.content}
+                  likes={comment.likes}
+                />
+              ))
+            :
+              comments.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  id={comment.id}
+                  author={comment.author}
+                  createdAt={comment.createdAt}
+                  content={comment.content}
+                  likes={comment.likes}
+                />
+              ))
+            }
           </ul>
           {commentsLink &&
             <>
