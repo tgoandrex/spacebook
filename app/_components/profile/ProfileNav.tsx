@@ -1,8 +1,12 @@
 'use client'
 
+import { useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from "next/image";
+import { UploadButton } from "@uploadthing/react";
+import { OurFileRouter } from "../../api/uploadthing/core";
+
 import { submitFollow } from "../../actions";
 
 import blankProfilePicture from "../../_assets/images/blank-profile-picture.jpg"
@@ -14,6 +18,7 @@ import Button from '../Button';
 import { profileNavLinks, users } from '../../_constants';
 
 const ProfileNav = () => {
+  const [showUploadButton, setShowUploadButton] = useState(false);
   const pathname = usePathname();
   const pathnameEnd = pathname.substring(pathname.lastIndexOf('/') + 1);
 
@@ -27,14 +32,42 @@ const ProfileNav = () => {
         <>
           <div className='flex flex-col items-center md:flex-row justify-between gap-4'>
             <div className='text-2xl pl-2 flex flex-col items-center md:flex-row gap-4 mt-5'>
-              <Image
+              <div className='flex flex-col items-center gap-4'>
+                {showUploadButton ?
+                  <div className='w-[150px] h-[150px] flex justify-center'>
+                    <UploadButton<OurFileRouter>
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res) => {
+                        // Do something with the response
+                        console.log("Files: ", res);
+                        alert("Upload Completed");
+                      }}
+                      onUploadError={(error: Error) => {
+                        // Do something with the error.
+                        alert(`ERROR! ${error.message}`);
+                      }}
+                    />
+                  </div>
+                :
+                  <Image
                     src={blankProfilePicture}
                     width={150}
                     height={150}
                     className="rounded-full"
                     alt="Profile picture"
                   />
-              {user.username}
+                }
+                <Button 
+                  label={showUploadButton ? "Cancel Change" : "Change Profile Picture"} 
+                  clickEvent={() => setShowUploadButton(!showUploadButton)} 
+                  isDisabled={true} 
+                />
+              </div>
+              {user.role === "Admin" ?
+                <span>{user.username} {user.role === "Admin" && "(Admin)"}</span>
+              :
+              user.username
+              }
             </div>
             <div className='flex flex-col gap-2 md:gap-4'>
               <div className='md:text-right text-2xl pr-2'>Joined: {user.createdAt}</div>

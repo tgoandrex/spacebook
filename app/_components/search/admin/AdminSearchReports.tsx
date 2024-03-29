@@ -30,14 +30,14 @@ const AdminSearchReports = ({ type } : { type: string; }) => {
               {report.id}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              <Link href={`/user/${report.reporter.id}/posts`}>{report.reporter.username}</Link>
+              <Link href={`/user/${report.reporter.id}/posts`} className="text-blue-700">{report.reporter.username}</Link>
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               "{report.reporterMessage}"
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               {report.reportedEntity.type !== "comment" ?
-                <Link href={`/${report.reportedEntity.type}/${report.reportedEntity.id}`}>
+                <Link href={`/${report.reportedEntity.type}/${report.reportedEntity.id}`} className="text-blue-700">
                   {report.reportedEntity.id} ({report.reportedEntity.type})
                 </Link>
               :

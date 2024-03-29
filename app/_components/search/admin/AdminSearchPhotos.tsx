@@ -14,6 +14,7 @@ import Photo from "../../Photo";
 
 const AdminSearchPhotos = ({ query } : { query: string; }) => {
   const [expandedPhotoId, setExpandedPhotoId] = useState<number | null>(null);
+  const [hoveredPhoto, setHoveredPhoto] = useState<typeof photos[number] | null>(null);
 
   const handleExpandImage = (photoId: number) => {
     setExpandedPhotoId(photoId === expandedPhotoId ? null : photoId);
@@ -42,10 +43,22 @@ const AdminSearchPhotos = ({ query } : { query: string; }) => {
               {photo.id}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              <Link href={`/user/${photo.author.id}/photos`}>{photo.author.username}</Link>
+              <Link href={`/user/${photo.author.id}/photos`} className="text-blue-700">{photo.author.username}</Link>
             </td>
-            <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              {photo.content}
+
+            <td
+              className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 overflow-hidden"
+              style={{ maxWidth: "50px" }}
+              onMouseEnter={() => setHoveredPhoto(photo)}
+              onMouseLeave={() => setHoveredPhoto(null)}
+            >
+              {hoveredPhoto === photo ? (
+                <div className="absolute z-10 bg-white border border-gray-200 shadow-lg rounded-lg p-4">
+                  {photo.content}
+                </div>
+              ) : (
+                <div className="overflow-hidden truncate">{photo.content}</div>
+              )}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               {expandedPhotoId === photo.id ?

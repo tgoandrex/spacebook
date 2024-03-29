@@ -27,7 +27,7 @@ const ReportCreateForm: React.FC<ReportFormProps> = ({ type, id }) => {
 
   return (
     <form className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto mt-4">
-      Please do not abuse the report function<br />
+      <span className='my-4'>Please do not abuse the report function. Repeated misuse will result in action against the reporter.</span>
       <div className="flex justify-center">
         <label htmlFor="offensiveContent" className="mr-4">
           <input 
@@ -58,8 +58,15 @@ const ReportCreateForm: React.FC<ReportFormProps> = ({ type, id }) => {
         </label>
       </div>
       <label htmlFor="message" className="mb-3">
-        Message
-        <textarea id="message" name="message" className="border border-gray-800 rounded-lg w-full text-black" rows={4} required />
+        Explain briefly why this needs to be reported
+        <textarea 
+          id="message" 
+          name="message" 
+          className="border border-gray-800 rounded-lg w-full text-black" 
+          rows={4} 
+          maxLength={300} 
+          required 
+        />
       </label>
       <Button label="Submit" isDisabled={true} clickEvent={() => handleSubmit} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
     </form>

@@ -17,6 +17,9 @@ const ReportPhotoPage = () => {
     <main className='page-layout'>
       {photo ?
         <>
+          <div className="text-center pb-4">
+            <span className="text-2xl">Report Photo</span>
+          </div>
           <div className='flex justify-center'>
             <div className='w-52 md:w-72'>
               <Photo 

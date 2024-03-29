@@ -17,7 +17,10 @@ const ReportPostPage = () => {
     <main className='page-layout'>
       {post ?
         <>
-          <div className='flex justify-center flex-wrap'>
+          <div className="text-center pb-4">
+            <span className="text-2xl">Report Post</span>
+          </div>
+          <div className='flex justify-center'>
             <Post 
               key={post.id} 
               id={post.id}

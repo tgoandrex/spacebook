@@ -18,7 +18,10 @@ const ReportCommentPage = () => {
     <main className='page-layout'>
       {comment ?
         <>
-          <div className='flex justify-center flex-wrap'>
+          <div className="text-center pb-4">
+            <span className="text-2xl">Report Comment</span>
+          </div>
+          <div className='flex justify-center'>
             <div className='px-2 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none'>
               <Comment 
                 key={comment.id} 

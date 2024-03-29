@@ -35,7 +35,7 @@ const AdminSearchPosts = ({ query } : { query: string; }) => {
                 {post.id}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <Link href={`/user/${post.author.id}/posts`}>{post.author.username}</Link>
+                <Link href={`/user/${post.author.id}/posts`} className="text-blue-700">{post.author.username}</Link>
               </td>
               <td
                 className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 overflow-hidden"

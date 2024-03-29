@@ -4,6 +4,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 // Components
 import Feed from "./_components/Feed";
 import PostForm from "./_components/forms/PostForm";
+import PhotoForm from "./_components/forms/PhotoForm";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -13,6 +14,7 @@ const Home = async () => {
       {session !== null ?
         <>
           <PostForm />
+          <PhotoForm />
           <div className="text-center pt-8 pb-4">
             <span className="text-3xl">Your Feed</span>
           </div>
