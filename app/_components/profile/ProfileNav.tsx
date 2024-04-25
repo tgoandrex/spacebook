@@ -1,24 +1,37 @@
 'use client'
 
-import { useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from "next/image";
+import { useState } from 'react';
+import { useParams, usePathname } from 'next/navigation';
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
 
 import { submitFollow } from "../../actions";
 
-import blankProfilePicture from "../../_assets/images/blank-profile-picture.jpg"
+import blankProfilePicture from "../../_assets/images/blank-profile-picture.jpg";
 
 // Components
 import Button from '../Button';
 
-// Constants (Only temporary while backend is disabled)
-import { profileNavLinks, users } from '../../_constants';
+// Constants
+import { profileNavLinks } from '../../_constants';
 
-const ProfileNav = () => {
+interface ProfileProps {
+  users: {
+    id: number,
+    username: string,
+    fname: string | null,
+    lname: string | null,
+    role: string,
+    profilePhoto: string | null,
+    createdAt: Date
+  }[]
+}
+
+const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
   const [showUploadButton, setShowUploadButton] = useState(false);
+  
   const pathname = usePathname();
   const pathnameEnd = pathname.substring(pathname.lastIndexOf('/') + 1);
 
@@ -26,6 +39,22 @@ const ProfileNav = () => {
 
   const user = users.find(user => user.id === parseInt(params.id));
 
+  const createProfilePhoto = async (id: number, url: string) => {
+    await fetch(`/api/profilePhoto`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        url: url
+      }),
+    }).then((res) => {
+      console.log(res)
+    });
+  };
+  
   return (
     <nav className="dark:bg-gray-700 dark:text-white items-center pb-5">
       {user ?
@@ -39,7 +68,7 @@ const ProfileNav = () => {
                       endpoint="imageUploader"
                       onClientUploadComplete={(res) => {
                         // Do something with the response
-                        console.log("Files: ", res);
+                        createProfilePhoto(user.id, res![0].url)
                         alert("Upload Completed");
                       }}
                       onUploadError={(error: Error) => {
@@ -49,7 +78,16 @@ const ProfileNav = () => {
                     />
                   </div>
                 :
+                user.profilePhoto ?
                   <Image
+                    src={user.profilePhoto}
+                    width={150}
+                    height={150}
+                    className="rounded-full"
+                    alt="Profile picture"
+                  />
+                :
+                <Image
                     src={blankProfilePicture}
                     width={150}
                     height={150}
@@ -60,7 +98,7 @@ const ProfileNav = () => {
                 <Button 
                   label={showUploadButton ? "Cancel Change" : "Change Profile Picture"} 
                   clickEvent={() => setShowUploadButton(!showUploadButton)} 
-                  isDisabled={true} 
+                  isDisabled={false} 
                 />
               </div>
               {user.role === "Admin" ?
@@ -70,7 +108,9 @@ const ProfileNav = () => {
               }
             </div>
             <div className='flex flex-col gap-2 md:gap-4'>
-              <div className='md:text-right text-2xl pr-2'>Joined: {user.createdAt}</div>
+              <div className='md:text-right text-2xl pr-2'>
+                Joined: {user.createdAt.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </div>
               <Button label="Follow" fontAwesomeIcon='fa-user-plus' isDisabled={true} clickEvent={() => submitFollow(user.id, 1)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
             </div>
           </div>

@@ -1,5 +1,5 @@
 // Components
-import ProfileNav from "../../_components/profile/ProfileNav"
+import GetProfileInfo from "../../_components/profile/GetProfiles";
 
 export default async function UserLayout({
   children,
@@ -9,7 +9,7 @@ export default async function UserLayout({
 
   return (
     <>
-      <ProfileNav />
+      <GetProfileInfo />
       {children}
     </>
   )

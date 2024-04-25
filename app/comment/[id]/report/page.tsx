@@ -1,7 +1,3 @@
-"use client"
-
-import { useParams } from 'next/navigation';
-
 // Components
 import Comment from '../../../_components/Comment';
 import ReportForm from "../../../_components/forms/ReportCreateForm";
@@ -9,10 +5,8 @@ import ReportForm from "../../../_components/forms/ReportCreateForm";
 // Constants (Only temporary while backend is disabled)
 import { comments } from "../../../_constants";
 
-const ReportCommentPage = () => {
-  const params = useParams();
-
-  const comment = comments.find(comment => comment.id === Number(params.id));
+const ReportCommentPage = async (props: { params: { id: number; } }) => {
+  const comment = comments.find(comment => comment.id === Number(props.params.id));
 
   return (
     <main className='page-layout'>

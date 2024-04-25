@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-import { deletePhoto } from "../../../actions";
+import { revalidatePath } from "next/cache";
+import prisma from "../../../../prisma/lib/prisma";
 
 // Constants (Only temporary while backend is disabled)
 import { photos, adminTableHeadersPhotos } from "../../../_constants";
@@ -15,6 +15,19 @@ import Photo from "../../Photo";
 const AdminSearchPhotos = ({ query } : { query: string; }) => {
   const [expandedPhotoId, setExpandedPhotoId] = useState<number | null>(null);
   const [hoveredPhoto, setHoveredPhoto] = useState<typeof photos[number] | null>(null);
+
+  const deletePhoto = async (photoId: number) => {  
+    try {
+      await prisma.photo.delete({
+        where: {
+          id: photoId
+        }
+      });
+      revalidatePath('/');
+    } catch (e) {
+      console.log('Failed to delete photo');
+    }
+  }
 
   const handleExpandImage = (photoId: number) => {
     setExpandedPhotoId(photoId === expandedPhotoId ? null : photoId);

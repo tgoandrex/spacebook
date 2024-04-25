@@ -6,7 +6,7 @@ import Photo from "../Photo";
 // Constants (Only temporary while backend is disabled)
 import { photos, comments } from "../../_constants/index";
 
-const ProfilePhotos = () => {
+const ProfilePhotos = async () => {
   return (
     <ul className="flex flex-wrap justify-center gap-4 md:gap-8">
       {photos.map((item) => (

@@ -13,8 +13,10 @@ model User {
   fname            String?       @map(name: "first_name") @db.VarChar(20)
   lname            String?       @map(name: "last_name") @db.VarChar(20)
   username         String        @unique @db.VarChar(20)
-  password         String        @db.VarChar(50)
+  password         String
   role             String        @default("User")
+  restricted       Boolean       @default(false)
+  profilePhoto     String?       @map(name: "profile_photo")
   createdAt        DateTime      @default(now()) @map(name: "created_at")
   posts            Post[]
   photos           Photo[]
@@ -42,7 +44,7 @@ model Follow {
 
 model Post {
   id             Int        @id @default(autoincrement())
-  content        String     @db.VarChar(500)
+  content        String     @db.VarChar(750)
   author         User       @relation(fields: [authorUsername], references: [username])
   authorUsername String     @map(name: "author_username")
   comments       Comment[]
@@ -66,7 +68,7 @@ model PostLike {
 model Photo {
   id             Int         @id @default(autoincrement())
   url            String
-  content        String      @db.VarChar(500)
+  content        String      @db.VarChar(750)
   author         User        @relation(fields: [authorUsername], references: [username])
   authorUsername String      @map(name: "author_username")
   comments       Comment[]
@@ -89,7 +91,7 @@ model PhotoLike {
 
 model Comment {
   id             Int           @id @default(autoincrement())
-  content        String        @db.VarChar(300)
+  content        String        @db.VarChar(500)
   post           Post?         @relation(fields: [postId], references: [id])
   postId         Int?          @map(name: "post_id")
   photo          Photo?        @relation(fields: [photoId], references: [id])

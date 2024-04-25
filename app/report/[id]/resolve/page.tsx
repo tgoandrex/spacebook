@@ -1,6 +1,6 @@
-'use client'
-
-import { useParams } from 'next/navigation';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 // Components
 import ReportResolveForm from "../../../_components/forms/ReportResolveForm";
@@ -8,10 +8,15 @@ import ReportResolveForm from "../../../_components/forms/ReportResolveForm";
 // Constants (Only temporary while backend is disabled)
 import { reports } from "../../../_constants";
 
-const ReportResolvePage = () => {
-  const params = useParams();
+const ReportResolvePage = async (props: { params: { id: number; } }) => {
+  const report = reports.find(report => report.id === Number(props.params.id));
 
-  const report = reports.find(report => report.id === Number(params.id));
+  const session = await getServerSession(authOptions);
+
+  if(session?.user.role === "User") {
+    redirect("/");
+  }
+
   return (
     <main className='page-layout'>
       <div className="text-center pb-4">

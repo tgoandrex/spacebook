@@ -5,16 +5,9 @@ import goat from "../_assets/images/goat.jpg";
 import parakeet from "../_assets/images/parakeet.jpg";
 import penguin from "../_assets/images/penguin.jpg";
 
-export const navLinksAuthenticatedUser = [
+export const generateAuthenticatedNavLinks = (userId: number) => [
   { href: "/search", label: "Search" },
-  { href: "/user/1/posts", label: "Profile" },
-  { href: "/logout", label: "Log Out" }
-];
-
-export const navLinksAuthenticatedAdmin = [
-  { href: "/admin/search", label: "Admin" },
-  { href: "/search", label: "Search" },
-  { href: "/user/1/posts", label: "Profile" },
+  { href: `/user/${userId}/posts`, label: "Profile" },
   { href: "/logout", label: "Log Out" }
 ];
 
@@ -29,24 +22,19 @@ export const profileNavLinks = [
   { href: "followers", label: "Followers" }
 ];
 
-export const authFormFields = [
-  { label: "Username", type: "username" },
-  { label: "Password", type: "password" }
-];
-
 export const adminTableHeadersPosts = ["ID", "Author", "Content", "Created At", "Controls"];
 
 export const adminTableHeadersPhotos = ["ID", "Author", "Content", "Preview", "Created At", "Controls"];
 
-export const adminTableHeadersUsers = ["ID", "Username", "Created At", "Controls"];
+export const adminTableHeadersUsers = ["ID", "Username", "Restricted?", "Created At", "Controls"];
 
 export const adminTableHeadersReports = ["ID", "Reporter", "Reporter Message", "Reported Entity", "Admin Action", "Created At", "Controls"];
 
 
 // (Only temporary while backend is disabled)
 export const users = [
-  { id: 1, username: "tgoandrex", role: "Admin", createdAt: "August 2, 12:00", followers: [{id: 2, username: "guy123"}]},
-  { id: 2, username: "guy123", role: "User", createdAt: "August 3, 11:00", followers: [{id: 1, username: "tgoandrex"}]}
+  { id: 1, username: "tgoandrex", role: "Admin", createdAt: "August 2, 12:00", restricted: false, followers: [{id: 2, username: "guy123"}]},
+  { id: 2, username: "guy123", role: "User", createdAt: "August 3, 11:00", restricted: false, followers: [{id: 1, username: "tgoandrex"}]}
 ];
 
 // (Only temporary while backend is disabled)

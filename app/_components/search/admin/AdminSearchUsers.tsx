@@ -1,12 +1,44 @@
-'use client'
+"use client"
 
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
+
+import prisma from "../../../../prisma/lib/prisma";
 
 // Constants (Only temporary while backend is disabled)
 import { users, adminTableHeadersUsers } from "../../../_constants";
 import Button from "../../Button";
 
-const AdminSearchUsers = ({ query } : { query: string; }) => {
+const AdminSearchUsers = async ({ query } : { query: string; }) => {
+  const restrictUser = async (userId: number) => {
+    try {
+      await prisma.user.update({
+        data: {
+          restricted: true
+        },
+        where: {
+          id: userId
+        }
+      });
+      revalidatePath('/');
+    } catch (e) {
+      console.log('Failed to restrict user');
+    }
+  }
+  
+  const deleteUser = async (userId: number) => {
+    try {
+      await prisma.user.delete({
+        where: {
+          id: userId
+        }
+      });
+      revalidatePath('/');
+    } catch (e) {
+      console.log('Failed to delete user');
+    }
+  }
+
   const filteredUsers = users.filter((user) => {
     return user.username.includes(query);
   });
@@ -33,10 +65,18 @@ const AdminSearchUsers = ({ query } : { query: string; }) => {
               <Link href={`/user/${user.id}/posts`} className="text-blue-700">{user.username}</Link>
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+              {user.restricted.toString()}
+            </td>
+            <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               {user.createdAt}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              <Button label="Ban User" isDisabled={true} fontAwesomeIcon="fa-x" />
+              <Button 
+                label={user.restricted === false ? `Restrict User` : `Delete User`} 
+                isDisabled={true} 
+                fontAwesomeIcon="fa-x" 
+                clickEvent={user.restricted === false ? () => restrictUser(user.id) : () => deleteUser(user.id)}
+              />
             </td>
           </tr>
           ))

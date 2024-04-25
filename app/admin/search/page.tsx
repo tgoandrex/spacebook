@@ -1,3 +1,7 @@
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+
 // Components
 import SearchForm from "../../_components/forms/SearchForm";
 import AdminSearchPosts from "../../_components/search/admin/AdminSearchPosts";
@@ -7,6 +11,12 @@ import AdminSearchUsers from "../../_components/search/admin/AdminSearchUsers";
 const AdminSearchPage = async({ searchParams } : { searchParams: { query?: string, type?: string }; }) => {
   const query = searchParams?.query || '';
   const type = searchParams?.type || '';
+
+  const session = await getServerSession(authOptions);
+
+  if(session?.user.role === "User") {
+    redirect("/");
+  }
 
   return (
     <main className='page-layout'>

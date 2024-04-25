@@ -1,7 +1,3 @@
-'use client'
-
-import { useParams } from 'next/navigation';
-
 // Components
 import Photo from '../../../_components/Photo';
 import ReportForm from '../../../_components/forms/ReportCreateForm';
@@ -9,10 +5,9 @@ import ReportForm from '../../../_components/forms/ReportCreateForm';
 // Constants (Only temporary while backend is disabled)
 import { photos } from "../../../_constants";
 
-const ReportPhotoPage = () => {
-  const params = useParams();
+const ReportPhotoPage = async (props: { params: { id: number; } }) => {
 
-  const photo = photos.find(photo => photo.id === Number(params.id));
+  const photo = photos.find(photo => photo.id === Number(props.params.id));
   return (
     <main className='page-layout'>
       {photo ?

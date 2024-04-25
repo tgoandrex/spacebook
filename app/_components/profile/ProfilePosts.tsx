@@ -5,7 +5,7 @@ import Post from "../Post";
 import { posts, comments } from "../../_constants";
 
 
-const ProfilePosts = () => {
+const ProfilePosts = async () => {
   const postsWithComments = posts.map((post) => ({
     ...post,
     comments: comments.filter((comment) => post.commentIds.includes(comment.id))

@@ -1,6 +1,6 @@
 import RegisterForm from "../_components/forms/RegisterForm";
 
-const Register = () => {
+const Register = async () => {
   return (
     <main className='page-layout'>
       <RegisterForm />

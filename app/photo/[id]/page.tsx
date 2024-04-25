@@ -1,7 +1,3 @@
-'use client'
-
-import { useParams } from 'next/navigation';
-
 // Components
 import Photo from '../../_components/Photo';
 import CommentForm from '../../_components/forms/CommentForm';
@@ -9,10 +5,8 @@ import CommentForm from '../../_components/forms/CommentForm';
 // Constants (Only temporary while backend is disabled)
 import { photos, comments } from "../../_constants";
 
-const PhotoPage = () => {
-  const params = useParams();
-
-  const photo = photos.find(photo => photo.id === Number(params.id));
+const PhotoPage = async (props: { params: { id: number; } }) => {
+  const photo = photos.find(photo => photo.id === Number(props.params.id));
 
   const photoComments = photo ? comments.filter(comment => photo.commentIds.includes(comment.id)) : [];
 
@@ -34,7 +28,7 @@ const PhotoPage = () => {
               commentsLink={false}
             />
           </div>
-          <CommentForm />
+          <CommentForm type={"Photo"} id={photo.id} />
         </>
         :
         <div className='text-2xl text-center'>Photo not found!</div>

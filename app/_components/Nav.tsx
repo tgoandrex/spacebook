@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession, signOut, signIn } from "next-auth/react"
+import { useSession, signOut, signIn } from "next-auth/react";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import Image from "next/image";
 
 // Components
 import Button from "./Button";
-import { navLinksAuthenticatedUser, navLinksAuthenticatedAdmin, navLinksUnauthenticated } from "../_constants/index";
+import { generateAuthenticatedNavLinks, navLinksUnauthenticated } from "../_constants/index";
 
 // Hooks
 import useColorMode from "../_hooks/useColorMode";
@@ -17,10 +17,12 @@ import navIcon from "../_assets/icons/nav-icon.png";
 import navIconDark from "../_assets/icons/nav-icon-dark.png";
 
 const Nav = () => {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
   const [toggleOpen, setToggleOpen] = useState(false);
   const [colorMode, setColorMode] = useColorMode();
+
+  const navLinksAuthenticated = generateAuthenticatedNavLinks(Number(session?.user.id));
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,7 +72,19 @@ const Nav = () => {
             />
           </div>
           <ul className="flex items-center max-sm:hidden">
-            {status === "authenticated" ? navLinksAuthenticatedAdmin.map((item) => (
+            {status === "authenticated" && session.user.role === "Admin" && 
+              <li
+                className={`relative group flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                hover:dark:bg-[#89CFF0] rounded-xl`}
+              >
+                <span className="mr-1">Admin</span>
+                <div className="absolute hidden group-hover:block top-full left-0 bg-white rounded-lg shadow-lg py-2 w-40">
+                  <Link href="/admin/search" className="block px-4 py-2 text-center dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
+                  <Link href="/admin/reports/search?type=resolved" className="block px-4 py-2 text-center dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
+                </div>
+              </li>
+            }
+            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
               item.href === "/logout" ?
                 <li 
                   key={item.label} 
@@ -80,20 +94,7 @@ const Nav = () => {
                 >
                   {item.label}
                 </li>
-              :
-              item.href === "/admin/search" ? (
-                <li
-                  key={item.label}
-                  className={`relative group flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
-                  hover:dark:bg-[#89CFF0] rounded-xl`}
-                >
-                  <span className="mr-1">{item.label}</span>
-                  <div className="absolute hidden group-hover:block top-full left-0 bg-white rounded-lg shadow-lg py-2 w-40">
-                    <Link href="/admin/search" className="block px-4 py-2 text-center dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
-                    <Link href="/admin/reports/search?type=resolved" className="block px-4 py-2 text-center dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
-                  </div>
-                </li>
-              ) : (
+              : (
                 <Link
                   key={item.label}
                   href={item.href}
@@ -109,7 +110,7 @@ const Nav = () => {
                 <li key={item.label}
                   className={`flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
                   hover:dark:bg-[#89CFF0] rounded-xl`}
-                  onClick={() => signIn('email', { callbackUrl: '/' })}
+                  onClick={() => signIn('username', { callbackUrl: '/' })}
                 >
                   {item.label}
                 </li>
@@ -142,7 +143,19 @@ const Nav = () => {
         </nav>
         <nav className={`overflow-hidden ${toggleOpen ? 'max-h-[100vh]' : 'max-h-0'} duration-700 ease-in-out`}>
           <ul className="flex flex-col items-center text-center">
-            {status === "authenticated" ? navLinksAuthenticatedAdmin.map((item) => (
+            {status === "authenticated" && session.user.role === "Admin" && (
+              <li
+                className={`relative group dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+                rounded-xl`}
+              >
+                <span className="mr-1">Admin</span>
+                <div className="absolute hidden group-hover:block top-0 right-full bg-white rounded-lg shadow-lg py-2 w-40">
+                  <Link href="/admin/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
+                  <Link href="/admin/reports/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
+                </div>
+              </li>
+            )}
+            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
               item.href === "/logout" ?
                 <li key={item.label}
                   className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
@@ -151,20 +164,7 @@ const Nav = () => {
                 >
                   {item.label}
                 </li>
-              :
-              item.href === "/admin/search" ? (
-                <li
-                  key={item.label}
-                  className={`relative group dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
-                  rounded-xl`}
-                >
-                  <span className="mr-1">{item.label}</span>
-                  <div className="absolute hidden group-hover:block top-0 right-full bg-white rounded-lg shadow-lg py-2 w-40">
-                    <Link href="/admin/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
-                    <Link href="/admin/reports/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
-                  </div>
-                </li>
-              ) : (
+              : (
                 <Link key={item.label}
                   href={item.href}
                   className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}

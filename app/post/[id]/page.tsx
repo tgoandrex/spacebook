@@ -1,7 +1,4 @@
-'use client'
-
 import prisma from "../../../prisma/lib/prisma";
-import { useParams } from 'next/navigation';
 
 // Components
 import Post from "../../_components/Post";
@@ -10,11 +7,8 @@ import CommentForm from "../../_components/forms/CommentForm";
 // Constants (Only temporary while backend is disabled)
 import { posts, comments } from "../../_constants";
 
-// const PostPage = async ({ params }: { params: { id: number } }) => { (Should use once backend is enabled again)
-const PostPage = () => {
-  const params = useParams();
-
-  const post = posts.find(post => post.id === Number(params.id));
+const PostPage = async (props: { params: { id: number; } }) => {
+  const post = posts.find(post => post.id === Number(props.params.id));
 
   const postComments = post ? comments.filter(comment => post.commentIds.includes(comment.id)) : [];
   /* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04)
@@ -78,11 +72,11 @@ const PostPage = () => {
               commentsLink={false}
             />
           </div>
+          <CommentForm type={"Post"} id={post.id} />
         </>
         :
-        <div className='text-2xl text-center'>Photo not found!</div>
+        <div className='text-2xl text-center'>Post not found!</div>
       }
-      <CommentForm />
     </main>
   )
 }

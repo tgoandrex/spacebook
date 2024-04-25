@@ -1,7 +1,3 @@
-"use client"
-
-import { useParams } from 'next/navigation';
-
 // Components
 import Post from '../../../_components/Post';
 import ReportForm from '../../../_components/forms/ReportCreateForm';
@@ -9,10 +5,8 @@ import ReportForm from '../../../_components/forms/ReportCreateForm';
 // Constants (Only temporary while backend is disabled)
 import { posts } from "../../../_constants";
 
-const ReportPostPage = () => {
-  const params = useParams();
-
-  const post = posts.find(post => post.id === Number(params.id));
+const ReportPostPage = async (props: { params: { id: number; } }) => {
+  const post = posts.find(post => post.id === Number(props.params.id));
   return (
     <main className='page-layout'>
       {post ?

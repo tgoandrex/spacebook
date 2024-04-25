@@ -1,11 +1,9 @@
-'use client'
-
 import Link from "next/link";
 
 // Constants (Only temporary while backend is disabled)
 import { reports, adminTableHeadersReports } from "../../../_constants";
 
-const AdminSearchReports = ({ type } : { type: string; }) => {
+const AdminSearchReports = async ({ type } : { type: string; }) => {
 
   const filteredReports = reports.filter((report) => {
     return report.resolved === (type === "resolved" ? true : false);
