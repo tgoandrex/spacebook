@@ -30,14 +30,15 @@ interface ProfileProps {
 }
 
 const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
-  const [showUploadButton, setShowUploadButton] = useState(false);
-  
   const pathname = usePathname();
   const pathnameEnd = pathname.substring(pathname.lastIndexOf('/') + 1);
 
   const params = useParams();
 
   const user = users.find(user => user.id === parseInt(params.id));
+
+  const [showUploadButton, setShowUploadButton] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto);
 
   const createProfilePhoto = async (id: number, url: string) => {
     await fetch(`/api/profilePhoto`, {
@@ -51,7 +52,12 @@ const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
         url: url
       }),
     }).then((res) => {
-      console.log(res)
+      console.log(res);
+      return res.json();
+    }).then((data) => {
+      console.log(data);
+    }).catch((e: Error) => {
+      console.log("response error: ", e);
     });
   };
   
@@ -67,20 +73,20 @@ const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
                     <UploadButton<OurFileRouter>
                       endpoint="imageUploader"
                       onClientUploadComplete={(res) => {
-                        // Do something with the response
-                        createProfilePhoto(user.id, res![0].url)
+                        createProfilePhoto(user.id, res![0].url);
+                        setShowUploadButton(false);
+                        setProfilePhoto(res![0].url)
                         alert("Upload Completed");
                       }}
                       onUploadError={(error: Error) => {
-                        // Do something with the error.
                         alert(`ERROR! ${error.message}`);
                       }}
                     />
                   </div>
                 :
-                user.profilePhoto ?
+                profilePhoto ?
                   <Image
-                    src={user.profilePhoto}
+                    src={profilePhoto}
                     width={150}
                     height={150}
                     className="rounded-full"
