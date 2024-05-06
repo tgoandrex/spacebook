@@ -9,11 +9,12 @@ import Comment from "./Comment";
 import Button from "./Button";
 
 type Comment = {
-  id: number,
-  author: {id: number, username: string};
-  createdAt: string;
+  id: number;
   content: string;
-  likes: number;
+  authorUsername: string;
+  createdAt: Date;
+  author: { id: number; username: string };
+  likes: { userId: number; commentId: number; createdAt: Date; }[];
 };
 
 type PhotoProps = {
@@ -56,7 +57,8 @@ const Photo: React.FC<PhotoProps> = ({ id, src, description, author, createdAt, 
                   key={comment.id}
                   id={comment.id}
                   author={comment.author}
-                  createdAt={comment.createdAt}
+                  authorUsername={comment.authorUsername}
+                  createdAt={new Date(comment.createdAt)}
                   content={comment.content}
                   likes={comment.likes}
                 />
@@ -67,7 +69,8 @@ const Photo: React.FC<PhotoProps> = ({ id, src, description, author, createdAt, 
                   key={comment.id}
                   id={comment.id}
                   author={comment.author}
-                  createdAt={comment.createdAt}
+                  authorUsername={comment.authorUsername}
+                  createdAt={new Date(comment.createdAt)}
                   content={comment.content}
                   likes={comment.likes}
                 />
