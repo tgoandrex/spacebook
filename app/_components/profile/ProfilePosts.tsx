@@ -64,7 +64,7 @@ const ProfilePosts = () => {
           },
           likes: post.likes,
           comments: post.comments,
-          createdAt: new Date(post.createdAt)
+          createdAt: post.createdAt
         }));
         setPosts(posts);
       }

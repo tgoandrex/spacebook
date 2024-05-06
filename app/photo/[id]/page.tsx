@@ -22,7 +22,7 @@ const PhotoPage = async (props: { params: { id: number; } }) => {
               description={photo.description} 
               author={photo.author} 
               likes={photo.likes}
-              createdAt={photo.createdAt}
+              createdAt={new Date(photo.createdAt)}
               content={photo.content}
               comments={photoComments}
               commentsLink={false}

@@ -20,7 +20,7 @@ const ReportPostPage = async (props: { params: { id: number; } }) => {
               id={post.id}
               author={post.author} 
               likes={post.likes}
-              createdAt={post.createdAt}
+              createdAt={new Date(post.createdAt)}
               content={post.content}
               commentsLink={false}
             />

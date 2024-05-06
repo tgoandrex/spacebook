@@ -1,5 +1,3 @@
-/* Temporarily shut off SearchPosts until I work on this
-
 // Components
 import Post from "../Post";
 
@@ -22,7 +20,7 @@ const SearchPosts = async ({ query }: { query: string }) => {
             key={post.id}
             id={post.id}
             author={post.author}
-            createdAt={new Date(post.createdAt}
+            createdAt={post.createdAt}
             content={post.content}
             likes={post.likes}
             comments={post.comments}
@@ -37,5 +35,3 @@ const SearchPosts = async ({ query }: { query: string }) => {
 };
 
 export default SearchPosts;
-
-*/
