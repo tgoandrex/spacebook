@@ -68,7 +68,7 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
               {user.restricted.toString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              {user.createdAt}
+              {user.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               <Button 

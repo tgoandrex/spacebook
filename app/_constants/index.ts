@@ -33,8 +33,8 @@ export const adminTableHeadersReports = ["ID", "Reporter", "Reporter Message", "
 
 // (Only temporary while backend is disabled)
 export const users = [
-  { id: 1, username: "tgoandrex", role: "Admin", createdAt: "August 2, 12:00", restricted: false, followers: [{id: 2, username: "guy123"}]},
-  { id: 2, username: "guy123", role: "User", createdAt: "August 3, 11:00", restricted: false, followers: [{id: 1, username: "tgoandrex"}]}
+  { id: 1, username: "tgoandrex", role: "Admin", createdAt: new Date("August 2, 12:00"), restricted: false, followers: [{id: 2, username: "guy123"}]},
+  { id: 2, username: "guy123", role: "User", createdAt: new Date("August 3, 11:00"), restricted: false, followers: [{id: 1, username: "tgoandrex"}]}
 ];
 
 // (Only temporary while backend is disabled)

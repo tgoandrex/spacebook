@@ -85,7 +85,7 @@ const AdminSearchPhotos = ({ query } : { query: string; }) => {
               }
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              {photo.createdAt}
+              {photo.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               <Button label="Delete" isDisabled={true} fontAwesomeIcon="fa-trash" clickEvent={() => deletePhoto(photo.id)} />

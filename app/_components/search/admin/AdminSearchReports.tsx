@@ -46,7 +46,7 @@ const AdminSearchReports = async ({ type } : { type: string; }) => {
               {report.resolved === true ? `"${report.adminMessage}"` : "Not resolved yet!"}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              {report.createdAt}
+              {report.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               {report.resolved === false ?
