@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from "next/image";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
@@ -17,31 +17,26 @@ import Button from '../Button';
 // Constants
 import { profileNavLinks } from '../../_constants';
 
-interface ProfileProps {
-  users: {
-    id: number,
-    username: string,
-    fname: string | null,
-    lname: string | null,
-    role: string,
-    profilePhoto: string | null,
-    createdAt: Date
-  }[]
-}
-
-const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
+const ProfileNav = () => {
   const pathname = usePathname();
   const pathnameEnd = pathname.substring(pathname.lastIndexOf('/') + 1);
 
   const params = useParams();
 
-  const user = users.find(user => user.id === parseInt(params.id));
-
+  const [user, setUser] = useState({
+    id: 0,
+    username: "",
+    fname: "",
+    lname: "",
+    role: "",
+    profilePhoto: "",
+    createdAt: new Date()
+  });
   const [showUploadButton, setShowUploadButton] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto);
+  const [profilePhoto, setProfilePhoto] = useState("");
 
   const createProfilePhoto = async (id: number, url: string) => {
-    await fetch(`/api/profilePhoto`, {
+    await fetch(`/api/user`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -52,7 +47,6 @@ const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
         url: url
       }),
     }).then((res) => {
-      console.log(res);
       return res.json();
     }).then((data) => {
       console.log(data);
@@ -61,9 +55,39 @@ const ProfileNav: React.FC<ProfileProps> = ({ users }) => {
     });
   };
   
+  useEffect(() => {
+    fetch(`/api/user?id=${params.id}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      if(data.user) {
+        setUser({
+          id: data.user.id,
+          username: data.user.username,
+          fname: data.user.fname,
+          lname: data.user.lname,
+          role: data.user.role,
+          profilePhoto: data.user.profilePhoto,
+          createdAt: new Date(data.user.createdAt)
+        });
+        setProfilePhoto(data.user.profilePhoto);
+      }
+    })
+    .catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  }, [])
+  
   return (
     <nav className="dark:bg-gray-700 dark:text-white items-center pb-5">
-      {user ?
+      {user.id !== 0 ?
         <>
           <div className='flex flex-col items-center md:flex-row justify-between gap-4'>
             <div className='text-2xl pl-2 flex flex-col items-center md:flex-row gap-4 mt-5'>

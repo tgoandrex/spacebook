@@ -33,7 +33,7 @@ export const authOptions: AuthOptions = {
           if (passwordMatch) {
             const user = { 
               id: foundUser.id.toString(), 
-              name: foundUser.username,
+              username: foundUser.username,
               role: foundUser.role
             };
             return user;

@@ -1,22 +1,6 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma/lib/prisma";
 
-export const createPost = async (formData: FormData) => {  
-  const value = formData.get("content") as string;
-
-  try {
-    await prisma.post.create({
-      data: {
-        content: value,
-        authorUsername: 'tgoandrex'
-      }
-    });
-    revalidatePath('/');
-  } catch (e) {
-    console.log('Failed to create post');
-  }
-}
-
 export const deletePost = async (postId: number) => {
   try {
     await prisma.post.delete({
@@ -28,60 +12,6 @@ export const deletePost = async (postId: number) => {
   } catch (e) {
     console.log('Failed to delete post');
   }
-}
-
-export const createComment = async (formData: FormData) => {
-  const content = formData.get("content") as string;
-  const entityType = formData.get("entityType") as string;
-  const entityId = Number(formData.get("entityId"));
-
-  switch(entityType) {
-    case "Photo":
-      try {
-        const foundPhoto = await prisma.photo.findFirst({
-          where: {
-            id: entityId
-          }
-        });
-
-        if(foundPhoto) {
-          await prisma.comment.create({
-            data: {
-              content: content,
-              authorUsername: "tgoandrex",
-              photoId: foundPhoto.id
-            }
-          });
-        } else {
-          console.log('Photo not found');
-        }
-      } catch (e) {
-        console.log('Failed to fetch photo');
-      }
-    case "Post":
-      try {
-        const foundPost = await prisma.post.findFirst({
-          where: {
-            id: entityId
-          }
-        });
-
-        if(foundPost) {
-          await prisma.comment.create({
-            data: {
-              content: content,
-              authorUsername: "tgoandrex",
-              postId: foundPost.id
-            }
-          });
-        } else {
-          console.log('Post not found');
-        }
-      } catch (e) {
-        console.log('Failed to fetch post');
-      }
-  }
-  revalidatePath('/');
 }
 
 export const deleteComment = async (commentId: number) => {  
