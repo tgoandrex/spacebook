@@ -1,3 +1,6 @@
+/* Temporarily shut off SearchPhotos until I work on this
+
+
 // Components
 import Photo from "../Photo";
 
@@ -37,3 +40,5 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
 }
 
 export default SearchPhotos;
+
+*/
