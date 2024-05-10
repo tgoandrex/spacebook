@@ -20,7 +20,7 @@ const ReportPhotoPage = async (props: { params: { id: number; } }) => {
               <Photo 
                 key={photo.id} 
                 id={photo.id} 
-                src={photo.src} 
+                url={photo.url} 
                 description={photo.description} 
                 author={photo.author} 
                 likes={photo.likes}
