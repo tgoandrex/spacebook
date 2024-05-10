@@ -1,4 +1,3 @@
-/*
 // Components
 import Photo from "../Photo";
 
@@ -20,7 +19,7 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
           <Photo 
             key={photo.id} 
             id={photo.author.id} 
-            src={photo.src} 
+            url={photo.url} 
             description={photo.description} 
             author={photo.author} 
             likes={photo.likes}
@@ -38,4 +37,3 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
 }
 
 export default SearchPhotos;
-*/

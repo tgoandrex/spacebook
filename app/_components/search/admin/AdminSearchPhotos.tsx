@@ -1,4 +1,3 @@
-/*
 'use client'
 
 import Link from "next/link";
@@ -78,7 +77,7 @@ const AdminSearchPhotos = ({ query } : { query: string; }) => {
               {expandedPhotoId === photo.id ?
                 <div className="w-52 md:w-72">
                   <Link href={`/photo/${photo.id}`}>
-                    <Photo id={photo.id} src={photo.src} description={photo.description} commentsLink={false} />
+                    <Photo id={photo.id} url={photo.url} description={photo.description} commentsLink={false} />
                   </Link>
                 </div>
                 :
@@ -106,4 +105,3 @@ const AdminSearchPhotos = ({ query } : { query: string; }) => {
 }
 
 export default AdminSearchPhotos;
-*/
