@@ -1,6 +1,9 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../../../prisma/lib/prisma";
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+
 // Components
 import Button from '../Button';
 
@@ -10,10 +13,13 @@ interface CommentFormProps {
 }
 
 const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
+  const session = await getServerSession(authOptions);
+
   const createComment = async (formData: FormData) => {
     "use server"
 
     const content = formData.get("content") as string;
+    const username = session!.user.username!;
   
     switch(type) {
       case "Photo":
@@ -21,6 +27,9 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
           const foundPhoto = await prisma.photo.findFirst({
             where: {
               id: id
+            },
+            select: {
+              id: true
             }
           });
   
@@ -28,7 +37,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
             await prisma.comment.create({
               data: {
                 content: content,
-                authorUsername: "tgoandrex",
+                authorUsername: username,
                 photoId: foundPhoto.id
               }
             });
@@ -43,6 +52,9 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
           const foundPost = await prisma.post.findFirst({
             where: {
               id: id
+            },
+            select: {
+              id: true
             }
           });
   
@@ -50,7 +62,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
             await prisma.comment.create({
               data: {
                 content: content,
-                authorUsername: "tgoandrex",
+                authorUsername: username,
                 postId: foundPost.id
               }
             });

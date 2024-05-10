@@ -60,7 +60,7 @@ const Feed = async () => {
           <Photo 
             key={item.shuffleID} 
             id={item.id} 
-            src={item.src} 
+            url={item.src} 
             description={item.description} 
             author={item.author} 
             likes={item.likes}

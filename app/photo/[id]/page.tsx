@@ -1,14 +1,35 @@
+import prisma from "../../../prisma/lib/prisma";
+
 // Components
 import Photo from '../../_components/Photo';
 import CommentForm from '../../_components/forms/CommentForm';
 
-// Constants (Only temporary while backend is disabled)
-import { photos, comments } from "../../_constants";
-
-const PhotoPage = async (props: { params: { id: number; } }) => {
-  const photo = photos.find(photo => photo.id === Number(props.params.id));
-
-  const photoComments = photo ? comments.filter(comment => photo.commentIds.includes(comment.id)) : [];
+const PhotoPage = async (props: { params: { id: string; } }) => {
+  const photo = await prisma.photo.findUnique({
+    where: {
+      id: parseInt(props.params.id)
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true
+        }
+      },
+      likes: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true
+            }
+          },
+          likes: true
+        }
+      }
+    }
+  });
 
   return (
     <main className="page-layout">
@@ -16,15 +37,14 @@ const PhotoPage = async (props: { params: { id: number; } }) => {
         <>
           <div className='flex justify-center flex-wrap'>
             <Photo 
-              key={photo.id} 
               id={photo.id} 
-              src={photo.src} 
-              description={photo.description} 
+              url={photo.url} 
+              description={photo.content} 
               author={photo.author} 
               likes={photo.likes}
               createdAt={new Date(photo.createdAt)}
               content={photo.content}
-              comments={photoComments}
+              comments={photo.comments}
               commentsLink={false}
             />
           </div>

@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import Link from "next/link";
@@ -105,3 +106,4 @@ const AdminSearchPhotos = ({ query } : { query: string; }) => {
 }
 
 export default AdminSearchPhotos;
+*/

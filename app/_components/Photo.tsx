@@ -1,6 +1,6 @@
 "use client"
 
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { submitLike } from "../actions";
 
@@ -18,7 +18,7 @@ type Comment = {
 
 type PhotoProps = {
   id: number;
-  src: StaticImageData;
+  url: string;
   description: string;
   author?: {id: number, username: string};
   createdAt?: Date;
@@ -28,12 +28,12 @@ type PhotoProps = {
   commentsLink: Boolean;
 }
 
-const Photo: React.FC<PhotoProps> = ({ id, src, description, author, createdAt, content, likes, comments, commentsLink }) => {
+const Photo: React.FC<PhotoProps> = ({ id, url, description, author, createdAt, content, likes, comments, commentsLink }) => {
   const reducedComments = comments ? comments.slice(0, 3) : [];
 
   return (
     <div className="px-2 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none">
-      <Image src={src} alt={description} />
+      <Image src={url} alt={description} width={500} height={500} />
       {author && content && createdAt && likes &&
         <div className="grid grid-cols-6 bg-[#89CFF0] dark:bg-[#034694] rounded-b-lg mb-1 shadow-md dark:shadow-none px-3 py-1">
           <Link href={`/user/${author.id}/posts`} className="col-start-1 col-end-4 text-blue-700 dark:text-blue-300">{author.username}</Link>
