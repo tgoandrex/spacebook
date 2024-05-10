@@ -1,3 +1,4 @@
+/*
 // Components
 import Photo from "../Photo";
 
@@ -37,3 +38,4 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
 }
 
 export default SearchPhotos;
+*/
