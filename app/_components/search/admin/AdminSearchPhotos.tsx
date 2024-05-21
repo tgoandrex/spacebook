@@ -77,7 +77,7 @@ const AdminSearchPhotos = ({ query } : { query: string; }) => {
               {expandedPhotoId === photo.id ?
                 <div className="w-52 md:w-72">
                   <Link href={`/photo/${photo.id}`}>
-                    <Photo id={photo.id} url={photo.url} description={photo.description} commentsLink={false} />
+                    <Photo id={photo.id} url={photo.url} commentsLink={false} />
                   </Link>
                 </div>
                 :

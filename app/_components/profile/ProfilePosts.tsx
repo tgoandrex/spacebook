@@ -76,19 +76,23 @@ const ProfilePosts = () => {
 
   return (
     <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
-      {posts.map((post) => (
-        post.id !== 0 &&
-          <Post 
-            key={post.id}  
-            id={post.id} 
-            author={post.author} 
-            createdAt={post.createdAt} 
-            content={post.content} 
-            likes={post.likes} 
-            comments={post.comments} 
-            commentsLink={true}
-          />
-      ))}
+      {posts.length > 0 ?
+        posts.map((post) => (
+          post.id !== 0 &&
+            <Post 
+              key={post.id}  
+              id={post.id} 
+              author={post.author} 
+              createdAt={post.createdAt} 
+              content={post.content} 
+              likes={post.likes} 
+              comments={post.comments} 
+              commentsLink={true}
+            />
+        ))
+      :
+        <li className='text-2xl text-center'>Posts not found!</li>
+      }
     </ul>
   )
 }

@@ -48,11 +48,11 @@ export const posts = [
 
 // (Only temporary while backend is disabled)
 export const photos = [
-  { id: 1, url: "cow", description: "A Cow", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 5, 4:00"), content: "Test Photo 1", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [] },
-  { id: 2, url: "duck", description: "A Duck", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 6, 3:00"), content: "Test Photo 2", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [9, 10] },
-  { id: 3, url: "goat", description: "A Goat", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 7, 1:00"), content: "Test Photo 3", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [11] },
-  { id: 4, url: "parakeet", description: "A Parakeet", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 8, 1:00"), content: "Test Photo 4", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [12, 13, 14] },
-  { id: 5, url: "penguin", description: "A Penguin", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 9, 10:00"), content: "Test Photo 5", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [15, 16, 17, 18] }
+  { id: 1, url: "/cow", description: "A Cow", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 5, 4:00"), content: "Test Photo 1", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [] },
+  { id: 2, url: "/duck", description: "A Duck", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 6, 3:00"), content: "Test Photo 2", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [9, 10] },
+  { id: 3, url: "/goat", description: "A Goat", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 7, 1:00"), content: "Test Photo 3", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [11] },
+  { id: 4, url: "/parakeet", description: "A Parakeet", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 8, 1:00"), content: "Test Photo 4", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [12, 13, 14] },
+  { id: 5, url: "/penguin", description: "A Penguin", author: {id: 1, username: "tgoandrex"}, createdAt: new Date("August 9, 10:00"), content: "Test Photo 5", likes: [{userId: 1, photoId: 1, createdAt: new Date("August 5, 2:25")}], commentIds: [15, 16, 17, 18] }
 ];
 
 // (Only temporary while backend is disabled)

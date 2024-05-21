@@ -39,7 +39,6 @@ const PhotoPage = async (props: { params: { id: string; } }) => {
             <Photo 
               id={photo.id} 
               url={photo.url} 
-              description={photo.content} 
               author={photo.author} 
               likes={photo.likes}
               createdAt={new Date(photo.createdAt)}

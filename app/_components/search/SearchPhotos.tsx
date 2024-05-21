@@ -20,7 +20,6 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
             key={photo.id} 
             id={photo.author.id} 
             url={photo.url} 
-            description={photo.description} 
             author={photo.author} 
             likes={photo.likes}
             createdAt={photo.createdAt}

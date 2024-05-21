@@ -27,23 +27,6 @@ export const deleteComment = async (commentId: number) => {
   }
 }
 
-export const createPhoto = async (formData: FormData) => {
-  const value = formData.get("content") as string;
-
-  try {
-    await prisma.photo.create({
-      data: {
-        url: "PLACEHOLDER",
-        content: value,
-        authorUsername: "tgoandrex"
-      }
-    });
-    revalidatePath('/');
-  } catch (e) {
-    console.log('Failed to create photo');
-  }
-}
-
 export const submitLike = async (type: "Comment" | "Photo" | "Post", id: number) => {
   switch(type) {
     case "Comment":
@@ -109,36 +92,6 @@ export const submitLike = async (type: "Comment" | "Photo" | "Post", id: number)
       } catch (e) {
         console.log('Failed to like post');
       }
-  }
-}
-
-export const submitFollow = async (followerId: number, followingId: number) => {
-  try {
-    const userToFollow = await prisma.user.findFirst({
-      where: {
-        id: followerId
-      }
-    })
-
-    const userFollowing = await prisma.user.findFirst({
-      where: {
-        id: followingId
-      }
-    })
-    
-    if(userToFollow && userFollowing) {
-      await prisma.follow.create({
-        data: {
-          followerId: userToFollow.id,
-          followingId: userFollowing.id
-        }
-      })
-      revalidatePath('/');
-    } else {
-      console.log("Could not find users!")
-    }
-  } catch (e) {
-    console.log('Failed to follow user');
   }
 }
 

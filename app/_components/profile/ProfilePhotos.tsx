@@ -32,16 +32,7 @@ interface Comment {
 };
 
 const ProfilePhotos = () => {
-  const [photos, setPhotos] = useState<Photo[]>([{
-    id: 0,
-    url: "",
-    content: "",
-    author: { id: 0, username: "" },
-    authorUsername: "",
-    likes: [],
-    comments: [],
-    createdAt: new Date()
-  }]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
 
   const params = useParams();
 
@@ -80,14 +71,16 @@ const ProfilePhotos = () => {
 
   return (
     <ul className="flex flex-wrap justify-center gap-4 md:gap-8">
-      {photos[0].id !== 0 &&
+      {photos.length > 0 ?
         photos.map((item) => (
-          <li className="w-52 md:w-72">
+          <li key={item.id} className="w-52 md:w-72">
             <Link href={`/photo/${item.id}`}>
-              <Photo key={item.id} id={item.id} url={item.url} description={item.content} commentsLink={false} />
+              <Photo id={item.id} url={item.url} commentsLink={false} />
             </Link>
           </li>
         ))
+        :
+        <li className='text-2xl text-center'>Photos not found!</li>
       }
     </ul>
   )

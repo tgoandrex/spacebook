@@ -41,6 +41,9 @@ export async function GET(request: Request) {
             likes: true
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
