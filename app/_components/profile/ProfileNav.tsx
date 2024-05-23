@@ -129,22 +129,13 @@ const ProfileNav = () => {
                     />
                   </div>
                 :
-                profilePhoto ?
-                  <Image
-                    src={profilePhoto}
-                    width={150}
-                    height={150}
-                    className="rounded-full"
-                    alt="Profile picture"
-                  />
-                :
                 <Image
-                    src={blankProfilePicture}
-                    width={150}
-                    height={150}
-                    className="rounded-full"
-                    alt="Profile picture"
-                  />
+                  src={profilePhoto ? profilePhoto : blankProfilePicture}
+                  width={150}
+                  height={150}
+                  className="rounded-full"
+                  alt="Profile picture"
+                />
                 }
                 {Number(session?.user.id) === user.id && (
                   <Button 

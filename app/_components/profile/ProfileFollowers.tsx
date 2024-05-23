@@ -2,6 +2,8 @@
 
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { StaticImageData } from 'next/image';
+
 
 // Components
 import User from '../User';
@@ -9,6 +11,7 @@ import User from '../User';
 interface Follower {
   id: number;
   username: string;
+  profilePhoto?: string;
 }
 
 const ProfileFollowers = () => {
@@ -31,7 +34,8 @@ const ProfileFollowers = () => {
       if(data.followers) {
         const followers: Follower[] = data.followers.map((follower: Follower) => ({
           id: follower.id,
-          username: follower.username
+          username: follower.username,
+          profilePhoto: follower.profilePhoto
         }));
         setFollowers(followers);
       }
@@ -49,6 +53,7 @@ const ProfileFollowers = () => {
             key={follower.id}  
             id={follower.id} 
             username={follower.username}
+            profilePhoto={follower.profilePhoto}
           />
         ))
       :

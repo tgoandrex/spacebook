@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useSession } from "next-auth/react";
 
 // Components
 import Post from "../Post";
+import PostForm from '../forms/PostForm';
 
 interface Post {
   id: number;
@@ -42,6 +44,8 @@ const ProfilePosts = () => {
 
   const params = useParams();
 
+  const { data: session } = useSession();
+
   useEffect(() => {
     fetch(`/api/post?id=${params.id}`, {
       method: "GET",
@@ -75,25 +79,30 @@ const ProfilePosts = () => {
   }, [])
 
   return (
-    <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
-      {posts.length > 0 ?
-        posts.map((post) => (
-          post.id !== 0 &&
-            <Post 
-              key={post.id}  
-              id={post.id} 
-              author={post.author} 
-              createdAt={post.createdAt} 
-              content={post.content} 
-              likes={post.likes} 
-              comments={post.comments} 
-              commentsLink={true}
-            />
-        ))
-      :
-        <li className='text-2xl text-center'>Posts not found!</li>
+    <>
+      {session?.user.id === params.id &&
+        <PostForm />
       }
-    </ul>
+      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
+        {posts.length > 0 ?
+          posts.map((post) => (
+            post.id !== 0 &&
+              <Post 
+                key={post.id}  
+                id={post.id} 
+                author={post.author} 
+                createdAt={post.createdAt} 
+                content={post.content} 
+                likes={post.likes} 
+                comments={post.comments} 
+                commentsLink={true}
+              />
+          ))
+        :
+          <li className='text-2xl text-center'>Posts not found!</li>
+        }
+      </ul>
+    </>
   )
 }
 

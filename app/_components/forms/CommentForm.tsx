@@ -72,7 +72,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
         } catch (e) {
           console.log('Failed to fetch post');
         }
-    }
+      }
     revalidatePath('/');
   }
 

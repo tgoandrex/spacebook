@@ -26,7 +26,8 @@ export async function GET(request: Request) {
         follower: {
           select: {
             id: true,
-            username: true
+            username: true,
+            profilePhoto: true
           }
         }
       }
@@ -38,7 +39,8 @@ export async function GET(request: Request) {
 
     const flattenedFollowers = followers.map(f => ({
       id: f.follower.id,
-      username: f.follower.username
+      username: f.follower.username,
+      profilePhoto: f.follower.profilePhoto
     }));
 
     return new Response(JSON.stringify({ success: true, followers: flattenedFollowers }), { status: 200, headers: { 'Content-Type': 'application/json' } });

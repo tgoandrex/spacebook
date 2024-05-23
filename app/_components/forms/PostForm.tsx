@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useSession } from "next-auth/react";
 
-
 // Components
 import Button from '../Button';
 
@@ -29,6 +28,7 @@ const PostForm = () => {
       return res.json();
     }).then((data) => {
       console.log(data);
+      setShowForm(false);
     }).catch((e: Error) => {
       console.log("response error: ", e);
     });

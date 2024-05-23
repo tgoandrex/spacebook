@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
+
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
 
@@ -50,6 +51,7 @@ const PostPhoto = () => {
             if(content) {
               createPhoto(Number(session!.user.id), content, res![0].url);
               alert("Photo upload Completed");
+              setShowUploadButton(false);
             } else {
               alert("Photo did not upload, please enter a description next time");
             }
