@@ -22,7 +22,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
     const username = session!.user.username!;
   
     switch(type) {
-      case "Photo":
+      case "Photo": {
         try {
           const foundPhoto = await prisma.photo.findFirst({
             where: {
@@ -32,7 +32,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
               id: true
             }
           });
-  
+
           if(foundPhoto) {
             await prisma.comment.create({
               data: {
@@ -45,9 +45,11 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
             console.log('Photo not found');
           }
         } catch (e) {
-          console.log('Failed to fetch photo');
+          throw new Error('Failed to fetch photo');
         }
-      case "Post":
+        break;
+      }
+      case "Post": {
         try {
           const foundPost = await prisma.post.findFirst({
             where: {
@@ -57,7 +59,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
               id: true
             }
           });
-  
+
           if(foundPost) {
             await prisma.comment.create({
               data: {
@@ -70,9 +72,11 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
             console.log('Post not found');
           }
         } catch (e) {
-          console.log('Failed to fetch post');
+          throw new Error('Failed to fetch post');
         }
+        break;
       }
+    }
     revalidatePath('/');
   }
 

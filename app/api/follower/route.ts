@@ -45,8 +45,7 @@ export async function GET(request: Request) {
 
     return new Response(JSON.stringify({ success: true, followers: flattenedFollowers }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    console.error('Failed to get followers:', error);
-    return new Response(JSON.stringify({ success: false, error: 'Failed to get followers' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    throw new Error('Failed to get followers');
   }
 }
 
@@ -61,7 +60,6 @@ export async function POST(request: Request) {
     });
     return new Response(JSON.stringify({ success: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    console.error('Failed to create follow:', error);
-    return new Response(JSON.stringify({ success: false, error: 'Failed to create follow' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    throw new Error('Failed to create follow');
   }
 }

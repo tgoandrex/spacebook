@@ -53,8 +53,7 @@ export async function GET(request: Request) {
 
     return new Response(JSON.stringify({ success: true, photos }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    console.error('Failed to get photos:', error);
-    return new Response(JSON.stringify({ success: false, error: 'Failed to get photos' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    throw new Error('Failed to get photos');
   }
 }
 
@@ -85,7 +84,6 @@ export async function POST(request: Request) {
 
     return new Response(JSON.stringify({ success: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    console.error('Failed to update profile picture:', error);
-    return new Response(JSON.stringify({ success: false, error: 'Failed to update profile photo' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    throw new Error('Failed to create photo');
   }
 }

@@ -13,8 +13,8 @@ const Home = async () => {
     <main className='page-layout'>
       {session !== null ?
         <>
-          <PostForm />
           <PhotoForm />
+          <PostForm />
           <div className="text-center pt-8 pb-4">
             <span className="text-3xl">Your Feed</span>
           </div>

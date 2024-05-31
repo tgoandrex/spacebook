@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation'; 
-import { useSession } from "next-auth/react";
 
 // Components
 import Photo from "../Photo";
-import PostPhoto from "../forms/PhotoForm";
 
 interface Photo {
   id: number;
@@ -37,8 +35,6 @@ const ProfilePhotos = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
 
   const params = useParams();
-
-  const { data: session } = useSession();
 
   useEffect(() => {
     fetch(`/api/photo?id=${params.id}`, {
@@ -74,24 +70,19 @@ const ProfilePhotos = () => {
   }, [])
 
   return (
-    <>
-      {session?.user.id === params.id &&
-        <PostPhoto />
+    <ul className="flex flex-wrap justify-center gap-4 md:gap-8 py-8">
+      {photos.length > 0 ?
+        photos.map((item) => (
+          <li key={item.id} className="w-52 md:w-72">
+            <Link href={`/photo/${item.id}`}>
+              <Photo id={item.id} url={item.url} commentsLink={false} />
+            </Link>
+          </li>
+        ))
+        :
+        <li className='text-2xl text-center'>Photos not found!</li>
       }
-      <ul className="flex flex-wrap justify-center gap-4 md:gap-8 py-8">
-        {photos.length > 0 ?
-          photos.map((item) => (
-            <li key={item.id} className="w-52 md:w-72">
-              <Link href={`/photo/${item.id}`}>
-                <Photo id={item.id} url={item.url} commentsLink={false} />
-              </Link>
-            </li>
-          ))
-          :
-          <li className='text-2xl text-center'>Photos not found!</li>
-        }
-      </ul>
-    </>
+    </ul>
   )
 }
 

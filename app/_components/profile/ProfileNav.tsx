@@ -123,8 +123,8 @@ const ProfileNav = () => {
                         setProfilePhoto(res![0].url)
                         alert("Upload Completed");
                       }}
-                      onUploadError={(error: Error) => {
-                        alert(`ERROR! ${error.message}`);
+                      onUploadError={() => {
+                        throw new Error('There was an error');
                       }}
                     />
                   </div>

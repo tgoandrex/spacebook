@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useSession } from "next-auth/react";
 
 // Components
 import Post from "../Post";
-import PostForm from '../forms/PostForm';
 
 interface Post {
   id: number;
@@ -44,8 +42,6 @@ const ProfilePosts = () => {
 
   const params = useParams();
 
-  const { data: session } = useSession();
-
   useEffect(() => {
     fetch(`/api/post?id=${params.id}`, {
       method: "GET",
@@ -80,9 +76,6 @@ const ProfilePosts = () => {
 
   return (
     <>
-      {session?.user.id === params.id &&
-        <PostForm />
-      }
       <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
         {posts.length > 0 ?
           posts.map((post) => (

@@ -1,19 +1,15 @@
 'use client'
 
-import { useState } from "react";
 import { useSession } from "next-auth/react";
-
+import { useRouter } from "next/navigation";
 
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
 
-// Components
-import Button from '../Button';
-
 const PostPhoto = () => {
   const { data: session } = useSession();
-
-  const [showUploadButton, setShowUploadButton] = useState(false);
+  
+  const router = useRouter();
 
   const createPhoto = async (id: number, content: string, url: string) => {
     await fetch(`/api/photo`, {
@@ -37,30 +33,23 @@ const PostPhoto = () => {
   };
 
   return (
-    <div className='flex flex-col items-center gap-4 pt-4'>
-      <Button 
-        label={showUploadButton ? "Cancel" : "Add New Photo"} 
-        clickEvent={() => setShowUploadButton(!showUploadButton)} 
-        isDisabled={false} 
+    <div className='flex flex-col items-center pb-2'>
+      New Photo
+      <UploadButton<OurFileRouter>
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          let content = prompt("Please enter a brief description for this photo");
+          if(content) {
+            createPhoto(Number(session!.user.id), content, res![0].url);
+            router.push(`/user/${session?.user.id}/photos`);
+          } else {
+            throw new Error('Photo did not upload, please enter a description when prompted');
+          }
+        }}
+        onUploadError={(error: Error) => {
+          throw new Error('Photo did not upload, please enter a description when prompted');
+        }}
       />
-      {showUploadButton &&
-        <UploadButton<OurFileRouter>
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            let content = prompt("Please enter a brief description for this photo");
-            if(content) {
-              createPhoto(Number(session!.user.id), content, res![0].url);
-              alert("Photo upload Completed");
-              setShowUploadButton(false);
-            } else {
-              alert("Photo did not upload, please enter a description next time");
-            }
-          }}
-          onUploadError={(error: Error) => {
-            alert(`ERROR! ${error.message}`);
-          }}
-        />
-      }
     </div>
   )
 }

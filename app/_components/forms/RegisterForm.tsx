@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 
 import prisma from "../../../prisma/lib/prisma";
@@ -6,14 +6,34 @@ import prisma from "../../../prisma/lib/prisma";
 // Components
 import Button from "../Button";
 
+const validatePassword = (password: string) => {
+  const minLength = 8;
+  const hasNumber = /\d/;
+  const hasUpperCase = /[A-Z]/;
+
+  if (password.length < minLength) {
+    return false;
+  }
+  if (!hasNumber.test(password)) {
+    return false;
+  }
+  if (!hasUpperCase.test(password)) {
+    return false;
+  }
+  return true;
+};
+
 const RegisterForm = async () => {
   const register = async (formData: FormData) => {
     "use server"
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
+
+    if (!validatePassword(password)) {
+      throw new Error('Password does not meet the requirements: Minimum 8 characters in length, contain at least one capital letter, contain at least one number.');
+    }
     
     try {
-
       const usernameExists = await prisma.user.findUnique({
         where: {
           username: username
@@ -21,7 +41,7 @@ const RegisterForm = async () => {
       })
 
       if(usernameExists) {
-        console.log('Username already exists');
+        throw new Error('Username is already in use');
       } else {
         bcrypt.genSalt(10, function(err, salt) {
           bcrypt.hash(password, salt, async function(err, hash) {
@@ -31,13 +51,13 @@ const RegisterForm = async () => {
                 password: hash
               }
             });
-            revalidatePath('/');
           });
         });
       }
     } catch (e) {
-      console.log('Failed to register new user');
+      throw new Error('Failed to register new user');
     }
+    redirect('/');
   }
   
   return (
@@ -48,7 +68,8 @@ const RegisterForm = async () => {
         <input type="text" id="username" name="username" className="border border-gray-800 w-full text-black" maxLength={20} required />
       </label>
       <label htmlFor="password" className="mb-3 w-full">
-        Password<br />
+        Password <br />
+        <span className="text-xs">(Minimum 8 characters in length, contain at least one capital letter, contain at least one number)</span><br />
         <input type="password" id="password" name="password" className="border border-gray-800 w-full text-black" maxLength={30} required />
       </label>
       <Button label="Register" isDisabled={false} />
