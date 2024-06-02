@@ -33,6 +33,7 @@ interface Comment {
 
 const ProfilePhotos = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [photosLoading, setPhotosLoading] = useState(true);
 
   const params = useParams();
 
@@ -62,6 +63,7 @@ const ProfilePhotos = () => {
           createdAt: photo.createdAt
         }));
         setPhotos(photos);
+        setPhotosLoading(false);
       }
     })
     .catch((e: Error) => {
@@ -71,7 +73,10 @@ const ProfilePhotos = () => {
 
   return (
     <ul className="flex flex-wrap justify-center gap-4 md:gap-8 py-8">
-      {photos.length > 0 ?
+      {photosLoading ?
+        <li className='text-2xl text-center'>Content loading, please wait.</li>
+      :
+        photos.length > 0 ?
         photos.map((item) => (
           <li key={item.id} className="w-52 md:w-72">
             <Link href={`/photo/${item.id}`}>

@@ -1,16 +1,38 @@
+import prisma from "../../../prisma/lib/prisma";
+
 // Components
 import Post from "../Post";
 
-// Constants (Only temporary while backend is disabled)
-import { posts, comments } from "../../_constants";
-
 const SearchPosts = async ({ query }: { query: string }) => {
-  const filteredPosts = posts.filter((post) => {
-    return post.content.includes(query);
-  }).map((post) => ({
-    ...post,
-    comments: comments.filter((comment) => post.commentIds.includes(comment.id))
-  }));
+
+  const filteredPosts = await prisma.post.findMany({
+    where: {
+      content: {
+        contains: query,
+        mode: 'insensitive'
+      }
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true
+        }
+      },
+      likes: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true
+            }
+          },
+          likes: true
+        }
+      }
+    }
+  });
 
   return (
     <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">

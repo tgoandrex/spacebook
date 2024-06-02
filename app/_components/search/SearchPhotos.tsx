@@ -1,16 +1,37 @@
+import prisma from "../../../prisma/lib/prisma";
+
 // Components
 import Photo from "../Photo";
 
-// Constants (Only temporary while backend is disabled)
-import { photos, comments } from "../../_constants";
-
 const SearchPhotos = async ({ query } : { query: string; }) => {
-  const filteredPhotos = photos.filter((photo) => {
-    return photo.content.includes(query);
-  }).map((photo) => ({
-    ...photo,
-    comments: comments.filter((comment) => photo.commentIds.includes(comment.id))
-  }));
+  const filteredPhotos = await prisma.photo.findMany({
+    where: {
+      content: {
+        contains: query,
+        mode: 'insensitive'
+      }
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true
+        }
+      },
+      likes: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true
+            }
+          },
+          likes: true
+        }
+      }
+    }
+  });
 
   return (
     <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">

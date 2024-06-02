@@ -2,8 +2,6 @@
 
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { StaticImageData } from 'next/image';
-
 
 // Components
 import User from '../User';
@@ -16,6 +14,7 @@ interface Follower {
 
 const ProfileFollowers = () => {
   const [followers, setFollowers] = useState<Follower[]>([]);
+  const [followersLoading, setFollowersLoading] = useState(true);
 
   const params = useParams();
 
@@ -38,6 +37,7 @@ const ProfileFollowers = () => {
           profilePhoto: follower.profilePhoto
         }));
         setFollowers(followers);
+        setFollowersLoading(false);
       }
     })
     .catch((e: Error) => {
@@ -47,7 +47,10 @@ const ProfileFollowers = () => {
 
   return (
     <ul className="flex flex-wrap justify-center gap-4 md:gap-8">
-      {followers.length > 0 ?
+      {followersLoading ?
+        <li className='text-2xl text-center'>Content loading, please wait.</li>
+      :
+      followers.length > 0 ?
         followers.map((follower) => (
           <User 
             key={follower.id}  

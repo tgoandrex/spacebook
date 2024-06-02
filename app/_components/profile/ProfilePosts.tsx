@@ -39,6 +39,7 @@ const ProfilePosts = () => {
     comments: [],
     createdAt: new Date()
   }]);
+  const [postsLoading, setPostsLoading] = useState(true);
 
   const params = useParams();
 
@@ -67,6 +68,7 @@ const ProfilePosts = () => {
           createdAt: post.createdAt
         }));
         setPosts(posts);
+        setPostsLoading(false);
       }
     })
     .catch((e: Error) => {
@@ -77,7 +79,10 @@ const ProfilePosts = () => {
   return (
     <>
       <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
-        {posts.length > 0 ?
+        {postsLoading ?
+          <li className='text-2xl text-center'>Content loading, please wait.</li>
+        :
+        posts.length > 0 ?
           posts.map((post) => (
             post.id !== 0 &&
               <Post 

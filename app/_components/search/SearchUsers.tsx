@@ -1,23 +1,41 @@
-// Components
-import Follower from "../User";
+import prisma from "../../../prisma/lib/prisma";
 
-// Constants (Only temporary while backend is disabled)
-import { users } from "../../_constants";
+// Components
+import User from "../User";
 
 const SearchUsers = async({ query } : { query: string; }) => {
-  const filteredUsers = users.filter((user) => {
-    return user.username.includes(query);
+
+  const filteredUsers = await prisma.user.findMany({
+    where: {
+      username: {
+        contains: query,
+        mode: 'insensitive'
+      }
+    },
+    select: {
+      id: true,
+      username: true,
+      profilePhoto: true
+    }
   });
 
   return (
-    <ul className="flex flex-col justify-center gap-4 max-w-[225px] m-auto py-8">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[250px] sm:max-w-[450px] m-auto py-8">
       {filteredUsers.length > 0 ?
         filteredUsers.map((user) => (
-          <Follower 
-            key={user.id}  
-            id={user.id} 
-            username={user.username}
-          />
+          user.profilePhoto ?
+            <User 
+              key={user.id}  
+              id={user.id} 
+              username={user.username}
+              profilePhoto={user.profilePhoto}
+            />
+          :
+            <User 
+              key={user.id}  
+              id={user.id} 
+              username={user.username}
+            />
         ))
         :
         <div className='text-2xl text-center'>Search found no users!</div>
