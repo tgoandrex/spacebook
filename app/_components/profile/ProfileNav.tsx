@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from "next/image";
 import { useEffect, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
@@ -19,6 +19,8 @@ import { profileNavLinks } from '../../_constants';
 const ProfileNav = () => {
   const { data: session } = useSession();
 
+  const router = useRouter();
+
   const pathname = usePathname();
   const pathnameEnd = pathname.substring(pathname.lastIndexOf('/') + 1);
 
@@ -31,10 +33,15 @@ const ProfileNav = () => {
     lname: "",
     role: "",
     profilePhoto: "",
+    followers: [],
     createdAt: new Date()
   });
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState("");
+
+  const isFollowing = (followersList: { id: number }[], loggedInUserId: number) => {
+    return followersList.some(follower => follower.id === loggedInUserId);
+  };
 
   const createProfilePhoto = async (id: number, url: string) => {
     await fetch(`/api/user`, {
@@ -70,7 +77,27 @@ const ProfileNav = () => {
     }).then((res) => {
       return res.json();
     }).then((data) => {
-      console.log(data);
+      if (data.success) {
+        router.push("/");
+      }
+    }).catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  };
+
+  const unfollowUser = async (followerId: number, followingId: number) => {
+    await fetch(`/api/follower?followerId=${followerId}&followingId=${followingId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      if (data.success) {
+        router.push("/");
+      }
     }).catch((e: Error) => {
       console.log("response error: ", e);
     });
@@ -88,7 +115,7 @@ const ProfileNav = () => {
       return res.json();
     })
     .then((data) => {
-      if(data.user) {
+      if(data) {
         setUser({
           id: data.user.id,
           username: data.user.username,
@@ -96,6 +123,7 @@ const ProfileNav = () => {
           lname: data.user.lname,
           role: data.user.role,
           profilePhoto: data.user.profilePhoto,
+          followers: data.formattedFollowers,
           createdAt: new Date(data.user.createdAt)
         });
         setProfilePhoto(data.user.profilePhoto);
@@ -155,14 +183,22 @@ const ProfileNav = () => {
               <div className='md:text-right text-2xl pr-2'>
                 Joined: {user.createdAt.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
               </div>
-              {Number(session?.user.id) !== user.id &&
-                <Button 
-                  label="Follow" 
-                  fontAwesomeIcon='fa-user-plus' 
-                  isDisabled={false} 
-                  clickEvent={() => followUser(Number(session?.user.id), user.id)} 
-                />
-              }
+              {Number(session?.user.id) !== user.id && (
+                isFollowing(user.followers, Number(session?.user.id)) ? (
+                  <Button 
+                    label="Unfollow" 
+                    fontAwesomeIcon='fa-user-minus' 
+                    isDisabled={false} 
+                    clickEvent={() => unfollowUser(Number(session?.user.id), user.id)} 
+                  />
+                ) : (
+                  <Button 
+                    label="Follow" 
+                    fontAwesomeIcon='fa-user-plus' 
+                    isDisabled={false} 
+                    clickEvent={() => followUser(Number(session?.user.id), user.id)} 
+                  />
+              ))}
             </div>
           </div>
           <ul className="w-full flex justify-around text-center items-end border-b-2 border-black mt-4">

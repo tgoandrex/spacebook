@@ -20,11 +20,23 @@ export async function GET(request: Request) {
       }
     });
 
-    if (!user) {
-      return new Response(JSON.stringify({ success: false, error: 'User not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+    if(user) {
+      const followers = await prisma.follow.findMany({
+        where: {
+          followingId: user.id
+        },
+        select: {
+          followerId: true
+        }
+      })
+
+      const formattedFollowers = followers.map(follower => ({ id: follower.followerId }));
+      
+      return new Response(JSON.stringify({ success: true, user, formattedFollowers }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
-    return new Response(JSON.stringify({ success: true, user }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: false, error: 'User not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+
   } catch (error) {
     throw new Error('Failed to get user');
   }

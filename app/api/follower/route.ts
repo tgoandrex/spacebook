@@ -63,3 +63,22 @@ export async function POST(request: Request) {
     throw new Error('Failed to create follow');
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const followerId = url.searchParams.get("followerId");
+    const followingId = url.searchParams.get("followingId");
+    await prisma.follow.delete({
+      where: {
+        followerId_followingId: {
+          followerId: parseInt(followerId!),
+          followingId: parseInt(followingId!),
+        }
+      },
+    });
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  } catch (error) {
+    throw new Error('Failed to unfollow');
+  }
+}
