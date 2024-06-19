@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from "next/image";
 import { useEffect, useState } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
@@ -16,10 +16,12 @@ import Button from '../Button';
 // Constants
 import { profileNavLinks } from '../../_constants';
 
+interface Follower {
+  id: number;
+}
+
 const ProfileNav = () => {
   const { data: session } = useSession();
-
-  const router = useRouter();
 
   const pathname = usePathname();
   const pathnameEnd = pathname.substring(pathname.lastIndexOf('/') + 1);
@@ -33,9 +35,9 @@ const ProfileNav = () => {
     lname: "",
     role: "",
     profilePhoto: "",
-    followers: [],
     createdAt: new Date()
   });
+  const [followers, setFollowers] = useState<Follower[]>([]);
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState("");
 
@@ -77,9 +79,7 @@ const ProfileNav = () => {
     }).then((res) => {
       return res.json();
     }).then((data) => {
-      if (data.success) {
-        router.push("/");
-      }
+      console.log(data);
     }).catch((e: Error) => {
       console.log("response error: ", e);
     });
@@ -95,9 +95,7 @@ const ProfileNav = () => {
     }).then((res) => {
       return res.json();
     }).then((data) => {
-      if (data.success) {
-        router.push("/");
-      }
+      console.log(data);
     }).catch((e: Error) => {
       console.log("response error: ", e);
     });
@@ -123,16 +121,19 @@ const ProfileNav = () => {
           lname: data.user.lname,
           role: data.user.role,
           profilePhoto: data.user.profilePhoto,
-          followers: data.formattedFollowers,
           createdAt: new Date(data.user.createdAt)
         });
+        const followers: Follower[] = data.formattedFollowers.map((follower: Follower) => ({
+          id: follower.id
+        }));
+        setFollowers(followers);
         setProfilePhoto(data.user.profilePhoto);
       }
     })
     .catch((e: Error) => {
       console.log("response error: ", e);
     });
-  }, [])
+  }, [followers])
   
   return (
     <nav className="dark:bg-gray-700 dark:text-white items-center pb-5">
@@ -184,7 +185,7 @@ const ProfileNav = () => {
                 Joined: {user.createdAt.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
               </div>
               {Number(session?.user.id) !== user.id && (
-                isFollowing(user.followers, Number(session?.user.id)) ? (
+                isFollowing(followers, Number(session?.user.id)) ? (
                   <Button 
                     label="Unfollow" 
                     fontAwesomeIcon='fa-user-minus' 

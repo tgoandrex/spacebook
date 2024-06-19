@@ -43,7 +43,7 @@ const ProfileFollowers = () => {
     .catch((e: Error) => {
       console.log("response error: ", e);
     });
-  }, [])
+  }, [followers])
 
   return (
     <ul className="flex flex-wrap justify-center gap-4 md:gap-8">
