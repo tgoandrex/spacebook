@@ -37,6 +37,7 @@ const PhotoPage = async (props: { params: { id: string; } }) => {
         <>
           <div className='flex justify-center flex-wrap'>
             <Photo 
+              key={photo.id}
               id={photo.id} 
               url={photo.url} 
               author={photo.author} 

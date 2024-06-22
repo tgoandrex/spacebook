@@ -52,6 +52,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const { followerId, followingId } = await request.json();
+    
     await prisma.follow.create({
       data: {
         followerId: followerId,
@@ -69,6 +70,7 @@ export async function DELETE(request: Request) {
     const url = new URL(request.url);
     const followerId = url.searchParams.get("followerId");
     const followingId = url.searchParams.get("followingId");
+
     await prisma.follow.delete({
       where: {
         followerId_followingId: {

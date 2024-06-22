@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { submitLike } from "../actions";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 // Components
 import Comment from "./Comment";
@@ -28,7 +29,60 @@ type PhotoProps = {
 }
 
 const Photo: React.FC<PhotoProps> = ({ id, url, author, createdAt, content, likes, comments, commentsLink }) => {
+  const { data: session } = useSession();
+  
+  const LoggedInUserLikes = (likedList: number[], loggedInUserId: number) => {
+    return likedList.includes(loggedInUserId);
+  };
+
+  const [likedUserIds] = useState<number[]>(likes ? likes.map(like => like.userId) : []);
+  const [isLikedByLoggedInUser, setIsLikedByLoggedInUser] = useState<boolean>(LoggedInUserLikes(likedUserIds, Number(session?.user.id)));
+  const [likesCount, setLikesCount] = useState<number>(likes ? likes.length : 0);
+
   const reducedComments = comments ? comments.slice(0, 3) : [];
+
+  const submitLike = async (userId: number, postId: number) => {
+    await fetch(`/api/like`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "Photo",
+        id: postId,
+        userId: userId
+      }),
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      console.log(data);
+      if(data.success) {
+        setIsLikedByLoggedInUser(true);
+        setLikesCount((prev) => prev + 1);
+      }
+    }).catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  };
+
+  const removeLike = async (userId: number, photoId: number) => {
+    await fetch(`/api/like?id=${photoId}&userId=${userId}&type=Photo`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      console.log(data);
+      setIsLikedByLoggedInUser(false);
+      setLikesCount((prev) => prev - 1);
+    }).catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  };
 
   return (
     <div className="px-2 py-2 bg-white dark:bg-slate-700 rounded-lg shadow-lg dark:shadow-none">
@@ -39,7 +93,11 @@ const Photo: React.FC<PhotoProps> = ({ id, url, author, createdAt, content, like
           <div className="col-end-7 col-span-3 text-right">{new Date(createdAt).toLocaleString()}</div>
           <div className="col-start-1 col-end-7 text-center min-h-[5rem]">{content}</div>
           <div className="col-start-1 col-end-4">
-            <Button label={`${likes.length}`} fontAwesomeIcon="fa-thumbs-up" isDisabled={true} clickEvent={() => submitLike("Photo", id)} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+            {isLikedByLoggedInUser ? (
+              <Button label={`${likesCount} (Liked)`} fontAwesomeIcon="fa-thumbs-up" isDisabled={false} clickEvent={() => removeLike(Number(session?.user.id), id)} />
+            ) : (
+              <Button label={`${likesCount}`} fontAwesomeIcon="fa-thumbs-up" isDisabled={false} clickEvent={() => submitLike(Number(session?.user.id), id)} />
+            )}
           </div>
           <div className="col-end-7 col-span-3 text-right">
             <Link href={`/photo/${id}/report`} className="text-blue-700 dark:text-blue-300">Report</Link>
