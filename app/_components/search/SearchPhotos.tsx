@@ -39,7 +39,7 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
         filteredPhotos.map((photo) => (
           <Photo 
             key={photo.id} 
-            id={photo.author.id} 
+            id={photo.id} 
             url={photo.url} 
             author={photo.author} 
             likes={photo.likes}

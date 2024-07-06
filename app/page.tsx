@@ -14,6 +14,7 @@ const Home = async () => {
       {session !== null ?
         <>
           <PhotoForm />
+          <div className="w-[75%] md:w-[50%] m-auto border-t-2 border-black dark:border-white my-2"></div>
           <PostForm />
           <div className="text-center pt-8 pb-4">
             <span className="text-3xl">Your Feed</span>

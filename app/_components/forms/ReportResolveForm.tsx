@@ -1,6 +1,5 @@
-'use client'
-
-import { resolveReport } from '../../actions';
+import { redirect } from "next/navigation";
+import prisma from "../../../prisma/lib/prisma";
 
 // Components
 import Button from '../Button';
@@ -9,19 +8,31 @@ interface ReportFormProps {
   id: number;
 }
 
-const ReportResolveForm: React.FC<ReportFormProps> = (id) => {
-  const handleSubmit = () => {
-    const message = (document.getElementById('message') as HTMLTextAreaElement).value;
-  
-    const data = new FormData();
-    data.append('message', message);
-    data.append('reportId', id.toString());
-  
-    resolveReport(data);
-  };
+const ReportResolveForm: React.FC<ReportFormProps> = async ({ id }) => {
+
+  const resolveReport = async (formData: FormData) => {
+    "use server"
+
+    const message = formData.get("message") as string;
+
+    try {
+      await prisma.report.update({
+        where: {
+          id: id
+        },
+        data: {
+          resolved: true,
+          adminAction: message
+        }
+      });
+    } catch {
+      throw new Error('Failed to resolve report');
+    }
+    redirect('/admin/reports/search?type=resolved');
+  }
 
   return (
-    <form className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto mt-4">
+    <form action={resolveReport} className="flex flex-col text-center w-3/4 sm:w-1/2 m-auto mt-4">
       <label htmlFor="message" className="mb-3">
         Explain briefly what action was took
         <textarea 
@@ -33,7 +44,7 @@ const ReportResolveForm: React.FC<ReportFormProps> = (id) => {
           required 
         />
       </label>
-      <Button label="Resolve Report" isDisabled={true} clickEvent={() => handleSubmit} /> {/* Backend temporarily DISABLED: Usage has exceeded the resources included on the HOBBY  plan and no additional data can be written (10/04) */}
+      <Button label="Resolve Report" isDisabled={false} />
     </form>
   )
 }

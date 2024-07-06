@@ -1,13 +1,25 @@
+import prisma from "../../../../prisma/lib/prisma";
+
 // Components
 import Photo from '../../../_components/Photo';
-import ReportForm from '../../../_components/forms/ReportCreateForm';
+import ReportCreateForm from '../../../_components/forms/ReportCreateForm';
 
-// Constants (Only temporary while backend is disabled)
-import { photos } from "../../../_constants";
+const ReportPhotoPage = async (props: { params: { id: string; } }) => {
+  const photo = await prisma.photo.findUnique({
+    where: {
+      id: parseInt(props.params.id)
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true
+        }
+      },
+      likes: true
+    }
+  });
 
-const ReportPhotoPage = async (props: { params: { id: number; } }) => {
-
-  const photo = photos.find(photo => photo.id === Number(props.params.id));
   return (
     <main className='page-layout'>
       {photo ?
@@ -18,7 +30,6 @@ const ReportPhotoPage = async (props: { params: { id: number; } }) => {
           <div className='flex justify-center'>
             <div className='w-52 md:w-72'>
               <Photo 
-                key={photo.id} 
                 id={photo.id} 
                 url={photo.url} 
                 author={photo.author} 
@@ -29,7 +40,7 @@ const ReportPhotoPage = async (props: { params: { id: number; } }) => {
               />
             </div>
           </div>
-          <ReportForm type={"Photo"} id={photo.id} />
+          <ReportCreateForm type={"Photo"} id={photo.id} />
         </>
         :
         <div className='text-2xl text-center'>Photo not found!</div>

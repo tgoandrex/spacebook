@@ -1,12 +1,22 @@
 import Link from "next/link";
+import prisma from "../../../../prisma/lib/prisma";
 
-// Constants (Only temporary while backend is disabled)
-import { reports, adminTableHeadersReports } from "../../../_constants";
+// Constants
+import { adminTableHeadersReports } from "../../../_constants";
 
 const AdminSearchReports = async ({ type } : { type: string; }) => {
 
-  const filteredReports = reports.filter((report) => {
-    return report.resolved === (type === "resolved" ? true : false);
+  const filteredReports = await prisma.report.findMany({
+    where: {
+      resolved: type === "unresolved" ? false : true
+    },
+    include: {
+      reporter: {
+        select: {
+          id: true
+        }
+      }
+    }
   });
 
   return (
@@ -28,22 +38,27 @@ const AdminSearchReports = async ({ type } : { type: string; }) => {
               {report.id}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              <Link href={`/user/${report.reporter.id}/posts`} className="text-blue-700">{report.reporter.username}</Link>
+              <Link href={`/user/${report.reporter.id}/posts`} className="text-blue-700">{report.reporterUsername}</Link>
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               "{report.reporterMessage}"
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              {report.reportedEntity.type !== "comment" ?
-                <Link href={`/${report.reportedEntity.type}/${report.reportedEntity.id}`} className="text-blue-700">
-                  {report.reportedEntity.id} ({report.reportedEntity.type})
-                </Link>
+              {report.commentId ?
+                `${report.commentId} (Comment)`
               :
-                `${report.reportedEntity.id} (${report.reportedEntity.type})`
+              report.photoId ?
+                <Link href={`/photo/${report.photoId}`} className="text-blue-700">
+                  {report.photoId} (Photo)
+                </Link>
+                :
+                <Link href={`/post/${report.postId}`} className="text-blue-700">
+                  {report.postId} (Post)
+                </Link>
               }
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              {report.resolved === true ? `"${report.adminMessage}"` : "Not resolved yet!"}
+              {report.resolved === true ? `"${report.adminAction}"` : "Not resolved yet!"}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
               {report.createdAt.toLocaleString()}

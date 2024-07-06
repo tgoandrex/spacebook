@@ -37,7 +37,6 @@ const PostPage = async (props: { params: { id: string; } }) => {
         <>
           <div className="gap-4 max-w-lg m-auto">
             <Post 
-              key={post.id} 
               id={post.id}
               author={post.author} 
               likes={post.likes}

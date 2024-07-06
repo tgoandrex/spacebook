@@ -2,14 +2,20 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
+import prisma from "../../../../prisma/lib/prisma";
+
 // Components
 import ReportResolveForm from "../../../_components/forms/ReportResolveForm";
 
-// Constants (Only temporary while backend is disabled)
-import { reports } from "../../../_constants";
-
 const ReportResolvePage = async (props: { params: { id: number; } }) => {
-  const report = reports.find(report => report.id === Number(props.params.id));
+  const report = await prisma.report.findUnique({
+    where: {
+      id: Number(props.params.id)
+    },
+    select: {
+      id: true
+    }
+  });
 
   const session = await getServerSession(authOptions);
 

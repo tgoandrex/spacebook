@@ -1,10 +1,3 @@
-// (Only temporary while backend is disabled)
-import cow from "../_assets/images/cow.jpg";
-import duck from "../_assets/images/duck.jpg";
-import goat from "../_assets/images/goat.jpg";
-import parakeet from "../_assets/images/parakeet.jpg";
-import penguin from "../_assets/images/penguin.jpg";
-
 export const generateAuthenticatedNavLinks = (userId: number) => [
   { href: "/search", label: "Search" },
   { href: `/user/${userId}/posts`, label: "Profile" },
@@ -28,7 +21,7 @@ export const adminTableHeadersPhotos = ["ID", "Author", "Content", "Preview", "C
 
 export const adminTableHeadersUsers = ["ID", "Username", "Restricted?", "Created At", "Controls"];
 
-export const adminTableHeadersReports = ["ID", "Reporter", "Reporter Message", "Reported Entity", "Admin Action", "Created At", "Controls"];
+export const adminTableHeadersReports = ["ID", "Reporter", "Reporter Message", "Reported Entity ID", "Admin Action", "Created At", "Controls"];
 
 
 // (Only temporary while backend is disabled)

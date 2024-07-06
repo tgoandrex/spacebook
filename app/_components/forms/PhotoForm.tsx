@@ -33,7 +33,7 @@ const PostPhoto = () => {
   };
 
   return (
-    <div className='flex flex-col items-center pb-2'>
+    <div className='flex flex-col items-center'>
       New Photo
       <UploadButton<OurFileRouter>
         endpoint="imageUploader"

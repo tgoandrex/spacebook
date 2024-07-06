@@ -1,12 +1,25 @@
+import prisma from "../../../../prisma/lib/prisma";
+
 // Components
 import Post from '../../../_components/Post';
-import ReportForm from '../../../_components/forms/ReportCreateForm';
+import ReportCreateForm from '../../../_components/forms/ReportCreateForm';
 
-// Constants (Only temporary while backend is disabled)
-import { posts } from "../../../_constants";
+const ReportPostPage = async (props: { params: { id: string; } }) => {
+  const post = await prisma.post.findUnique({
+    where: {
+      id: parseInt(props.params.id)
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true
+        }
+      },
+      likes: true
+    }
+  });
 
-const ReportPostPage = async (props: { params: { id: number; } }) => {
-  const post = posts.find(post => post.id === Number(props.params.id));
   return (
     <main className='page-layout'>
       {post ?
@@ -16,7 +29,6 @@ const ReportPostPage = async (props: { params: { id: number; } }) => {
           </div>
           <div className='flex justify-center'>
             <Post 
-              key={post.id} 
               id={post.id}
               author={post.author} 
               likes={post.likes}
@@ -25,7 +37,7 @@ const ReportPostPage = async (props: { params: { id: number; } }) => {
               commentsLink={false}
             />
           </div>
-          <ReportForm type={"Post"} id={post.id} />
+          <ReportCreateForm type={"Post"} id={post.id} />
         </>
         :
         <div className='text-2xl text-center'>Post not found!</div>
