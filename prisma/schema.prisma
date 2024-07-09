@@ -32,9 +32,9 @@ model User {
 }
 
 model Follow {
-  follower    User     @relation("follower", fields: [followerId], references: [id])
+  follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  Int      @map(name: "follower_id")
-  following   User     @relation("following", fields: [followingId], references: [id])
+  following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
   followingId Int      @map(name: "following_id")
   createdAt   DateTime @default(now()) @map(name: "created_at")
 
@@ -45,7 +45,7 @@ model Follow {
 model Post {
   id             Int        @id @default(autoincrement())
   content        String     @db.VarChar(750)
-  author         User       @relation(fields: [authorUsername], references: [username])
+  author         User       @relation(fields: [authorUsername], references: [username], onDelete: Cascade)
   authorUsername String     @map(name: "author_username")
   comments       Comment[]
   reports        Report[]
@@ -55,9 +55,9 @@ model Post {
 }
 
 model PostLike {
-  user      User     @relation("user", fields: [userId], references: [id])
+  user      User     @relation("user", fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      @map(name: "user_id")
-  post      Post     @relation("post", fields: [postId], references: [id])
+  post      Post     @relation("post", fields: [postId], references: [id], onDelete: Cascade)
   postId    Int      @map(name: "post_id")
   createdAt DateTime @default(now()) @map(name: "created_at")
 
@@ -69,7 +69,7 @@ model Photo {
   id             Int         @id @default(autoincrement())
   url            String
   content        String      @db.VarChar(750)
-  author         User        @relation(fields: [authorUsername], references: [username])
+  author         User        @relation(fields: [authorUsername], references: [username], onDelete: Cascade)
   authorUsername String      @map(name: "author_username")
   comments       Comment[]
   reports        Report[]
@@ -79,9 +79,9 @@ model Photo {
 }
 
 model PhotoLike {
-  user      User     @relation("user", fields: [userId], references: [id])
+  user      User     @relation("user", fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      @map(name: "user_id")
-  photo     Photo    @relation("photo", fields: [photoId], references: [id])
+  photo     Photo    @relation("photo", fields: [photoId], references: [id], onDelete: Cascade)
   photoId   Int      @map(name: "photo_id")
   createdAt DateTime @default(now()) @map(name: "created_at")
 
@@ -92,11 +92,11 @@ model PhotoLike {
 model Comment {
   id             Int           @id @default(autoincrement())
   content        String        @db.VarChar(500)
-  post           Post?         @relation(fields: [postId], references: [id])
+  post           Post?         @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId         Int?          @map(name: "post_id")
-  photo          Photo?        @relation(fields: [photoId], references: [id])
+  photo          Photo?        @relation(fields: [photoId], references: [id], onDelete: Cascade)
   photoId        Int?          @map(name: "photo_id")
-  author         User          @relation(fields: [authorUsername], references: [username])
+  author         User          @relation(fields: [authorUsername], references: [username], onDelete: Cascade)
   authorUsername String        @map(name: "author_username")
   likes          CommentLike[] @relation("comment")
   reports        Report[]
@@ -105,9 +105,9 @@ model Comment {
 }
 
 model CommentLike {
-  user      User     @relation("user", fields: [userId], references: [id])
+  user      User     @relation("user", fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      @map(name: "user_id")
-  Comment   Comment  @relation("comment", fields: [commentId], references: [id])
+  Comment   Comment  @relation("comment", fields: [commentId], references: [id], onDelete: Cascade)
   commentId Int      @map(name: "comment_id")
   createdAt DateTime @default(now()) @map(name: "created_at")
 
@@ -119,11 +119,11 @@ model Report {
   id               Int      @id @default(autoincrement())
   type             String
   reporterMessage  String   @map(name: "reporter_message") @db.VarChar(300)
-  post             Post?    @relation(fields: [postId], references: [id])
+  post             Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId           Int?     @map(name: "post_id")
-  photo            Photo?   @relation(fields: [photoId], references: [id])
+  photo            Photo?   @relation(fields: [photoId], references: [id], onDelete: Cascade)
   photoId          Int?     @map(name: "photo_id")
-  comment          Comment? @relation(fields: [commentId], references: [id])
+  comment          Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId        Int?     @map(name: "comment_id")
   resolved         Boolean  @default(false)
   adminAction      String?  @map(name: "admin_action") @db.VarChar(300)

@@ -1,20 +1,51 @@
-'use client'
-
 import Link from "next/link";
-import { useState } from "react";
+import { revalidatePath } from "next/cache";
 
-import { deletePost } from "../../../actions";
+import prisma from "../../../../prisma/lib/prisma";
 
 // Constants (Only temporary while backend is disabled)
-import { posts, adminTableHeadersPosts } from "../../../_constants";
+import { adminTableHeadersPosts } from "../../../_constants";
+
+// Components
 import Button from "../../Button";
 
-const AdminSearchPosts = ({ query } : { query: string; }) => {
-  const [hoveredPost, setHoveredPost] = useState<typeof posts[number] | null>(null);
-  
-  const filteredPosts = posts.filter((post) => {
-    return post.content.includes(query);
+const AdminSearchPosts = async ({ query } : { query: string; }) => {
+  const filteredPosts = await prisma.post.findMany({
+    where: {
+      content: {
+        contains: query,
+        mode: 'insensitive'
+      }
+    },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      author: {
+        select: {
+          id: true,
+          username: true
+        }
+      }
+    }
   });
+
+  const deletePost = async (formData: FormData) => {
+    "use server"
+
+    const postId = formData.get("postId");
+    
+    try {
+      await prisma.post.delete({
+        where: {
+          id: Number(postId)
+        }
+      });
+      revalidatePath('/');
+    } catch (e) {
+      console.log('Failed to delete post');
+    }
+  }
 
   return (
     <table className="min-w-full divide-y divide-gray-200">
@@ -32,30 +63,22 @@ const AdminSearchPosts = ({ query } : { query: string; }) => {
           filteredPosts.map((post, i) => (
             <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-100"}>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                {post.id}
+                <Link href={`/post/${post.id}`} className="text-blue-700">{post.id}</Link>
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
                 <Link href={`/user/${post.author.id}/posts`} className="text-blue-700">{post.author.username}</Link>
               </td>
-              <td
-                className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 overflow-hidden"
-                style={{ maxWidth: "50px" }}
-                onMouseEnter={() => setHoveredPost(post)}
-                onMouseLeave={() => setHoveredPost(null)}
-              >
-                {hoveredPost === post ? (
-                  <div className="absolute z-10 bg-white border border-gray-200 shadow-lg rounded-lg p-4">
-                    {post.content}
-                  </div>
-                ) : (
-                  <div className="overflow-hidden truncate">{post.content}</div>
-                )}
+              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+                {post.content}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
                 {post.createdAt.toLocaleString()}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <Button label="Delete" isDisabled={true} fontAwesomeIcon="fa-trash" clickEvent={() => deletePost(post.id)} />
+                <form action={deletePost}>
+                  <input id="postId" name="postId" value={post.id} className="hidden" readOnly />
+                  <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
+                </form>
               </td>
             </tr>
           ))

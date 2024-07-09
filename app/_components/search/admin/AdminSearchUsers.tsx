@@ -1,23 +1,40 @@
-"use client"
-
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 
 import prisma from "../../../../prisma/lib/prisma";
 
 // Constants (Only temporary while backend is disabled)
-import { users, adminTableHeadersUsers } from "../../../_constants";
+import { adminTableHeadersUsers } from "../../../_constants";
 import Button from "../../Button";
 
 const AdminSearchUsers = async ({ query } : { query: string; }) => {
-  const restrictUser = async (userId: number) => {
+  const filteredUsers = await prisma.user.findMany({
+    where: {
+      username: {
+        contains: query,
+        mode: 'insensitive'
+      }
+    },
+    select: {
+      id: true,
+      username: true,
+      restricted: true,
+      createdAt: true
+    }
+  });
+  
+  const restrictUser = async (formData: FormData) => {
+    "use server"
+
+    const userId = formData.get("userId");
+
     try {
       await prisma.user.update({
         data: {
           restricted: true
         },
         where: {
-          id: userId
+          id: Number(userId)
         }
       });
       revalidatePath('/');
@@ -26,11 +43,15 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
     }
   }
   
-  const deleteUser = async (userId: number) => {
+  const deleteUser = async (formData: FormData) => {
+    "use server"
+
+    const userId = formData.get("userId");
+    
     try {
       await prisma.user.delete({
         where: {
-          id: userId
+          id: Number(userId)
         }
       });
       revalidatePath('/');
@@ -38,10 +59,6 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
       console.log('Failed to delete user');
     }
   }
-
-  const filteredUsers = users.filter((user) => {
-    return user.username.includes(query);
-  });
 
   return (
     <table className="min-w-full divide-y divide-gray-200">
@@ -71,12 +88,14 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
               {user.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
+            <form action={user.restricted === false ? restrictUser : deleteUser}>
+              <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
               <Button 
-                label={user.restricted === false ? `Restrict User` : `Delete User`} 
-                isDisabled={true} 
-                fontAwesomeIcon="fa-x" 
-                clickEvent={user.restricted === false ? () => restrictUser(user.id) : () => deleteUser(user.id)}
+                label={user.restricted === false ? `Restrict User` : `Delete User (WARNING)`} 
+                isDisabled={false} 
+                fontAwesomeIcon={user.restricted === false ? `fa-x` : `fa-trash`}
               />
+            </form>
             </td>
           </tr>
           ))
