@@ -9,8 +9,8 @@ import { adminTableHeadersPostsAndComments } from "../../../_constants";
 // Components
 import Button from "../../Button";
 
-const AdminSearchPosts = async ({ query } : { query: string; }) => {
-  const filteredPosts = await prisma.post.findMany({
+const AdminSearchComments = async ({ query } : { query: string; }) => {
+  const filteredComments = await prisma.comment.findMany({
     where: {
       content: {
         contains: query,
@@ -30,20 +30,20 @@ const AdminSearchPosts = async ({ query } : { query: string; }) => {
     }
   });
 
-  const deletePost = async (formData: FormData) => {
+  const deleteComment = async (formData: FormData) => {
     "use server"
 
-    const postId = formData.get("postId");
+    const commentId = formData.get("commentId");
     
     try {
-      await prisma.post.delete({
+      await prisma.comment.delete({
         where: {
-          id: Number(postId)
+          id: Number(commentId)
         }
       });
       revalidatePath('/');
     } catch (e) {
-      console.log('Failed to delete post');
+      console.log('Failed to delete comment');
     }
   }
 
@@ -59,24 +59,24 @@ const AdminSearchPosts = async ({ query } : { query: string; }) => {
         </tr>
       </thead>
       <tbody>
-        {filteredPosts.length > 0 ?
-          filteredPosts.map((post, i) => (
+        {filteredComments.length > 0 ?
+          filteredComments.map((comment, i) => (
             <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-100"}>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <Link href={`/post/${post.id}`} className="text-blue-700">{post.id}</Link>
+                {comment.id}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <Link href={`/user/${post.author.id}/posts`} className="text-blue-700">{post.author.username}</Link>
+                <Link href={`/user/${comment.author.id}/posts`} className="text-blue-700">{comment.author.username}</Link>
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                {post.content}
+                {comment.content}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                {post.createdAt.toLocaleString()}
+                {comment.createdAt.toLocaleString()}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <form action={deletePost}>
-                  <input id="postId" name="postId" value={post.id} className="hidden" readOnly />
+                <form action={deleteComment}>
+                  <input id="commentId" name="commentId" value={comment.id} className="hidden" readOnly />
                   <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
                 </form>
               </td>
@@ -85,7 +85,7 @@ const AdminSearchPosts = async ({ query } : { query: string; }) => {
           :
           <tr className="bg-white">
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colSpan={adminTableHeadersPostsAndComments.length}>
-              Search found no posts!
+              Search found no comments!
             </td>
           </tr>
         }
@@ -94,4 +94,4 @@ const AdminSearchPosts = async ({ query } : { query: string; }) => {
   )
 }
 
-export default AdminSearchPosts;
+export default AdminSearchComments;

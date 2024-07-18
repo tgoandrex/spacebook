@@ -69,6 +69,20 @@ const SearchForm = ({ title } : { title: string; }) => {
           />
           Photos
         </label>
+        {title === "Admin" &&
+          <label htmlFor="comments" className="mr-4">
+            <input 
+              type="radio" 
+              id="comments" 
+              name="searchType" 
+              value="comments"
+              onChange={(e) => {
+                handleRadioButtons(e.target.value);
+              }}
+            />
+            Comments
+          </label>
+        }
         <label htmlFor="users">
           <input 
             type="radio" 

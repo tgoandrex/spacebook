@@ -15,7 +15,7 @@ export const profileNavLinks = [
   { href: "followers", label: "Followers" }
 ];
 
-export const adminTableHeadersPosts = ["ID", "Author", "Content", "Created At", "Controls"];
+export const adminTableHeadersPostsAndComments = ["ID", "Author", "Content", "Created At", "Controls"];
 
 export const adminTableHeadersPhotos = ["ID", "Author", "Content", "Preview", "Created At", "Controls"];
 
