@@ -44,7 +44,7 @@ password. Enter any username that isn't already taken, and a password with the r
 
 Proceed to the 'Login' tab on the navigation bar, which will present you with another form for username and password. Use the exact username and password you used in the registration form and click the 'Sign in with Credentials' button. A successful login will move you to the main page once again, but with the following: a Photo upload button, and Post upload form and button, and your Feed (which should be empty if you just registered). Please remember your username and password, as currently there is no recovery system in place to get it back!
 
-## Log in into your Account
+## Toggle Light or Space Modes
 
 The entire application has a light or dark (space) mode that can be toggled by clicking the 'Space Mode' (If currently in light mode) or 'Light Mode' (If currently in space mode) button in the navigation bar at the top. Choose whatever mode fits your preference.
 
