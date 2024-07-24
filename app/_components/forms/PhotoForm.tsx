@@ -47,7 +47,7 @@ const PostPhoto = () => {
           }
         }}
         onUploadError={(error: Error) => {
-          throw new Error('Photo did not upload, please enter a description when prompted');
+          throw new Error('Photo did not upload. Please ensure file is less than 4MB in size.');
         }}
       />
     </div>
