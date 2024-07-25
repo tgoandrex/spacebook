@@ -26,7 +26,9 @@ const PostPhoto = () => {
     }).then((res) => {
       return res.json();
     }).then((data) => {
-      console.log(data);
+      if(data.error) {
+        alert(data.error);
+      }
     }).catch((e: Error) => {
       console.log("response error: ", e);
     });
@@ -43,11 +45,11 @@ const PostPhoto = () => {
             createPhoto(Number(session!.user.id), content, res![0].url);
             router.push(`/user/${session?.user.id}/photos`);
           } else {
-            throw new Error('Photo did not upload, please enter a description when prompted');
+            throw new Error();
           }
         }}
         onUploadError={(error: Error) => {
-          throw new Error('Photo did not upload. Please ensure file is less than 4MB in size.');
+          throw new Error('Photo did not upload. Please ensure file is less than 4MB in size and you are not leaving the description blank.');
         }}
       />
     </div>

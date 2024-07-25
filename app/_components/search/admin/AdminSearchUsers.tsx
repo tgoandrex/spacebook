@@ -42,6 +42,26 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
       console.log('Failed to restrict user');
     }
   }
+
+  const unrestrictUser = async (formData: FormData) => {
+    "use server"
+
+    const userId = formData.get("userId");
+
+    try {
+      await prisma.user.update({
+        data: {
+          restricted: false
+        },
+        where: {
+          id: Number(userId)
+        }
+      });
+      revalidatePath('/');
+    } catch (e) {
+      console.log('Failed to unrestrict user');
+    }
+  }
   
   const deleteUser = async (formData: FormData) => {
     "use server"
@@ -88,12 +108,20 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
               {user.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-            <form action={user.restricted === false ? restrictUser : deleteUser}>
+            <form action={user.restricted === false ? restrictUser : unrestrictUser}>
               <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
               <Button 
-                label={user.restricted === false ? `Restrict User` : `Delete User (WARNING)`} 
+                label={user.restricted === false ? `Restrict User` : `Unrestrict User`} 
                 isDisabled={false} 
-                fontAwesomeIcon={user.restricted === false ? `fa-x` : `fa-trash`}
+                fontAwesomeIcon={user.restricted === false ? `fa-x` : `fa-check`}
+              />
+            </form>
+            <form action={deleteUser}>
+              <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
+              <Button 
+                label="Delete User (WARNING)"
+                isDisabled={false} 
+                fontAwesomeIcon="fa-trash"
               />
             </form>
             </td>

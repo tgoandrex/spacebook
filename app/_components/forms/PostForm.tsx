@@ -15,6 +15,19 @@ const PostForm = async () => {
 
     const content = formData.get("content") as string;
 
+    const user = await prisma.user.findUnique({
+      where: {
+        username: session?.user.username
+      },
+      select: {
+        restricted: true
+      }
+    })
+
+    if(user?.restricted) {
+      throw new Error('Your account has been restricted by the administrators. Please try again in a few days.');
+    }
+
     try {
       await prisma.post.create({
         data: {

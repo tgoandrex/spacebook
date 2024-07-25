@@ -66,12 +66,17 @@ export async function POST(request: Request) {
         id: parseInt(id!)
       },
       select: {
-        username: true
+        username: true,
+        restricted: true
       }
     })
 
     if (!author) {
       return new Response(JSON.stringify({ success: false, error: 'User not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if(author.restricted) {
+      return new Response(JSON.stringify({ success: false, error: 'Your account has been restricted by the administrators. Please try again in a few days' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
     await prisma.photo.create({

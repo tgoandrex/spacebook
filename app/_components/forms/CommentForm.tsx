@@ -20,6 +20,19 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
 
     const content = formData.get("content") as string;
     const username = session!.user.username!;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        username: username
+      },
+      select: {
+        restricted: true
+      }
+    })
+
+    if(user?.restricted) {
+      throw new Error('Your account has been restricted by the administrators. Please try again in a few days.');
+    }
   
     switch(type) {
       case "Photo": {
@@ -42,7 +55,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
               }
             });
           } else {
-            console.log('Photo not found');
+            throw new Error('Photo not found');
           }
         } catch (e) {
           throw new Error('Failed to fetch photo');
@@ -69,7 +82,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
               }
             });
           } else {
-            console.log('Post not found');
+            throw new Error('Post not found');
           }
         } catch (e) {
           throw new Error('Failed to fetch post');

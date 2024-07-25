@@ -78,7 +78,7 @@ Anyone's Post, Photo, or Comment can be liked by you or other users. The bottom 
 
 ## Reporting a Post, Photo, or Comment
 
-Any Post, Photo, or Comment that is not yours can be reported and sent to the admins to view and take action if necessary. On the bottom right of any Post, Photo, or Comment, click the link labelled 'Report' and you will be directed to a report form for that entity. Check any box that most closely relates to the report reason, type any additional information under 'Explain briefly why this should be reported', and click the 'Submit' button when finished. A successful submission will redirect you to the main page. Please do not abuse this feature, as repeated misuse will result in action taken against you.
+Any Post, Photo, or Comment that is not yours can be reported and sent to the admins to view and take action if necessary. On the bottom right of any Post, Photo, or Comment, click the link labelled 'Report' and you will be directed to a report form for that entity. Check any box that most closely relates to the report reason, type any additional information under 'Explain briefly why this should be reported', and click the 'Submit' button when finished. A successful submission will redirect you to the main page. Please do not abuse this feature, as repeated misuse will result in action taken against you which may include temporary restriction on creating Posts, Photos, and Comments or outright account removal.
 
 
 ## Deleting your Post, Photo, or Comment
@@ -88,3 +88,7 @@ Any Post, Photo, or Comment associated with you can be deleted for any reason. S
 ## Using the General Search
 
 Click the 'Search' tab on the navigation bar to use the search form for any Post, Photo, or user on the application. Clicking any radio button without text will display all Posts, Photos, or users. Adding text will filter results to display only Posts' or Photos' content that matches the text, or users' usernames that matches the text. Individual Comments cannot be searched for.
+
+## Admin Abilities
+
+Admins are hand picked to keep users and the application as a whole safe. Any user who is found abusing features, threatening others, or any other action deemed inappropriate by an admin will result in consequences. Typically first or minor offenses will 'restrict' a user from creating Posts, Photos, or Comments for a set amount of time. Please note that a restricted user may still like or unlike Posts, Photos, or Comments. Repeated issues or major problems will result in permanent account deletion.
