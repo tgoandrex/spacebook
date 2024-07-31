@@ -25,6 +25,7 @@ const Comment: React.FC<CommentProps> = ({ id, author, createdAt, content, likes
   const [likedUserIds] = useState<number[]>(likes.map(like => like.userId));
   const [isLikedByLoggedInUser, setIsLikedByLoggedInUser] = useState<boolean>(LoggedInUserLikes(likedUserIds, Number(session?.user.id)));
   const [likesCount, setLikesCount] = useState<number>(likes.length);
+  const [expandedDeleteButton, setExpandedDeleteButton] = useState<boolean>(false);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   const submitLike = async (userId: number, commentId: number) => {
@@ -104,7 +105,14 @@ const Comment: React.FC<CommentProps> = ({ id, author, createdAt, content, likes
           </div>
           <div className="col-end-7 col-span-3 text-right">
             {Number(session?.user.id) === author.id ?
-              <Button label="Delete" fontAwesomeIcon="fa-trash" isDisabled={false} clickEvent={() => deleteComment(id)} />
+              expandedDeleteButton ?
+                <div className="flex flex-col">
+                  <div className="text-center">Are you sure? This can't be undone!</div>
+                  <Button label="Delete" fontAwesomeIcon="fa-trash" isDisabled={false} clickEvent={() => deleteComment(id)} />
+                  <Button label="Cancel" isDisabled={false} clickEvent={() => setExpandedDeleteButton(false)} />
+                </div>
+              :
+                <Button label="Delete" isDisabled={false} clickEvent={() => setExpandedDeleteButton(true)} />
             :
               <Link href={`/comment/${id}/report`} className="text-blue-700 dark:text-blue-300">Report</Link>
             }

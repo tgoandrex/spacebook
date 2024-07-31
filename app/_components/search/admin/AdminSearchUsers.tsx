@@ -3,8 +3,10 @@ import { revalidatePath } from "next/cache";
 
 import prisma from "../../../../prisma/lib/prisma";
 
-// Constants (Only temporary while backend is disabled)
+// Constants
 import { adminTableHeadersUsers } from "../../../_constants";
+
+// Components
 import Button from "../../Button";
 
 const AdminSearchUsers = async ({ query } : { query: string; }) => {

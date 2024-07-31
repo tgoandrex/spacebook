@@ -7,7 +7,7 @@ import Button from "../../Button";
 import Photo from "../../Photo";
 
 const AdminPhotoExpand = ({ id, url }: {id: number, url: string}) => {
-  const [expandedPhoto, setExpandedPhoto] = useState(false);
+  const [expandedPhoto, setExpandedPhoto] = useState<boolean>(false);
 
   return (
     <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
