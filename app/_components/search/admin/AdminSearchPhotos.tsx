@@ -10,7 +10,8 @@ import { adminTableHeadersPhotos } from "../../../_constants";
 import Button from "../../Button";
 import AdminPhotoExpand from "./AdminPhotoExpand";
 
-const AdminSearchPhotos = async ({ query } : { query: string; }) => {
+const AdminSearchPhotos = async ({ query, page, pageSize } : { query: string, page: number, pageSize: number;  }) => {
+  const offset = (page - 1) * pageSize;
 
   const filteredPhotos = await prisma.photo.findMany({
     where: {
@@ -30,7 +31,9 @@ const AdminSearchPhotos = async ({ query } : { query: string; }) => {
           username: true
         }
       }
-    }
+    },
+    skip: offset,
+    take: pageSize
   });
 
   const deletePhoto = async (formData: FormData) => {

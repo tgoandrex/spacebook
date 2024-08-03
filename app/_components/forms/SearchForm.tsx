@@ -3,6 +3,9 @@
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
+// Components
+import Button from '../Button';
+
 const SearchForm = ({ title } : { title: string; }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -10,9 +13,12 @@ const SearchForm = ({ title } : { title: string; }) => {
 
   const params = new URLSearchParams(Array.from(searchParams.entries()));
 
+  const currentPage = parseInt(params.get('page') || '1', 10);
+
   const handleInput = useDebouncedCallback((term: string) => {
     if(term) {
       params.set('query', term);
+      params.set('page', '1');
     } else {
       params.delete('query');
     }
@@ -22,6 +28,7 @@ const SearchForm = ({ title } : { title: string; }) => {
   const handleRadioButtons = useDebouncedCallback((term: string) => {
     if(term) {
       params.set('type', term);
+      params.set('page', '1');
     } else {
       params.delete('type');
     }
@@ -95,6 +102,26 @@ const SearchForm = ({ title } : { title: string; }) => {
           />
           Users
         </label>
+      </div>
+      <div className="flex justify-center mt-4">
+        <Button
+          label='Previous'
+          clickEvent={() => {
+            if (currentPage > 1) {
+              params.set('page', (currentPage - 1).toString());
+              replace(`${pathname}?${params.toString()}`);
+            }
+          }}
+          isDisabled={currentPage === 1 ? true : false}
+        />
+        <Button
+          label='Next'
+          clickEvent={() => {
+            params.set('page', (currentPage + 1).toString());
+            replace(`${pathname}?${params.toString()}`);
+          }}
+          isDisabled={false}
+        />
       </div>
     </form>
   )

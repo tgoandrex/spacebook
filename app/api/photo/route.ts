@@ -4,6 +4,8 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
+    const offset = url.searchParams.get("offset");
+    const limit = url.searchParams.get("limit");
 
     const author = await prisma.user.findUnique({
       where: {
@@ -44,7 +46,9 @@ export async function GET(request: Request) {
       },
       orderBy: {
         createdAt: 'desc'
-      }
+      },
+      skip: Number(offset),
+      take: Number(limit)
     })
 
     if (!photos) {

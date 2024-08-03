@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 
 // Components
 import Post from "../Post";
+import Button from '../Button';
 
 interface Post {
   id: number;
@@ -30,6 +31,10 @@ interface Comment {
 };
 
 const ProfilePosts = () => {
+  const INITIAL_NUMBER_OF_POSTS = 10;
+
+  const [limit, setLimit] = useState(INITIAL_NUMBER_OF_POSTS);
+  const [postLimitReached, setPostLimitReached] = useState(false);
   const [posts, setPosts] = useState<Post[]>([{
     id: 0,
     content: "",
@@ -44,7 +49,7 @@ const ProfilePosts = () => {
   const params = useParams();
 
   useEffect(() => {
-    fetch(`/api/post?id=${params.id}`, {
+    fetch(`/api/post?id=${params.id}?offset=0&limit=${limit}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -69,12 +74,51 @@ const ProfilePosts = () => {
         }));
         setPosts(posts);
         setPostsLoading(false);
+        if(posts.length < limit) {
+          setPostLimitReached(true);
+        }
       }
     })
     .catch((e: Error) => {
       console.log("response error: ", e);
     });
   }, [])
+
+  const loadMorePosts = (limit: number) => {
+    setLimit(limit + 10);
+    fetch(`/api/post?id=${params.id}?offset=0&limit=${limit}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      if(data.posts) {
+        const posts: Post[] = data.posts.map((post: Post) => ({
+          id: post.id,
+          content: post.content,
+          author: {
+            id: post.author.id,
+            username: post.author.username
+          },
+          likes: post.likes,
+          comments: post.comments,
+          createdAt: post.createdAt
+        }));
+        setPosts(posts);
+        if(posts.length < limit) {
+          setPostLimitReached(true);
+        }
+      }
+    })
+    .catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  }
 
   return (
     <>
@@ -98,6 +142,13 @@ const ProfilePosts = () => {
           ))
         :
           <li className='text-2xl text-center'>Posts not found!</li>
+        }
+        {!postsLoading &&
+          <Button 
+            label={!postLimitReached ? "Load More Posts" : "No More Posts to Display"} 
+            clickEvent={() => loadMorePosts(limit + 10)} 
+            isDisabled={!postLimitReached ? false : true} 
+          />
         }
       </ul>
     </>

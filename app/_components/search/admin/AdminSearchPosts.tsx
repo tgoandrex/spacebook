@@ -9,7 +9,9 @@ import { adminTableHeadersPostsAndComments } from "../../../_constants";
 // Components
 import Button from "../../Button";
 
-const AdminSearchPosts = async ({ query } : { query: string; }) => {
+const AdminSearchPosts = async ({ query, page, pageSize } : { query: string, page: number, pageSize: number;  }) => {
+  const offset = (page - 1) * pageSize;
+
   const filteredPosts = await prisma.post.findMany({
     where: {
       content: {
@@ -27,7 +29,9 @@ const AdminSearchPosts = async ({ query } : { query: string; }) => {
           username: true
         }
       }
-    }
+    },
+    skip: offset,
+    take: pageSize
   });
 
   const deletePost = async (formData: FormData) => {

@@ -9,7 +9,9 @@ import { adminTableHeadersPostsAndComments } from "../../../_constants";
 // Components
 import Button from "../../Button";
 
-const AdminSearchComments = async ({ query } : { query: string; }) => {
+const AdminSearchComments = async ({ query, page, pageSize } : { query: string, page: number, pageSize: number;  }) => {
+  const offset = (page - 1) * pageSize;
+
   const filteredComments = await prisma.comment.findMany({
     where: {
       content: {
@@ -27,7 +29,9 @@ const AdminSearchComments = async ({ query } : { query: string; }) => {
           username: true
         }
       }
-    }
+    },
+    skip: offset,
+    take: pageSize
   });
 
   const deleteComment = async (formData: FormData) => {

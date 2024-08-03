@@ -9,7 +9,9 @@ import { adminTableHeadersUsers } from "../../../_constants";
 // Components
 import Button from "../../Button";
 
-const AdminSearchUsers = async ({ query } : { query: string; }) => {
+const AdminSearchUsers = async ({ query, page, pageSize } : { query: string, page: number, pageSize: number;  }) => {
+  const offset = (page - 1) * pageSize;
+
   const filteredUsers = await prisma.user.findMany({
     where: {
       username: {
@@ -22,7 +24,12 @@ const AdminSearchUsers = async ({ query } : { query: string; }) => {
       username: true,
       restricted: true,
       createdAt: true
-    }
+    },
+    orderBy: {
+      username: "asc"
+    },
+    skip: offset,
+    take: pageSize
   });
   
   const restrictUser = async (formData: FormData) => {

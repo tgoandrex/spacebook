@@ -3,7 +3,9 @@ import prisma from "../../../prisma/lib/prisma";
 // Components
 import Photo from "../Photo";
 
-const SearchPhotos = async ({ query } : { query: string; }) => {
+const SearchPhotos = async({ query, page, pageSize } : { query: string, page: number, pageSize: number;  }) => {
+  const offset = (page - 1) * pageSize;
+
   const filteredPhotos = await prisma.photo.findMany({
     where: {
       content: {
@@ -30,13 +32,18 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
           likes: true
         }
       }
-    }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    skip: offset,
+    take: pageSize
   });
 
   return (
-    <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
-      {filteredPhotos.length > 0 ?
-        filteredPhotos.map((photo) => (
+    filteredPhotos.length > 0 ?
+      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
+        {filteredPhotos.map((photo) => (
           <Photo 
             key={photo.id} 
             id={photo.id} 
@@ -48,11 +55,10 @@ const SearchPhotos = async ({ query } : { query: string; }) => {
             comments={photo.comments}
             commentsLink={true}
           />
-        ))
-        :
-        <div className='text-2xl text-center'>Search found no photos!</div>
-      }
-    </ul>
+        ))}
+      </ul>
+    :
+      <div className='text-2xl text-center'>Search found no photos!</div>
   )
 }
 
