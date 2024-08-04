@@ -42,7 +42,7 @@ const SearchPosts = async({ query, page, pageSize } : { query: string, page: num
 
   return (
     filteredPosts.length > 0 ?
-      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
+      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto">
         {filteredPosts.map((post) => (
             <Post
               key={post.id}

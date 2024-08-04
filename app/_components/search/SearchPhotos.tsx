@@ -42,7 +42,7 @@ const SearchPhotos = async({ query, page, pageSize } : { query: string, page: nu
 
   return (
     filteredPhotos.length > 0 ?
-      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto py-8">
+      <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto">
         {filteredPhotos.map((photo) => (
           <Photo 
             key={photo.id} 

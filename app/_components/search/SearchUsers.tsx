@@ -27,7 +27,7 @@ const SearchUsers = async({ query, page, pageSize } : { query: string, page: num
 
   return (
     filteredUsers.length > 0 ?
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[250px] sm:max-w-[450px] m-auto py-8">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[250px] sm:max-w-[450px] m-auto">
         {filteredUsers.map((user) => (
           user.profilePhoto ?
             <User 

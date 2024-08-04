@@ -103,26 +103,28 @@ const SearchForm = ({ title } : { title: string; }) => {
           Users
         </label>
       </div>
-      <div className="flex justify-center mt-4">
-        <Button
-          label='Previous'
-          clickEvent={() => {
-            if (currentPage > 1) {
-              params.set('page', (currentPage - 1).toString());
+      {params.get('type') &&
+        <div className="flex justify-center my-4">
+          <Button
+            label='Previous'
+            clickEvent={() => {
+              if (currentPage > 1) {
+                params.set('page', (currentPage - 1).toString());
+                replace(`${pathname}?${params.toString()}`);
+              }
+            }}
+            isDisabled={currentPage === 1 ? true : false}
+          />
+          <Button
+            label='Next'
+            clickEvent={() => {
+              params.set('page', (currentPage + 1).toString());
               replace(`${pathname}?${params.toString()}`);
-            }
-          }}
-          isDisabled={currentPage === 1 ? true : false}
-        />
-        <Button
-          label='Next'
-          clickEvent={() => {
-            params.set('page', (currentPage + 1).toString());
-            replace(`${pathname}?${params.toString()}`);
-          }}
-          isDisabled={false}
-        />
-      </div>
+            }}
+            isDisabled={false}
+          />
+        </div>
+      }
     </form>
   )
 }

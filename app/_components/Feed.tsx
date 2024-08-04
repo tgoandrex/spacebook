@@ -1,17 +1,12 @@
-import prisma from "../../prisma/lib/prisma";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+"use client"
+
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 
 // Components
 import Post from "./Post";
 import Photo from "./Photo";
-
-interface Follow {
-  following: {
-    posts: Post[];
-    photos: Photo[];
-  };
-}
+import Button from "./Button";
 
 interface Post {
   id: number;
@@ -49,106 +44,110 @@ interface Comment {
   likes: { userId: number; commentId: number; createdAt: Date; }[];
 };
 
-const Feed = async () => {
-  const session = await getServerSession(authOptions);
+const Feed = () => {
+  const { data: session } = useSession();
 
-  const followingPostsAndPhotos = await prisma.follow.findMany({
-    where: {
-      followerId: Number(session?.user.id)
-    },
-    select: {
-      following: {
-        select: {
-          posts: {
-            include: {
-              likes: true,
-              author: {
-                select: {
-                  id: true,
-                  username: true
-                }
-              },
-              comments: {
-                include: {
-                  likes: true,
-                  author: {
-                    select: {
-                      id: true,
-                      username: true
-                    }
-                  }
-                }
-              }
-            }
-          },
-          photos: {
-            include: {
-              likes: true,
-              author: {
-                select: {
-                  id: true,
-                  username: true
-                }
-              },
-              comments: {
-                include: {
-                  likes: true,
-                  author: {
-                    select: {
-                      id: true,
-                      username: true
-                    }
-                  }
-                }
-              }
-            }
-          }
+  const INITIAL_NUMBER_OF_FEED_ITEMS = 10;
+
+  const [limit, setLimit] = useState(INITIAL_NUMBER_OF_FEED_ITEMS);
+  const [feedLimitReached, setFeedLimitReached] = useState(false);
+  const [feed, setFeed] = useState<(Post | Photo)[]>([]);
+  const [feedLoading, setFeedLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/api/feed?id=${session?.user.id}?offset=0&limit=${limit}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      if(data) {
+        setFeed(data.paginatedItems);
+        setFeedLoading(false);
+        if(data.paginatedItems.length < limit) {
+          setFeedLimitReached(true);
         }
       }
-    }
-  });
+    })
+    .catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  }, [])
 
-  const mergedItems = followingPostsAndPhotos.flatMap((follow: Follow) => {
-    return [...follow.following.posts, ...follow.following.photos];
-  });
-
-  const sortedItems = mergedItems.sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  const loadMoreFeed = (limit: number) => {
+    setLimit(limit + 10);
+    fetch(`/api/feed?id=${session?.user.id}?offset=0&limit=${limit}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      if(data) {
+        setFeed(data.paginatedItems);
+        if(data.paginatedItems.length < limit) {
+          setFeedLimitReached(true);
+        }
+      }
+    })
+    .catch((e: Error) => {
+      console.log("response error: ", e);
+    });
+  }
 
   return (
     <ul className="flex flex-col justify-center gap-4 max-w-lg m-auto">
-      {sortedItems.length > 0 ?
-        sortedItems.map((item: Post | Photo) => (
-          'url' in item ? (
-            <Photo 
-              key={item.id} 
-              id={item.id} 
-              url={item.url} 
-              content={item.content} 
-              author={{ id: item.author.id, username: item.author.username }} 
-              createdAt={item.createdAt}
-              likes={item.likes}
-              comments={item.comments}
-              commentsLink={true}
-            />
-          ) : (
-            <Post 
-              key={item.id}  
-              id={item.id} 
-              content={item.content} 
-              author={{ id: item.author.id, username: item.author.username }} 
-              createdAt={item.createdAt}
-              likes={item.likes}
-              comments={item.comments}
-              commentsLink={true}
-            />
-          )
-        ))
+      {feedLoading ?
+        <li className='text-2xl text-center'>Content loading, please wait.</li>
       :
-        <li className='text-2xl text-center'>Feed not found!</li>
-      }
+        feed.length > 0 ?
+          feed.map((item: Post | Photo) => (
+            'url' in item ? (
+              <Photo 
+                key={item.id} 
+                id={item.id} 
+                url={item.url} 
+                content={item.content} 
+                author={{ id: item.author.id, username: item.author.username }} 
+                createdAt={item.createdAt}
+                likes={item.likes}
+                comments={item.comments}
+                commentsLink={true}
+              />
+            ) : (
+              <Post 
+                key={item.id}  
+                id={item.id} 
+                content={item.content} 
+                author={{ id: item.author.id, username: item.author.username }} 
+                createdAt={item.createdAt}
+                likes={item.likes}
+                comments={item.comments}
+                commentsLink={true}
+              />
+            )
+          ))
+        :
+          <li className='text-2xl text-center'>Feed not found!</li>
+    }
+    {!feedLoading &&
+      <Button 
+        label={!feedLimitReached ? "Load More Feed" : "No More Feed to Display"} 
+        clickEvent={() => loadMoreFeed(limit + 10)} 
+        isDisabled={!feedLimitReached ? false : true} 
+      />
+    }
     </ul>
+    
   )
 }
 
