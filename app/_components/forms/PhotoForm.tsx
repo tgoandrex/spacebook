@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../api/uploadthing/core";
 
-const PostPhoto = () => {
+const PhotoForm = () => {
   const { data: session } = useSession();
   
   const router = useRouter();
@@ -56,4 +56,4 @@ const PostPhoto = () => {
   )
 }
 
-export default PostPhoto;
+export default PhotoForm;

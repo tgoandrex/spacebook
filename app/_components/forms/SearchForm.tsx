@@ -6,6 +6,16 @@ import { useDebouncedCallback } from 'use-debounce';
 // Components
 import Button from '../Button';
 
+const validateInput = (input: string) => {
+  const regex = /^[a-zA-Z0-9\s]+$/;
+  const maxLength = 25;
+
+  if (input.length > maxLength || !regex.test(input)) {
+    return false;
+  }
+  return true;
+};
+
 const SearchForm = ({ title } : { title: string; }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -17,6 +27,9 @@ const SearchForm = ({ title } : { title: string; }) => {
 
   const handleInput = useDebouncedCallback((term: string) => {
     if(term) {
+      if (!validateInput(term)) {
+        throw new Error('Input does not meet the requirements: Contain only alphanumeric values or spaces. Maximum 25 characters in length.');
+      }
       params.set('query', term);
       params.set('page', '1');
     } else {
