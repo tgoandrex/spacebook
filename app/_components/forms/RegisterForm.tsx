@@ -43,11 +43,13 @@ const RegisterForm = async () => {
     const password = formData.get("password") as string;
 
     if (!validateUsername(username)) {
-      throw new Error('Username does not meet the requirements: Minimum 4 characters in length, contain only alphanumeric values.');
+      console.error('Username does not meet the requirements: Minimum 4 characters in length, contain only alphanumeric values.');
+      return null;
     }
 
     if (!validatePassword(password)) {
-      throw new Error('Password does not meet the requirements: Minimum 8 characters in length, contain at least one capital letter, contain at least one number.');
+      console.error('Password does not meet the requirements: Minimum 8 characters in length, contain at least one capital letter, contain at least one number.');
+      return null;
     }
     
     try {
@@ -58,7 +60,8 @@ const RegisterForm = async () => {
       })
 
       if(usernameExists) {
-        throw new Error('Username is already in use');
+        console.error('Username is already in use');
+        return null;
       } else {
         bcrypt.genSalt(10, function(err, salt) {
           bcrypt.hash(password, salt, async function(err, hash) {
@@ -72,7 +75,8 @@ const RegisterForm = async () => {
         });
       }
     } catch (e) {
-      throw new Error('Failed to register new user');
+      console.error('Failed to register new user');
+      return null;
     }
     redirect('/');
   }
