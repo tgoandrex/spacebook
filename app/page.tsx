@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { auth } from "../auth";
+
 
 // Components
 import Feed from "./_components/Feed";
@@ -7,11 +7,11 @@ import PostForm from "./_components/forms/PostForm";
 import PhotoForm from "./_components/forms/PhotoForm";
 
 const Home = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
   return (
     <main className='page-layout'>
-      {session !== null ?
+      {session ?
         <>
           <PhotoForm />
           <div className="w-[75%] md:w-[50%] m-auto border-t-2 border-black dark:border-white my-2"></div>

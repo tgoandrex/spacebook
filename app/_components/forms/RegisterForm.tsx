@@ -8,9 +8,13 @@ import Button from "../Button";
 
 const validateUsername = (username: string) => {
   const minLength = 4;
+  const maxLength = 20;
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
 
   if (username.length < minLength) {
+    return false;
+  }
+  if (username.length > maxLength) {
     return false;
   }
   if (!alphanumericRegex.test(username)) {
@@ -21,10 +25,14 @@ const validateUsername = (username: string) => {
 
 const validatePassword = (password: string) => {
   const minLength = 8;
+  const maxLength = 30;
   const hasNumber = /\d/;
   const hasUpperCase = /[A-Z]/;
 
   if (password.length < minLength) {
+    return false;
+  }
+  if (password.length > maxLength) {
     return false;
   }
   if (!hasNumber.test(password)) {
@@ -87,12 +95,29 @@ const RegisterForm = async () => {
       <label htmlFor="username" className="mb-3 w-full">
         Username<br />
         <span className="text-xs">(Minimum 4 characters in length, contain only alphanumeric values)</span><br />
-        <input type="text" id="username" name="username" className="border border-gray-800 w-full text-black" maxLength={20} required />
+        <input
+          type="text"
+          id="username"
+          name="username"
+          className="border border-gray-800 w-full text-black"
+          maxLength={20}
+          pattern="[a-zA-Z0-9]+"
+          minLength={4}
+          required
+        />
       </label>
       <label htmlFor="password" className="mb-3 w-full">
         Password <br />
         <span className="text-xs">(Minimum 8 characters in length, contain at least one capital letter, contain at least one number)</span><br />
-        <input type="password" id="password" name="password" className="border border-gray-800 w-full text-black" maxLength={30} required />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          className="border border-gray-800 w-full text-black"
+          maxLength={30}
+          pattern="(?=.*\d)(?=.*[A-Z]).{8,}"
+          required
+        />
       </label>
       <Button label="Register" isDisabled={false} />
     </form>

@@ -45,7 +45,7 @@ interface Comment {
 };
 
 const Feed = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const INITIAL_NUMBER_OF_FEED_ITEMS = 10;
 
@@ -55,31 +55,34 @@ const Feed = () => {
   const [feedLoading, setFeedLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/feed?id=${session?.user.id}?offset=0&limit=${limit}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      if(data) {
-        setFeed(data.paginatedItems);
-        setFeedLoading(false);
-        if(data.paginatedItems.length < limit) {
-          setFeedLimitReached(true);
+    if (status === "authenticated") {
+      fetch(`/api/feed?id=${session?.user.id}?offset=0&limit=${limit}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
         }
-      }
-    })
-    .catch((e: Error) => {
-      console.log("response error: ", e);
-    });
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if(data) {
+          setFeed(data.paginatedItems);
+          setFeedLoading(false);
+          if(data.paginatedItems.length < limit) {
+            setFeedLimitReached(true);
+          }
+        }
+      })
+      .catch((e: Error) => {
+        console.log("response error: ", e);
+        setFeedLoading(false);
+      });
+    }
   }, [])
 
-  const loadMoreFeed = (limit: number) => {
+  const loadMoreFeed = () => {
     setLimit(limit + 10);
     fetch(`/api/feed?id=${session?.user.id}?offset=0&limit=${limit}`, {
       method: "GET",
@@ -142,7 +145,7 @@ const Feed = () => {
     {!feedLoading &&
       <Button 
         label={!feedLimitReached ? "Load More Feed" : "No More Feed to Display"} 
-        clickEvent={() => loadMoreFeed(limit + 10)} 
+        clickEvent={() => loadMoreFeed()} 
         isDisabled={!feedLimitReached ? false : true} 
       />
     }

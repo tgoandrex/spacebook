@@ -92,7 +92,6 @@ export async function GET(request: Request) {
 
     return new Response(JSON.stringify({ success: true, paginatedItems }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    console.error('Failed to get user:', error);
     return new Response(JSON.stringify({ success: false, error: 'Failed to get feed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

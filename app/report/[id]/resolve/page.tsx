@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { auth } from "../../../../auth";
+
 import { redirect } from "next/navigation";
 
 import prisma from "../../../../prisma/lib/prisma";
@@ -17,7 +17,7 @@ const ReportResolvePage = async (props: { params: { id: number; } }) => {
     }
   });
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if(session?.user.role === "User") {
     redirect("/");

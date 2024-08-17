@@ -1,8 +1,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../../../prisma/lib/prisma";
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { auth } from "../../../auth";
 
 // Components
 import Button from '../Button';
@@ -13,7 +12,7 @@ interface CommentFormProps {
 }
 
 const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   const createComment = async (formData: FormData) => {
     "use server"

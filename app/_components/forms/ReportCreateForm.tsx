@@ -1,8 +1,7 @@
 import prisma from "../../../prisma/lib/prisma";
 import { redirect } from "next/navigation";
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { auth } from "../../../auth";
 
 // Components
 import Button from '../Button';
@@ -13,7 +12,7 @@ interface ReportFormProps {
 }
 
 const ReportCreateForm: React.FC<ReportFormProps> = async ({ type, id }) => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   const createReport = async (formData: FormData) => {
     "use server"

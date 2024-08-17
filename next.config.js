@@ -8,9 +8,5 @@ module.exports = {
         hostname: 'utfs.io'
       }
     ]
-  },
-  nextConfig,
-  experimental: {
-    serverActions: true,
   }
 }

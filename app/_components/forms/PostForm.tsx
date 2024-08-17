@@ -1,14 +1,13 @@
 import prisma from "../../../prisma/lib/prisma";
 import { redirect } from "next/navigation";
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { auth } from "../../../auth";
 
 // Components
 import Button from '../Button';
 
 const PostForm = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   const createPost = async (formData: FormData) => {
     "use server"

@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { auth } from "../../../auth";
+
 import { redirect } from "next/navigation";
 
 // Components
@@ -15,7 +15,7 @@ const AdminSearchPage = async({ searchParams } : { searchParams: { query?: strin
   const page = parseInt(searchParams?.page || '1', 10);
   const pageSize = parseInt(searchParams?.pageSize || '10', 10);
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if(session?.user.role === "User") {
     redirect("/");

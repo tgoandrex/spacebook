@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { auth } from "../../../../auth";
+
 import { redirect } from "next/navigation";
 
 // Components
@@ -9,7 +9,7 @@ import AdminSearchReports from "../../../_components/search/admin/AdminSearchRep
 const AdminSearchPage = async({ searchParams } : { searchParams: { type?: string }; }) => {
   const type = searchParams?.type || '';
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if(session?.user.role === "User") {
     redirect("/");
