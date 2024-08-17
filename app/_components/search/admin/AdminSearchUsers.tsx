@@ -23,7 +23,8 @@ const AdminSearchUsers = async ({ query, page, pageSize } : { query: string, pag
       id: true,
       username: true,
       restricted: true,
-      createdAt: true
+      createdAt: true,
+      role: true
     },
     orderBy: {
       username: "asc"
@@ -117,22 +118,28 @@ const AdminSearchUsers = async ({ query, page, pageSize } : { query: string, pag
               {user.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-            <form action={user.restricted === false ? restrictUser : unrestrictUser}>
-              <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
-              <Button 
-                label={user.restricted === false ? `Restrict User` : `Unrestrict User`} 
-                isDisabled={false} 
-                fontAwesomeIcon={user.restricted === false ? `fa-x` : `fa-check`}
-              />
-            </form>
-            <form action={deleteUser}>
-              <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
-              <Button 
-                label="Delete User (WARNING)"
-                isDisabled={false} 
-                fontAwesomeIcon="fa-trash"
-              />
-            </form>
+            {user.role === "User" ?
+              <>
+                <form action={user.restricted === false ? restrictUser : unrestrictUser}>
+                  <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
+                  <Button 
+                    label={user.restricted === false ? `Restrict User` : `Unrestrict User`} 
+                    isDisabled={false} 
+                    fontAwesomeIcon={user.restricted === false ? `fa-x` : `fa-check`}
+                  />
+                </form>
+                <form action={deleteUser}>
+                  <input id="userId" name="userId" value={user.id} className="hidden" readOnly />
+                  <Button 
+                    label="Delete User (WARNING)"
+                    isDisabled={false} 
+                    fontAwesomeIcon="fa-trash"
+                  />
+                </form>
+              </>
+            :
+            <div>This user is an Admin!</div>
+            }
             </td>
           </tr>
           ))

@@ -28,7 +28,8 @@ const AdminSearchPhotos = async ({ query, page, pageSize } : { query: string, pa
       author: {
         select: {
           id: true,
-          username: true
+          username: true,
+          role: true
         }
       }
     },
@@ -82,10 +83,14 @@ const AdminSearchPhotos = async ({ query, page, pageSize } : { query: string, pa
               {photo.createdAt.toLocaleString()}
             </td>
             <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-              <form action={deletePhoto}>
-                <input id="photoId" name="photoId" value={photo.id} className="hidden" readOnly />
-                <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
-              </form>
+              {photo.author.role === "User" ?
+                <form action={deletePhoto}>
+                  <input id="photoId" name="photoId" value={photo.id} className="hidden" readOnly />
+                  <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
+                </form>
+              :
+                <div>This Photo belongs to an Admin!</div>
+              }
             </td>
           </tr>
           ))

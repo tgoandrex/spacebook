@@ -26,7 +26,8 @@ const AdminSearchPosts = async ({ query, page, pageSize } : { query: string, pag
       author: {
         select: {
           id: true,
-          username: true
+          username: true,
+          role: true
         }
       }
     },
@@ -79,10 +80,14 @@ const AdminSearchPosts = async ({ query, page, pageSize } : { query: string, pag
                 {post.createdAt.toLocaleString()}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <form action={deletePost}>
-                  <input id="postId" name="postId" value={post.id} className="hidden" readOnly />
-                  <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
-                </form>
+                {post.author.role === "User" ?
+                  <form action={deletePost}>
+                    <input id="postId" name="postId" value={post.id} className="hidden" readOnly />
+                    <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
+                  </form>
+                :
+                  <div>This Post belongs to an Admin!</div>
+                }
               </td>
             </tr>
           ))

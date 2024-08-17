@@ -26,7 +26,8 @@ const AdminSearchComments = async ({ query, page, pageSize } : { query: string, 
       author: {
         select: {
           id: true,
-          username: true
+          username: true,
+          role: true
         }
       }
     },
@@ -79,10 +80,14 @@ const AdminSearchComments = async ({ query, page, pageSize } : { query: string, 
                 {comment.createdAt.toLocaleString()}
               </td>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500">
-                <form action={deleteComment}>
-                  <input id="commentId" name="commentId" value={comment.id} className="hidden" readOnly />
-                  <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
-                </form>
+                {comment.author.role === "User" ?
+                  <form action={deleteComment}>
+                    <input id="commentId" name="commentId" value={comment.id} className="hidden" readOnly />
+                    <Button label="Delete" isDisabled={false} fontAwesomeIcon="fa-trash" />
+                  </form>
+                :
+                  <div>This Comment belongs to an Admin!</div>
+                }
               </td>
             </tr>
           ))
