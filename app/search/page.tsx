@@ -1,3 +1,6 @@
+import { auth } from "../../auth";
+import { redirect } from "next/navigation";
+
 // Components
 import SearchForm from "../_components/forms/SearchForm";
 import SearchPosts from "../_components/search/SearchPosts";
@@ -9,6 +12,12 @@ const SearchPage = async({ searchParams } : { searchParams: { query?: string, ty
   const type = searchParams?.type || '';
   const page = parseInt(searchParams?.page || '1', 10);
   const pageSize = parseInt(searchParams?.pageSize || '10', 10);
+
+  const session = await auth();
+
+  if(!session?.user) {
+    redirect("/");
+  }
   
   return (
     <main className='page-layout'>

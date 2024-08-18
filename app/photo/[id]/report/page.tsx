@@ -1,10 +1,19 @@
 import prisma from "../../../../prisma/lib/prisma";
 
+import { auth } from "../../../../auth";
+import { redirect } from "next/navigation";
+
 // Components
 import Photo from '../../../_components/Photo';
 import ReportCreateForm from '../../../_components/forms/ReportCreateForm';
 
 const ReportPhotoPage = async (props: { params: { id: string; } }) => {
+  const session = await auth();
+
+  if(!session?.user) {
+    redirect("/");
+  }
+  
   const photo = await prisma.photo.findUnique({
     where: {
       id: parseInt(props.params.id)

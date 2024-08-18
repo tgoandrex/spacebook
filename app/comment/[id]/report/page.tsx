@@ -1,3 +1,7 @@
+import { auth } from "../../../../auth";
+import { redirect } from "next/navigation";
+
+
 import prisma from "../../../../prisma/lib/prisma";
 
 // Components
@@ -5,6 +9,13 @@ import Comment from '../../../_components/Comment';
 import ReportCreateForm from "../../../_components/forms/ReportCreateForm";
 
 const ReportCommentPage = async (props: { params: { id: string; } }) => {
+
+  const session = await auth();
+
+  if(!session?.user) {
+    redirect("/");
+  }
+
   const comment = await prisma.comment.findUnique({
     where: {
       id: parseInt(props.params.id)

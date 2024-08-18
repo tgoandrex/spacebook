@@ -19,7 +19,7 @@ const ReportResolvePage = async (props: { params: { id: number; } }) => {
 
   const session = await auth();
 
-  if(session?.user.role === "User") {
+  if(session?.user.role !== "Admin") {
     redirect("/");
   }
 

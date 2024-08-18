@@ -1,10 +1,19 @@
 import prisma from "../../../../prisma/lib/prisma";
 
+import { auth } from "../../../../auth";
+import { redirect } from "next/navigation";
+
 // Components
 import Post from '../../../_components/Post';
 import ReportCreateForm from '../../../_components/forms/ReportCreateForm';
 
 const ReportPostPage = async (props: { params: { id: string; } }) => {
+  const session = await auth();
+
+  if(!session?.user) {
+    redirect("/");
+  }
+
   const post = await prisma.post.findUnique({
     where: {
       id: parseInt(props.params.id)

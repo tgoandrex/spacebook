@@ -11,7 +11,7 @@ const Home = async () => {
   
   return (
     <main className='page-layout'>
-      {session ?
+      {session?.user ?
         <>
           <PhotoForm />
           <div className="w-[75%] md:w-[50%] m-auto border-t-2 border-black dark:border-white my-2"></div>

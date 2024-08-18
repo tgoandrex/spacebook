@@ -17,7 +17,7 @@ const AdminSearchPage = async({ searchParams } : { searchParams: { query?: strin
 
   const session = await auth();
 
-  if(session?.user.role === "User") {
+  if(session?.user.role !== "Admin") {
     redirect("/");
   }
 

@@ -1,10 +1,19 @@
 import prisma from "../../../prisma/lib/prisma";
 
+import { auth } from "../../../auth";
+import { redirect } from "next/navigation";
+
 // Components
 import Photo from '../../_components/Photo';
 import CommentForm from '../../_components/forms/CommentForm';
 
 const PhotoPage = async (props: { params: { id: string; } }) => {
+  const session = await auth();
+
+  if(!session?.user) {
+    redirect("/");
+  }
+
   const photo = await prisma.photo.findUnique({
     where: {
       id: parseInt(props.params.id)
