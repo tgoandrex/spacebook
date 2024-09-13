@@ -7,6 +7,9 @@ import { useState } from "react";
 // Components
 import Button from "./Button";
 
+// Constants
+import { getRelativeTime } from "../_constants";
+
 type CommentProps = {
   id: number;
   content: string;
@@ -90,11 +93,11 @@ const Comment: React.FC<CommentProps> = ({ id, author, createdAt, content, likes
   };
 
   return (
-    <div className="px-3 py-1 w-[85%] min-w-[20rem] bg-[#89CFF0] dark:bg-[#034694] rounded-lg shadow-md dark:shadow-none">
+    <div className="px-3 py-1 w-[95%] sm:w-[85%] bg-[#89CFF0] dark:bg-[#034694] rounded-lg shadow-md dark:shadow-none">
       {!isDeleted ?
         <div className="grid grid-cols-6">
           <Link href={`/user/${author.id}/posts`} className="col-start-1 col-end-4 text-blue-700 dark:text-blue-300">{author.username}</Link>
-          <div className="col-end-7 col-span-3 text-right">{new Date(createdAt).toLocaleString()}</div>
+          <div className="col-end-7 col-span-3 text-right">{getRelativeTime(new Date(createdAt))}</div>
           <div className="col-start-1 col-end-7 text-center min-h-[3rem]">{content}</div>
           <div className="col-start-1 col-end-4">
             {isLikedByLoggedInUser ? (

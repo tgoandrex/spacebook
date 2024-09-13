@@ -8,6 +8,9 @@ import Image from "next/image";
 
 // Components
 import Button from "./Button";
+import Notification from "./Notification";
+
+// Constants
 import { generateAuthenticatedNavLinks, navLinksUnauthenticated } from "../_constants/index";
 
 // Hooks
@@ -16,13 +19,159 @@ import useColorMode from "../_hooks/useColorMode";
 import navIcon from "../_assets/icons/nav-icon.png";
 import navIconDark from "../_assets/icons/nav-icon-dark.png";
 
+interface Notification {
+  id: number;
+  content: string;
+  userUsername: string;
+  postId?: number;
+  photoId?: number;
+  createdAt: Date;
+}
+
 const Nav = () => {
   const { data: session, status } = useSession();
 
   const [toggleOpen, setToggleOpen] = useState(false);
   const [colorMode, setColorMode] = useColorMode();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(true);
 
   const navLinksAuthenticated = generateAuthenticatedNavLinks(Number(session?.user.id));
+
+  useEffect(() => {
+    if(status === "authenticated") {
+      fetch(`/api/notification?id=${session?.user.id}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if(data.notifications) {
+          const notifications: Notification[] = data.notifications.map((notification: Notification) => ({
+            id: notification.id,
+            content: notification.content,
+            userUsername: notification.userUsername,
+            postId: notification.postId,
+            photoId: notification.photoId,
+            createdAt: notification.createdAt
+          }));
+          setNotifications(notifications);
+          setNotificationsLoading(false);
+        }
+      })
+      .catch((e: Error) => {
+        console.log("response error: ", e);
+      });
+    }
+  }, [])
+
+  const mobileNav = () => {
+    return(
+      <nav className={`overflow-hidden ${toggleOpen ? 'max-h-[100vh]' : 'max-h-0'} duration-700 ease-in-out`}>
+        <ul className="flex flex-col items-center text-center">
+          {status === "authenticated" &&
+            <li
+              className={`relative group dark:text-white text-lg py-1 my-2 cursor-pointer 
+              hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
+            >
+              <span className="fa fa-bell"></span>
+              {!notificationsLoading && notifications.length}
+              <div className={`absolute left-0 z-50 hidden group-hover:block bg-white rounded-lg shadow-lg overflow-y-auto max-h-48
+                py-2 w-60 cursor-default`}>
+                <ul>
+                  {notificationsLoading ?
+                    <li className='text-sm dark:text-black text-center'>Notifications loading, please wait.</li>
+                  :
+                    notifications.length > 0 ?
+                      notifications.map((item: Notification) => (
+                        'postId' in item ? (
+                          <li className={`block px-4 py-2 dark:text-black text-sm hover:bg-[#034694] 
+                          hover:dark:bg-[#89CFF0]`}>
+                            <Notification 
+                              key={item.id} 
+                              id={item.id} 
+                              content={item.content} 
+                              userUsername={item.userUsername}
+                              postId={item.postId}
+                              createdAt={item.createdAt}
+                            />
+                          </li>
+                        ) : (
+                          <li className="block px-4 py-2 dark:text-black text-sm hover:bg-[#034694] hover:dark:bg-[#89CFF0]">
+                            <Notification 
+                              key={item.id}  
+                              id={item.id} 
+                              content={item.content} 
+                              userUsername={item.userUsername}
+                              photoId={item.photoId}
+                              createdAt={item.createdAt}
+                            />
+                          </li>
+                        )
+                      ))
+                    :
+                      <li className='text-sm dark:text-black text-center'>No new Notifications!</li>
+                  }
+                </ul>
+              </div>
+            </li>
+          }
+          {status === "authenticated" && session.user.role === "Admin" && (
+            <li
+              className={`relative group dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+              rounded-xl`}
+            >
+              <span className="mr-1">Admin</span>
+              <div className="absolute hidden group-hover:block left-0 bg-white rounded-lg shadow-lg py-2 w-40">
+                <Link href="/admin/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
+                <Link href="/admin/reports/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
+              </div>
+            </li>
+          )}
+          {status === "authenticated" ? navLinksAuthenticated.map((item) => (
+            item.href === "/logout" ?
+              <li key={item.label}
+                className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+                rounded-xl`}
+                onClick={() => signOut({ callbackUrl: '/' })}
+              >
+                {item.label}
+              </li>
+            : (
+              <Link key={item.label}
+                href={item.href}
+                className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
+              >
+                {item.label}
+              </Link>
+            )
+          )) :
+          navLinksUnauthenticated.map((item) => (
+            item.href === "/login" ?
+              <li key={item.label}
+                className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
+                rounded-xl`}
+                onClick={() => signIn('email', { callbackUrl: '/' })}
+              >
+                {item.label}
+              </li>
+            :
+              <Link key={item.label}
+                href={item.href}
+                className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
+              >
+                {item.label}
+              </Link>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -72,6 +221,51 @@ const Nav = () => {
             />
           </div>
           <ul className="flex items-center max-sm:hidden">
+            {status === "authenticated" &&
+              <li
+                className={`relative group flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
+                  hover:dark:bg-[#89CFF0] rounded-xl`}
+              >
+                <span className="fa fa-bell"></span>
+                {!notificationsLoading && notifications.length}
+                <div className="absolute hidden group-hover:block top-full left-0 bg-white rounded-lg shadow-lg py-2 w-72 cursor-default">
+                  <ul>
+                    {notificationsLoading ?
+                      <li className='text-sm dark:text-black text-center'>Notifications loading, please wait.</li>
+                    :
+                      notifications.length > 0 ?
+                        notifications.map((item: Notification) => (
+                          'postId' in item ? (
+                            <li className="block px-4 py-2 dark:text-black text-sm hover:bg-[#034694] hover:dark:bg-[#89CFF0]">
+                              <Notification 
+                                key={item.id} 
+                                id={item.id} 
+                                content={item.content} 
+                                userUsername={item.userUsername}
+                                postId={item.postId}
+                                createdAt={item.createdAt}
+                              />
+                            </li>
+                          ) : (
+                            <li className="block px-4 py-2 dark:text-black text-sm hover:bg-[#034694] hover:dark:bg-[#89CFF0]">
+                              <Notification 
+                                key={item.id}  
+                                id={item.id} 
+                                content={item.content} 
+                                userUsername={item.userUsername}
+                                photoId={item.photoId}
+                                createdAt={item.createdAt}
+                              />
+                            </li>
+                          )
+                        ))
+                      :
+                        <li className='text-sm dark:text-black text-center'>No new Notifications!</li>
+                    }
+                  </ul>
+                </div>
+              </li>
+            }
             {status === "authenticated" && session.user.role === "Admin" && 
               <li
                 className={`relative group flex items-center px-2 dark:text-white text-lg list-none h-full cursor-pointer hover:bg-[#034694] 
@@ -141,57 +335,7 @@ const Nav = () => {
             </button>
           </div>
         </nav>
-        <nav className={`overflow-hidden ${toggleOpen ? 'max-h-[100vh]' : 'max-h-0'} duration-700 ease-in-out`}>
-          <ul className="flex flex-col items-center text-center">
-            {status === "authenticated" && session.user.role === "Admin" && (
-              <li
-                className={`relative group dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
-                rounded-xl`}
-              >
-                <span className="mr-1">Admin</span>
-                <div className="absolute hidden group-hover:block top-0 right-full bg-white rounded-lg shadow-lg py-2 w-40">
-                  <Link href="/admin/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Search</Link>
-                  <Link href="/admin/reports/search" className="block px-4 py-2 dark:text-black text-lg hover:bg-[#034694] hover:dark:bg-[#89CFF0]">Reports</Link>
-                </div>
-              </li>
-            )}
-            {status === "authenticated" ? navLinksAuthenticated.map((item) => (
-              item.href === "/logout" ?
-                <li key={item.label}
-                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
-                  rounded-xl`}
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                >
-                  {item.label}
-                </li>
-              : (
-                <Link key={item.label}
-                  href={item.href}
-                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
-                >
-                  {item.label}
-                </Link>
-              )
-            )) :
-            navLinksUnauthenticated.map((item) => (
-              item.href === "/login" ?
-                <li key={item.label}
-                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] 
-                  rounded-xl`}
-                  onClick={() => signIn('email', { callbackUrl: '/' })}
-                >
-                  {item.label}
-                </li>
-              :
-                <Link key={item.label}
-                  href={item.href}
-                  className={`dark:text-white text-lg py-1 my-2 cursor-pointer hover:bg-[#034694] hover:dark:bg-[#89CFF0] w-[30%] rounded-xl`}
-                >
-                  {item.label}
-                </Link>
-            ))}
-          </ul>
-        </nav>
+        {mobileNav()}
       </header>
     </>
   )

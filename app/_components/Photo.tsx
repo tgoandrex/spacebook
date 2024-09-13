@@ -9,6 +9,9 @@ import { useState } from "react";
 import Comment from "./Comment";
 import Button from "./Button";
 
+// Constants
+import { getRelativeTime } from "../_constants";
+
 type Comment = {
   id: number;
   content: string;
@@ -112,7 +115,7 @@ const Photo: React.FC<PhotoProps> = ({ id, url, author, createdAt, content, like
           {author && content && createdAt && likes &&
             <div className="grid grid-cols-6 bg-[#89CFF0] dark:bg-[#034694] rounded-b-lg mb-1 shadow-md dark:shadow-none px-3 py-1">
               <Link href={`/user/${author.id}/posts`} className="col-start-1 col-end-4 text-blue-700 dark:text-blue-300">{author.username}</Link>
-              <div className="col-end-7 col-span-3 text-right">{new Date(createdAt).toLocaleString()}</div>
+              <div className="col-end-7 col-span-3 text-right">{getRelativeTime(new Date(createdAt))}</div>
               <div className="col-start-1 col-end-7 text-center min-h-[5rem]">{content}</div>
               <div className="col-start-1 col-end-4">
                 {isLikedByLoggedInUser ? (

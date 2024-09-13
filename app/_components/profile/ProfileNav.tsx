@@ -149,7 +149,7 @@ const ProfileNav = () => {
                       onClientUploadComplete={(res) => {
                         createProfilePhoto(user.id, res![0].url);
                         setShowUploadButton(false);
-                        setProfilePhoto(res![0].url)
+                        setProfilePhoto(res![0].url);
                         alert("Upload Completed");
                       }}
                       onUploadError={() => {

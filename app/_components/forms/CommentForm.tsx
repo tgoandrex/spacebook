@@ -25,6 +25,7 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
         username: username
       },
       select: {
+        username: true,
         restricted: true
       }
     })
@@ -41,7 +42,13 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
               id: id
             },
             select: {
-              id: true
+              id: true,
+              content: true,
+              author: {
+                select: {
+                  username: true
+                }
+              }
             }
           });
 
@@ -56,6 +63,25 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
           } else {
             throw new Error('Photo not found');
           }
+
+          const ExistingNotificationForPhoto = await prisma.notification.findFirst({
+            where: {
+              photoId: foundPhoto.id
+            },
+            select: {
+              id: true
+            }
+          });
+
+          if(!ExistingNotificationForPhoto && foundPhoto?.author.username !== user?.username) {
+            await prisma.notification.create({
+              data: {
+                content: `New comment(s) on your photo: ${foundPhoto?.content.substring(0, 50)}`,
+                userUsername: foundPhoto.author.username,
+                photoId: foundPhoto?.id
+              }
+            });
+          }
         } catch (e) {
           throw new Error('Failed to fetch photo');
         }
@@ -68,7 +94,13 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
               id: id
             },
             select: {
-              id: true
+              id: true,
+              content: true,
+              author: {
+                select: {
+                  username: true
+                }
+              }
             }
           });
 
@@ -82,6 +114,25 @@ const CommentForm: React.FC<CommentFormProps> = async ({ type, id }) => {
             });
           } else {
             throw new Error('Post not found');
+          }
+
+          const ExistingNotificationForPost = await prisma.notification.findFirst({
+            where: {
+              postId: foundPost.id
+            },
+            select: {
+              id: true
+            }
+          });
+
+          if(!ExistingNotificationForPost && foundPost?.author.username !== user?.username) {
+            await prisma.notification.create({
+              data: {
+                content: `New comments on your post: ${foundPost?.content}`,
+                userUsername: foundPost.author.username,
+                postId: foundPost?.id
+              }
+            });
           }
         } catch (e) {
           throw new Error('Failed to fetch post');

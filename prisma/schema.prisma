@@ -22,6 +22,7 @@ model User {
   photos           Photo[]
   comments         Comment[]
   submittedReports Report[]
+  notifications    Notification[]
   followedBy       Follow[]      @relation("follower")
   following        Follow[]      @relation("following")
   postlikes        PostLike[]    @relation("user")
@@ -50,6 +51,7 @@ model Post {
   comments       Comment[]
   reports        Report[]
   likes          PostLike[] @relation("post")
+  notifications  Notification[]
   createdAt      DateTime   @default(now()) @map(name: "created_at")
   @@map(name: "posts")
 }
@@ -74,6 +76,7 @@ model Photo {
   comments       Comment[]
   reports        Report[]
   likes          PhotoLike[] @relation("photo")
+  notifications  Notification[]
   createdAt      DateTime    @default(now()) @map(name: "created_at")
   @@map(name: "photos")
 }
@@ -131,4 +134,17 @@ model Report {
   reporterUsername String   @map(name: "reporter_username")
   createdAt        DateTime @default(now()) @map(name: "created_at")
   @@map(name: "reports")
+}
+
+model Notification {
+  id             Int        @id @default(autoincrement())
+  content        String     @db.VarChar(750)
+  post           Post?         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId         Int?          @map(name: "post_id")
+  photo          Photo?        @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId        Int?          @map(name: "photo_id")
+  user           User       @relation(fields: [userUsername], references: [username], onDelete: Cascade)
+  userUsername   String     @map(name: "author_username")
+  createdAt      DateTime   @default(now()) @map(name: "created_at")
+  @@map(name: "notifications")
 }
